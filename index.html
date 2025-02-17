@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Venn It To Win It!</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="./node_modules/dragula/dist/dragula.css"/>
+  <link rel="stylesheet" href="./containers.css"/>
+</head>
+<body>
+    <div class="left">
+        <div class="left">
+            <label>Select Game:</label>
+            <select name="games" id="gamelist">
+            </select>
+            <button id="Load">Start</button>
+            <button id="Check">Check</button>
+        </div>
+        <br/>
+        <p>Source</p>
+        <div id="drag-src">
+        </div>
+    </div>
+
+    <div class="right">
+
+        <div>
+            <div id="redlabel" class="RedGroup">Red Group :</div>
+            <div id="bluelabel" class="BlueGroup">Blue Group :</div>
+            <div id="greenlabel" class="GreenGroup">Green Group :</div>
+        </div>   
+    
+        <br/>
+        <label>Red</label>
+        <div class="drop-target red" g1="true" id="slot1">
+        </div>
+
+        <br/>
+        <label>Red , Blue</label>
+        <div class="drop-target red blue" g1="true" g2="true" id="slot2">
+        </div>
+
+        <br/>
+        <label>Blue</label>
+        <div class="drop-target blue" g2="true" id="slot3">
+        </div>
+
+        <br/>
+        <label>Blue, Green</label>
+        <div class="drop-target blue green" g2="true" g3="true" id="slot4">
+        </div>
+
+        <br/>
+        <label>Green</label>
+        <div class="drop-target green" g3="true" id="slot5">
+        </div>
+
+        <br/>
+        <label>Red, Blue, Green</label>
+        <div class="drop-target red blue green" g1="true" g2="true" g3="true" id="slot6">
+        </div>
+
+        <br/>
+        <label>Red, Green</label>
+        <div class="drop-target red green" g1="true" g3="true" id="slot7">
+        </div>
+    </div>
+
+    <script src="./node_modules/dragula/dist/dragula.js"></script>
+    <script>
+        games = []
+    </script>
+    <script src="./demo.js"></script>
+    <script src="./play.js"></script>
+
+</body>
+</html>
