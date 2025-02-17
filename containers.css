@@ -1,49 +1,47 @@
 .left {
     float: left;
     position: relative;
-    width: 50%;
+    width: 35%;
     height: 100%;
 }
   
 .right {
-    float: left;
+    float: right;
     position: relative;
-    width: 40%;
-    margin-left: 5%;
+    width: 60%;
     height: 100%;
+    background-color: cornsilk;
 }
 
 #drag-src {
     display: block;
     background-color: #dfdfdf;
     border-radius: 5px;
-    min-height: 120px;
+    width: 100%;
+    min-height: 100%;
     margin: 1 auto;
-    padding: 1em;
+    padding: 0.5em;
 }
-  
-#drag-src > div {
-    text-align: center;
-    float: left;
-    padding: 1em;
-    margin: 0 1em 1em 0;
+
+.phrase > div {
+    text-align: left;
+    padding: 0.5em;
+    margin: 0.5em;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-    border-radius: 100px;
+    border-radius: 10px;
     border: 2px solid #ececec;
-    /*
     background: #F7F7F7;
-    */
     transition: all .5s ease;
 }
-  
-#drag-src > div:active {
+
+.phrase > div:active {
     -webkit-animation: wiggle 0.3s 0s infinite ease-in;
     animation: wiggle 0.3s 0s infinite ease-in;
     opacity: .6;
     border: 2px solid #000;
 }
   
-#drag-src > div:hover {
+.phrase > div:hover {
     border: 2px solid gray;
     background-color: #e5e5e5;
 }
@@ -81,6 +79,7 @@
     border: 2px solid #000;
 }
 
+/*
 .red > div {
     border-color: red;
 }
@@ -103,4 +102,95 @@
 
 [g3] {
     border-radius: 50px;
+}
+*/
+
+.filler {
+    width: 100%;
+    height: 90vh;
+    border:2px solid indigo;
+    position: relative;
+    background-color: transparent;
+}
+
+textarea {
+    position: absolute;
+    left: 30%;
+    width: 40%;
+    top: 20%;
+
+}
+
+svg {
+    position: relative;
+    top: 10px;
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+}
+
+
+.drop-target {
+    position: absolute;
+    width: 20%;
+}
+
+#slot1 {
+    left: 40%;
+    top: 15%;
+}
+
+#slot2 {
+    right: 18%;
+    top: 37%;
+}
+
+#slot3 {
+    right: 8%;
+    top: 73%;
+}
+
+#slot4 {
+    left: 40%;
+    top: 68%;
+}
+
+#slot5 {
+    left: 8%;
+    top: 73%;
+}
+
+#slot6 {
+    left: 40%;
+    top: 50%;
+}
+
+#slot7 {
+    left: 18%;
+    top: 37%;
+}
+
+
+table {
+    position: absolute;
+    width: 100%;
+    height: 200%
+}
+
+table > tbody > tr {
+    text-align: center;
+}
+
+table > tbody > tr > td {
+    border: 1px dashed teal;
+}
+
+.circle2 {
+    position: absolute;
+    /*
+    display: block;
+    width:100%;
+    height:100%;
+    */
+    background-color: transparent;
 }

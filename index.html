@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="./containers.css"/>
 </head>
 <body>
-    <div class="left">
-        <div class="left">
+    <div class="left panel">
+        <div>
             <label>Select Game:</label>
             <select name="games" id="gamelist">
             </select>
@@ -17,8 +17,10 @@
             <button id="Check">Check</button>
         </div>
         <br/>
-        <p>Source</p>
-        <div id="drag-src">
+        <div>
+            <div id="title">Phrases</div>
+            <div id="drag-src">
+            </div>
         </div>
     </div>
 
@@ -28,42 +30,84 @@
             <div id="redlabel" class="RedGroup">Red Group :</div>
             <div id="bluelabel" class="BlueGroup">Blue Group :</div>
             <div id="greenlabel" class="GreenGroup">Green Group :</div>
-        </div>   
+        </div>
+
+
+        <svg class="circle" viewbox="0 0 99 99">
+            <circle cx="52" cy="33%" r="32" fill="none" stroke-width="1" stroke="red"></circle>
+            <circle cx="33" cy="60" r="32" fill="none" stroke-width="1" stroke="green"></circle>
+            <circle cx="66" cy="60" r="32" fill="none" stroke-width="1" stroke="blue"></circle>
+        </svg>
+
+        <div class="drop-target red" g1="true" id="slot1"></div>
+        <div class="drop-target red blue" g1="true" g2="true" id="slot2"></div>
+        <div class="drop-target blue" g2="true" id="slot3"></div>
+        <div class="drop-target blue green" g2="true" g3="true" id="slot4"></div>
+        <div class="drop-target green" g3="true" id="slot5"></div>
+        <div class="drop-target red blue green" g1="true" g2="true" g3="true" id="slot6"></div>
+        <div class="drop-target red green" g1="true" g3="true" id="slot7"></div>
     
-        <br/>
-        <label>Red</label>
-        <div class="drop-target red" g1="true" id="slot1">
+    <!--
+        <div class="filler">
         </div>
+        <textarea>Haha Baba</textarea>
 
+        <table>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Red
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>Red / Green
+                    <div class="drop-target red green" g1="true" g3="true" id="slot7">
+                    </div>
+                </td>
+                <td></td>
+                <td>Red / Blue
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Red / Blue / Green
+                    <div class="drop-target red blue green" g1="true" g2="true" g3="true" id="slot6">
+                    </div>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Green
+                    <div class="drop-target green" g3="true" id="slot5">
+                    </div>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Blue
+                    <div class="drop-target blue" g2="true" id="slot3">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Blue / Green
+                    <div class="drop-target blue green" g2="true" g3="true" id="slot4">
+                    </div>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
         <br/>
-        <label>Red , Blue</label>
-        <div class="drop-target red blue" g1="true" g2="true" id="slot2">
-        </div>
-
-        <br/>
-        <label>Blue</label>
-        <div class="drop-target blue" g2="true" id="slot3">
-        </div>
-
-        <br/>
-        <label>Blue, Green</label>
-        <div class="drop-target blue green" g2="true" g3="true" id="slot4">
-        </div>
-
-        <br/>
-        <label>Green</label>
-        <div class="drop-target green" g3="true" id="slot5">
-        </div>
-
-        <br/>
-        <label>Red, Blue, Green</label>
-        <div class="drop-target red blue green" g1="true" g2="true" g3="true" id="slot6">
-        </div>
-
-        <br/>
-        <label>Red, Green</label>
-        <div class="drop-target red green" g1="true" g3="true" id="slot7">
-        </div>
+    -->
     </div>
 
     <script src="./node_modules/dragula/dist/dragula.js"></script>

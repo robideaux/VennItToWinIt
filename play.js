@@ -20,6 +20,8 @@ gamelist.selectedIndex = -1
 gamelist.onchange = () =>
 {
   currentGame = games[gamelist.selectedIndex]
+  title = byId('title')
+  title.textContent = "Phrases for: " + currentGame.title
   console.log(currentGame)
 }
 
@@ -36,17 +38,20 @@ checkButton.onclick = () => {
 function loadGame() {
   currentPhrases = currentGame.phrases
   srcPanel = byId('drag-src')
-  srcPanel.textContent = ''
-  currentPhrases.forEach(element => {
+  srcPanel.textContent = null
+  currentPhrases.forEach((element, index) => {
+    phrase = document.createElement('div')
+    phrase.classList.add("phrase")
     div = document.createElement('div')
     text = document.createTextNode(element.phrase)
     div.appendChild(text)
-    div.setAttribute('id', "phrase_" + element.id)
+    div.setAttribute('id', "phrase_" + index)
     element.groupIds.forEach(id => {
       div.classList.add("G" + id)
     })
+    phrase.appendChild(div)
 
-    srcPanel.appendChild(div)
+    srcPanel.appendChild(phrase)
   });
 
   slots = []
@@ -105,7 +110,8 @@ function arePhrasesInCircle(phrases, circle) {
   found = true
   for (let phrase of phrases) {
     parent = phrase.parentElement
-    if (!parent.classList.contains(circle)) {
+    slot = parent.parentElement
+    if (!slot.classList.contains(circle)) {
       found = false
     }
   }
