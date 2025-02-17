@@ -1,5 +1,5 @@
 game = {
-    title: "Demo Game",
+    title: "Original Demo Game",
     groups: [
         {
             id: 1,
