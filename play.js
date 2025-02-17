@@ -42,6 +42,10 @@ function loadGame() {
   currentPhrases.forEach((element, index) => {
     phrase = document.createElement('div')
     phrase.classList.add("phrase")
+    phrase.setAttribute('title', element.phrase)
+    if (element.short) {
+      phrase.setAttribute('title', element.short)
+    }
     div = document.createElement('div')
     text = document.createTextNode(element.phrase)
     div.appendChild(text)
@@ -61,21 +65,7 @@ function loadGame() {
     slot.textContent = ''
     slots.push(slot)
   }
-/*
-  slot = byId('slot1')
-  slot.textContent = ''
-  slots.push(slot)
 
-  slots.push(byId('slot1'))
-  slots.push(byId('slot2'))
-  slots.push(byId('slot3'))
-  slots.push(byId('slot4'))
-  slots.push(byId('slot5'))
-  slots.push(byId('slot6'))
-  slots.push(byId('slot7'))
-*/
-
-  // dragula([byId('drag-elements'), byId('green'), byId('red'), byId('blue')], {
   dragula(slots, {
       revertOnSpill: true,
       accepts: function(el, target) {
@@ -85,22 +75,27 @@ function loadGame() {
       if (target.children.length >= 2) {
         source.appendChild(target.children[0])
       }
+      title = el.getAttribute('title')
+      text = el.children[0].textContent
+      el.setAttribute('title', text)
+      el.children[0].textContent = title
     })
 }
 
 function checkGame() {
   groups = ["G1", "G2", "G3"]
+  circles = ["red", "blue", "green"]
   groups.forEach((group, index) => {
     phrases = byClass(group)
-    circles = ["red", "blue", "green"]
-    circles.forEach(circle => {
+    circles.forEach((circle, ci) => {
+      label = byId(circle+"label")
       if (arePhrasesInCircle(phrases, circle))
       {
-        // highlight circle
-        // update lable
+        circles.splice(ci, 1)
         console.log(circle + " Circle is solved!")
-        label = byId(circle+"label")
-        label.textContent = circle + " Group : " + currentGame.groups[index].label
+        label.textContent = '"' + currentGame.groups[index].label + '"'
+      } else {
+        label.textContent = circle + ' group'
       }
     })
   })

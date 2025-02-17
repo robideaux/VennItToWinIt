@@ -26,18 +26,15 @@
 
     <div class="right">
 
-        <div>
-            <div id="redlabel" class="RedGroup">Red Group :</div>
-            <div id="bluelabel" class="BlueGroup">Blue Group :</div>
-            <div id="greenlabel" class="GreenGroup">Green Group :</div>
-        </div>
-
-
         <svg class="circle" viewbox="0 0 99 99">
             <circle cx="52" cy="33%" r="32" fill="none" stroke-width="1" stroke="red"></circle>
             <circle cx="33" cy="60" r="32" fill="none" stroke-width="1" stroke="green"></circle>
             <circle cx="66" cy="60" r="32" fill="none" stroke-width="1" stroke="blue"></circle>
         </svg>
+
+        <div id="redlabel" class="RedGroup">Red Group :</div>
+        <div id="bluelabel" class="BlueGroup">Blue Group :</div>
+        <div id="greenlabel" class="GreenGroup">Green Group :</div>
 
         <div class="drop-target red" g1="true" id="slot1"></div>
         <div class="drop-target red blue" g1="true" g2="true" id="slot2"></div>
@@ -47,69 +44,6 @@
         <div class="drop-target red blue green" g1="true" g2="true" g3="true" id="slot6"></div>
         <div class="drop-target red green" g1="true" g3="true" id="slot7"></div>
     
-    <!--
-        <div class="filler">
-        </div>
-        <textarea>Haha Baba</textarea>
-
-        <table>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>Red
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>Red / Green
-                    <div class="drop-target red green" g1="true" g3="true" id="slot7">
-                    </div>
-                </td>
-                <td></td>
-                <td>Red / Blue
-                </td>
-                <td></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>Red / Blue / Green
-                    <div class="drop-target red blue green" g1="true" g2="true" g3="true" id="slot6">
-                    </div>
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Green
-                    <div class="drop-target green" g3="true" id="slot5">
-                    </div>
-                </td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>Blue
-                    <div class="drop-target blue" g2="true" id="slot3">
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td>Blue / Green
-                    <div class="drop-target blue green" g2="true" g3="true" id="slot4">
-                    </div>
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-        </table>
-        <br/>
-    -->
-    </div>
-
     <script src="./node_modules/dragula/dist/dragula.js"></script>
     <script>
         games = []
