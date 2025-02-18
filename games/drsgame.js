@@ -32,22 +32,22 @@ game = {
         },
         {
             phrase: "Poison",
-            short: "1 & 2",
+            short: "",
             groupIds: [1,2]
         },
         {
             phrase: "Dark Chocolate",
-            short: "2 & 3",
+            short: "",
             groupIds: [2,3]
         },
         {
             phrase: "Cream",
-            short: "1 & 3",
+            short: "",
             groupIds: [1,3]
         },
         {
             phrase: "Cranberries",
-            short: "1,2,3",
+            short: "",
             groupIds: [1,2,3]
         }
     ]
