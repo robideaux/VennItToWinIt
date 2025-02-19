@@ -135,7 +135,7 @@ function checkGame() {
   groups.forEach((group, index) => {
     phrases = byClass(group)
 
-    for (let ci=0; ci<circles.length; i++) {
+    for (let ci=0; ci<circles.length; ci++) {
       circle = circles[ci]
       label = byId(circle+"label")
       if (arePhrasesInCircle(phrases, circle))
