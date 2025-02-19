@@ -1,9 +1,25 @@
+//const LZString = require("lz-string/libs/lz-string")
+
 function byId(id) {
     return document.getElementById(id)
 }
 
 function byClass(classname) {
   return document.getElementsByClassName(classname)
+}
+
+// Add game from query string
+query = document.location.search
+if (query) {
+  params = query.split(",")[0]
+  if (params) {
+    gameData = params.replace("?game=", "")
+    gameStr = LZString.decompressFromEncodedURIComponent(gameData)
+    game = JSON.parse(gameStr)
+    if (game && games.findIndex(x => x.title == game.title) < 0) {
+      games.push(game)
+    }
+  }
 }
 
 gamelist = byId("gamelist")
@@ -17,13 +33,21 @@ games.forEach(game => {
 })
 gamelist.selectedIndex = -1
 
+
 gamelist.onchange = () =>
 {
-  currentGame = games[gamelist.selectedIndex]
+  setGame(games[gamelist.selectedIndex])
+}
+
+function setGame(game) {
+  currentGame = game
   title = byId('title')
   title.textContent = "Phrases for: " + currentGame.title
-  console.log(currentGame)
+
+  strGame = JSON.stringify(currentGame)
+  console.log(LZString.compressToEncodedURIComponent(strGame))
 }
+
 
 startButton = byId("Load")
 startButton.onclick = () => {
@@ -42,6 +66,14 @@ function getRandomIntInclusive(min, max) {
 }
 
 function loadGame() {
+
+  // clear labels
+  circles = ["red", "blue", "green"]
+  for (let circle of circles) {
+    label = byId(circle+"label")
+      label.textContent = circle + ' group'
+  }
+
   currentPhrases = [...currentGame.phrases]
 
   srcPanel = byId('drag-src')
@@ -72,27 +104,6 @@ function loadGame() {
     srcPanel.appendChild(phrase)
     numPhrases = currentPhrases.length 
   }
-
-  /*
-  currentPhrases.forEach((element, index) => {
-    phrase = document.createElement('div')
-    phrase.classList.add("phrase")
-    phrase.setAttribute('title', element.phrase)
-    if (element.short) {
-      phrase.setAttribute('title', element.short)
-    }
-    div = document.createElement('div')
-    text = document.createTextNode(element.phrase)
-    div.appendChild(text)
-    div.setAttribute('id', "phrase_" + index)
-    element.groupIds.forEach(id => {
-      div.classList.add("G" + id)
-    })
-    phrase.appendChild(div)
-
-    srcPanel.appendChild(phrase)
-  });
-*/
 
   slots = []
   slots.push(srcPanel)
@@ -137,20 +148,6 @@ function checkGame() {
         label.textContent = circle + ' group'
       }
     }
-
-    /*
-    circles.forEach((circle, ci) => {
-      label = byId(circle+"label")
-      if (arePhrasesInCircle(phrases, circle))
-      {
-        circles.splice(ci, 1)
-        console.log(circle + " Circle is solved!")
-        label.textContent = '"' + currentGame.groups[index].label + '"'
-      } else {
-        label.textContent = circle + ' group'
-      }
-    })
-    */
   })
 }
 

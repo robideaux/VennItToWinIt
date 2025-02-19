@@ -9,6 +9,7 @@
   "author": "jdr",
   "license": "ISC",
   "dependencies": {
-    "dragula": "^3.7.3"
+    "dragula": "^3.7.3",
+    "lz-string": "^1.5.0"
   }
 }
