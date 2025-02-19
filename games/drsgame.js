@@ -1,52 +1,52 @@
 game = {
-    title: "Extra-hard Game",
+    title: "Vinegar Rock Candy",
     groups: [
         {
             id: 1,
-            label: "Primes"
+            label: "Bands"
         },
         {
             id: 2,
-            label: "Solid Pool Balls"
+            label: "Bitter Things"
         },
         {
             id: 3,
-            label: "A Few"
+            label: "Food"
         }
     ],
     phrases: [
         {
-            phrase: "17",
+            phrase: "Queen",
             short: "", // use this to save space, if defined.
             groupIds: [1]
         },
         {
-            phrase: "8",
+            phrase: "Your Ex",
             short: "",
             groupIds: [2]
         },
         {
-            phrase: "2",
+            phrase: "Corn",
             short: "", // empty or missing altogether just uses the phrase
             groupIds: [3]
         },
         {
-            phrase: "7",
+            phrase: "Poison",
             short: "",
             groupIds: [1,2]
         },
         {
-            phrase: "4",
+            phrase: "Dark Chocolate",
             short: "",
             groupIds: [2,3]
         },
         {
-            phrase: "1",
+            phrase: "Cream",
             short: "",
             groupIds: [1,3]
         },
         {
-            phrase: "3",
+            phrase: "Cranberries",
             short: "",
             groupIds: [1,2,3]
         }
