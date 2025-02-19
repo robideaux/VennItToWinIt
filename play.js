@@ -65,8 +65,30 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function loadGame() {
+slots = []
+slots.push(byId('drag-src'))
+for (let i=1; i<=7; i++) {
+  slot = byId('slot' + i)
+  slot.textContent = ''
+  slots.push(slot)
+}
 
+drake = dragula(slots, {
+  revertOnSpill: true,
+  accepts: function(el, target) {
+    return target !== byId('drag-src')
+  }
+}).on('drop', function(el, target, source, sib) {
+  if (target.children.length >= 2) {
+    source.appendChild(target.children[0])
+  }
+  title = el.getAttribute('title')
+  text = el.children[0].textContent
+  el.setAttribute('title', text)
+  el.children[0].textContent = title
+})
+
+function loadGame() {
   // clear labels
   circles = ["red", "blue", "green"]
   for (let circle of circles) {
@@ -76,6 +98,7 @@ function loadGame() {
 
   currentPhrases = [...currentGame.phrases]
 
+  // Clear source
   srcPanel = byId('drag-src')
   srcPanel.textContent = null
 
@@ -105,28 +128,11 @@ function loadGame() {
     numPhrases = currentPhrases.length 
   }
 
-  slots = []
-  slots.push(srcPanel)
-  for (let i=1; i<=7; i++) {
-    slot = byId('slot' + i)
-    slot.textContent = ''
-    slots.push(slot)
+  // Clear Targets (slots)
+  slots = byClass('drop-target')
+  for (let slot of slots) {
+    slot.textContent = null
   }
-
-  dragula(slots, {
-      revertOnSpill: true,
-      accepts: function(el, target) {
-        return target !== byId('drag-src')
-      }
-    }).on('drop', function(el, target, source, sib) {
-      if (target.children.length >= 2) {
-        source.appendChild(target.children[0])
-      }
-      title = el.getAttribute('title')
-      text = el.children[0].textContent
-      el.setAttribute('title', text)
-      el.children[0].textContent = title
-    })
 }
 
 function checkGame() {
