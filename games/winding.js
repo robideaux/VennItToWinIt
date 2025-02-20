@@ -1,52 +1,52 @@
 game = {
-    title: "Just Relax",
+    title: "Winding",
     groups: [
         {
             id: 1,
-            label: "Tending a Boo-Boo"
+            label: "Finance"
         },
         {
             id: 2,
-            label: "Getting Mugged"
+            label: "Rivers"
         },
         {
             id: 3,
-            label: "Beatles Albums"
+            label: "Askew"
         }
     ],
     phrases: [
         {
-            phrase: "Peroxide",
+            phrase: "Load",
             short: "", // use this to save space, if defined.
             groupIds: [1]
         },
         {
-            phrase: "Wallet",
+            phrase: "Rapid",
             short: "",
             groupIds: [2]
         },
         {
-            phrase: "Please Please Me",
+            phrase: "Tilt",
             short: "", // empty or missing altogether just uses the phrase
             groupIds: [3]
         },
         {
-            phrase: "Revolver",
+            phrase: "Deposit",
             short: "",
             groupIds: [1,2]
         },
         {
-            phrase: "Don't Move",
+            phrase: "Slope",
             short: "",
             groupIds: [2,3]
         },
         {
-            phrase: "Let It Be",
+            phrase: "Dip",
             short: "",
             groupIds: [1,3]
         },
         {
-            phrase: "Help!",
+            phrase: "Bank",
             short: "",
             groupIds: [1,2,3]
         }
