@@ -3,7 +3,7 @@ game = {
     groups: [
         {
             id: 1,
-            label: "Primes"
+            label: "Odd Primes"
         },
         {
             id: 2,

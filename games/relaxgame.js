@@ -31,12 +31,12 @@ game = {
             groupIds: [3]
         },
         {
-            phrase: "Revolver",
+            phrase: "Don't Move",
             short: "",
             groupIds: [1,2]
         },
         {
-            phrase: "Don't Move",
+            phrase: "Revolver",
             short: "",
             groupIds: [2,3]
         },

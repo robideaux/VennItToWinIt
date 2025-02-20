@@ -16,7 +16,7 @@ game = {
     ],
     phrases: [
         {
-            phrase: "Load",
+            phrase: "Loan",
             short: "", // use this to save space, if defined.
             groupIds: [1]
         },
