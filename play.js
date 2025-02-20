@@ -24,7 +24,6 @@ if (query) {
 
 gamelist = byId("gamelist")
 currentGame = []
-currentPhrases = []
 games.forEach(game => {
   option = document.createElement('option')
   text = document.createTextNode(game.title)
@@ -96,36 +95,37 @@ function loadGame() {
       label.textContent = circle + ' group'
   }
 
-  currentPhrases = [...currentGame.phrases]
+  currentPhrases = currentGame.phrases
+  phraseList = [...Object.keys(currentPhrases)]
 
   // Clear source
   srcPanel = byId('drag-src')
   srcPanel.textContent = null
 
   // add phrases in random order
-  numPhrases = currentPhrases.length 
+  numPhrases = phraseList.length 
   while (numPhrases > 0) {
     let index = getRandomIntInclusive(0, numPhrases-1);
-    node = currentPhrases[index]
-    currentPhrases.splice(index, 1)
+    phrase = phraseList[index]
+    phraseList.splice(index, 1)
+    phraseObj = currentPhrases[phrase]
 
-    phrase = document.createElement('div')
-    phrase.classList.add("phrase")
-    phrase.setAttribute('title', node.phrase)
-    if (node.short) {
-      phrase.setAttribute('title', node.short)
+    phraseEl = document.createElement('div')
+    phraseEl.classList.add("phrase")
+    phraseEl.setAttribute('title', phrase)
+    if (phraseObj.short) {
+      phraseEl.setAttribute('title', phraseObj.short)
     }
     div = document.createElement('div')
-    text = document.createTextNode(node.phrase)
+    text = document.createTextNode(phrase)
     div.appendChild(text)
-    // div.setAttribute('id', "phrase_" + index)
-    node.groupIds.forEach(id => {
-      div.classList.add("G" + id)
+    phraseObj.groupIds.forEach(id => {
+      div.classList.add("G" + (id-1))
     })
-    phrase.appendChild(div)
+    phraseEl.appendChild(div)
 
-    srcPanel.appendChild(phrase)
-    numPhrases = currentPhrases.length 
+    srcPanel.appendChild(phraseEl)
+    numPhrases = phraseList.length 
   }
 
   // Clear Targets (slots)
@@ -148,7 +148,7 @@ function checkGame() {
       {
         circles.splice(ci, 1)
         console.log(circle + " Circle is solved!")
-        label.textContent = '"' + currentGame.groups[index].label + '"'
+        label.textContent = '"' + currentGame.groups[index] + '"'
         break
       } else {
         label.textContent = circle + ' group'
