@@ -1,0 +1,49 @@
+.gameboard {
+    display: flex;
+    flex-direction: row;
+    height: 90vh;
+}
+
+.gutter {
+    background-color: transparent;
+    cursor: col-resize;
+    border: 1px solid gray;
+    border-bottom: 0px;
+    border-top: 0px;
+    margin: 5vh 4px 5vh 4px;
+}
+
+#leftpanel {
+    float: left;
+    position: relative;
+}
+
+button.check {
+  background-color: #04AA6D; /* Green */
+  border: 2px solid transparent;
+  border-radius: 50%;
+  color: white;
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 16px;
+  margin: 2px 2px;
+}
+
+button.check:hover {
+    border-color: limegreen;
+}
+
+
+#rightpanel {
+    float: right;
+    position: relative;
+    max-height: 100vh;
+}
+
+.live {
+    display: block;
+}
+
+.editing {
+    display: none;
+}

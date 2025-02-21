@@ -1,40 +1,3 @@
-.gameboard {
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
-}
-
-.gutter {
-    background-color: transparent;
-    cursor: col-resize;
-    border: 1px solid gray;
-    border-bottom: 0px;
-    border-top: 0px;
-    margin: 5vh 4px 5vh 4px;
-}
-
-#leftpanel {
-    float: left;
-    position: relative;
-}
-
-button.check {
-  background-color: #04AA6D; /* Green */
-  border: none;
-  border-radius: 50%;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  font-size: 16px;
-  margin: 4px 2px;
-}
-
-#rightpanel {
-    float: right;
-    position: relative;
-    max-height: 100vh;
-}
-
 #drag-src {
     display: block;
     background-color: #dfdfdf;
@@ -77,8 +40,10 @@ button.check {
     padding: 1em;
     display: block;
     text-align: center;
+    position: absolute;
+    width: 20%;
 }
-  
+
 .drop-target > div {
     transition: all .5s;
     text-align: center;
@@ -125,12 +90,6 @@ svg {
     position: absolute;
     left: 5%;
     bottom: 1%;
-}
-
-
-.drop-target {
-    position: absolute;
-    width: 20%;
 }
 
 #slot1 {
