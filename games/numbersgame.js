@@ -1,56 +1,33 @@
 game = {
     title: "A Numbers Game",
     groups: [
-        {
-            id: 1,
-            label: "Odd Primes"
-        },
-        {
-            id: 2,
-            label: "Solid Pool Balls"
-        },
-        {
-            id: 3,
-            label: "A Few"
-        }
+        "Odd Primes",
+        "Solid Pool Balls",
+        "A Few"
     ],
-    phrases: [
-        {
-            phrase: "17",
-            short: "", // use this to save space, if defined.
+    phrases: {
+        "17": {
             groupIds: [1]
         },
-        {
-            phrase: "8",
-            short: "",
+        "8": {
             groupIds: [2]
         },
-        {
-            phrase: "2",
-            short: "", // empty or missing altogether just uses the phrase
+        "2": {
             groupIds: [3]
         },
-        {
-            phrase: "7",
-            short: "",
+        "7": {
             groupIds: [1,2]
         },
-        {
-            phrase: "4",
-            short: "",
+        "4": {
             groupIds: [2,3]
         },
-        {
-            phrase: "1",
-            short: "",
+        "1": {
             groupIds: [1,3]
         },
-        {
-            phrase: "3",
-            short: "",
+        "3": {
             groupIds: [1,2,3]
         }
-    ]
+    }
 }
 
 games.push(game)

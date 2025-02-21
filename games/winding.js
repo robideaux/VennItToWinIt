@@ -1,56 +1,33 @@
 game = {
     title: "Winding",
     groups: [
-        {
-            id: 1,
-            label: "Finance"
-        },
-        {
-            id: 2,
-            label: "Rivers"
-        },
-        {
-            id: 3,
-            label: "Askew"
-        }
+        "Finance",
+        "Rivers",
+        "Askew"
     ],
-    phrases: [
-        {
-            phrase: "Loan",
-            short: "", // use this to save space, if defined.
+    phrases: {
+        "Loan": {
             groupIds: [1]
         },
-        {
-            phrase: "Rapid",
-            short: "",
+        "Rapid": {
             groupIds: [2]
         },
-        {
-            phrase: "Tilt",
-            short: "", // empty or missing altogether just uses the phrase
+        "Tilt": {
             groupIds: [3]
         },
-        {
-            phrase: "Deposit",
-            short: "",
+        "Deposit": {
             groupIds: [1,2]
         },
-        {
-            phrase: "Slope",
-            short: "",
+        "Slope": {
             groupIds: [2,3]
         },
-        {
-            phrase: "Dip",
-            short: "",
+        "Dip": {
             groupIds: [1,3]
         },
-        {
-            phrase: "Bank",
-            short: "",
+        "Bank": {
             groupIds: [1,2,3]
         }
-    ]
+    }
 }
 
 games.push(game)

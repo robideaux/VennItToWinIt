@@ -1,56 +1,33 @@
 game = {
     title: "Vinegar Rock Candy",
     groups: [
-        {
-            id: 1,
-            label: "Bands"
-        },
-        {
-            id: 2,
-            label: "Bitter Things"
-        },
-        {
-            id: 3,
-            label: "Food"
-        }
+        "Bands",
+        "Bitter Things",
+        "Food"
     ],
-    phrases: [
-        {
-            phrase: "Queen",
-            short: "", // use this to save space, if defined.
+    phrases: {
+        "Queen": {
             groupIds: [1]
         },
-        {
-            phrase: "Your Ex",
-            short: "",
+        "Your Ex": {
             groupIds: [2]
         },
-        {
-            phrase: "Corn",
-            short: "", // empty or missing altogether just uses the phrase
+        "Corn": {
             groupIds: [3]
         },
-        {
-            phrase: "Poison",
-            short: "",
+        "Poison": {
             groupIds: [1,2]
         },
-        {
-            phrase: "Dark Chocolate",
-            short: "",
+        "Dark Chocolate": {
             groupIds: [2,3]
         },
-        {
-            phrase: "Cream",
-            short: "",
+        "Cream": {
             groupIds: [1,3]
         },
-        {
-            phrase: "Cranberries",
-            short: "",
+        "Cranberries": {
             groupIds: [1,2,3]
         }
-    ]
+    }
 }
 
 games.push(game)

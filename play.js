@@ -1,4 +1,3 @@
-//const LZString = require("lz-string/libs/lz-string")
 
 function byId(id) {
     return document.getElementById(id)
@@ -120,7 +119,7 @@ function loadGame() {
     text = document.createTextNode(phrase)
     div.appendChild(text)
     phraseObj.groupIds.forEach(id => {
-      div.classList.add("G" + (id-1))
+      div.classList.add("G" + (id))
     })
     phraseEl.appendChild(div)
 
@@ -172,3 +171,11 @@ function arePhrasesInCircle(phrases, circle) {
   }
   return found
 }
+
+
+Split(['#leftpanel', '#rightpanel'], {
+  sizes: [20, 80],
+  minSize: [200,450],
+  direction: 'horizontal',
+  gutterSize: 2
+})

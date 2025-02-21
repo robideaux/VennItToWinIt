@@ -1,56 +1,33 @@
 game = {
     title: "JDR Game 01",
     groups: [
-        {
-            id: 1,
-            label: "Do Re Me Fa So La Ti Do"
-        },
-        {
-            id: 2,
-            label: "Actual Words"
-        },
-        {
-            id: 3,
-            label: "State Abbreviations"
-        }
+        "Do Re Me Fa So La Ti Do",
+        "Actual Words",
+        "State Abbreviations"
     ],
-    phrases: [
-        {
-            phrase: "FA",
-            short: "",
+    phrases: {
+        "FA": {
             groupIds: [1]
         },
-        {
-            phrase: "IF",
-            short: "",
+        "IF": {
             groupIds: [2]
         },
-        {
-            phrase: "NE",
-            short: "",
+        "NE": {
             groupIds: [3]
         },
-        {
-            phrase: "DO",
-            short: "",
+        "DO": {
             groupIds: [1,2]
         },
-        {
-            phrase: "OR",
-            short: "",
+        "OR": {
             groupIds: [2,3]
         },
-        {
-            phrase: "LA",
-            short: "",
+        "LA": {
             groupIds: [1,3]
         },
-        {
-            phrase: "ME",
-            short: "",
+        "ME": {
             groupIds: [1,2,3]
         }
-    ]
+    }
 }
 
 games.push(game)

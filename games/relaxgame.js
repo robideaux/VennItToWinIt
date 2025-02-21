@@ -1,56 +1,33 @@
 game = {
     title: "Just Relax",
     groups: [
-        {
-            id: 1,
-            label: "Tending a Boo-Boo"
-        },
-        {
-            id: 2,
-            label: "Getting Mugged"
-        },
-        {
-            id: 3,
-            label: "Beatles Albums"
-        }
+        "Tending a Boo-Boo",
+        "Getting Mugged",
+        "Beatles Albums"
     ],
-    phrases: [
-        {
-            phrase: "Peroxide",
-            short: "", // use this to save space, if defined.
+    phrases: {
+        "Peroxide": {
             groupIds: [1]
         },
-        {
-            phrase: "Wallet",
-            short: "",
+        "Wallet": {
             groupIds: [2]
         },
-        {
-            phrase: "Please Please Me",
-            short: "", // empty or missing altogether just uses the phrase
+        "Please Please Me": {
             groupIds: [3]
         },
-        {
-            phrase: "Don't Move",
-            short: "",
+        "Don't Move": {
             groupIds: [1,2]
         },
-        {
-            phrase: "Revolver",
-            short: "",
+        "Revolver": {
             groupIds: [2,3]
         },
-        {
-            phrase: "Let It Be",
-            short: "",
+        "Let It Be": {
             groupIds: [1,3]
         },
-        {
-            phrase: "Help!",
-            short: "",
+        "Help!": {
             groupIds: [1,2,3]
         }
-    ]
+    }
 }
 
 games.push(game)

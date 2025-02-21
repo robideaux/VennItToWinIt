@@ -8,44 +8,48 @@
   <link rel="stylesheet" href="./containers.css"/>
 </head>
 <body>
-    <div class="left panel">
-        <div>
-            <label>Select Game:</label>
-            <select name="games" id="gamelist">
-            </select>
-            <button id="Load">Start</button>
-            <button class="button button1" id="Check">Check</button>
-        </div>
-        <br/>
-        <div>
-            <div id="title">Phrases</div>
-            <div id="drag-src">
+    <div class="gameboard">
+        <div id="leftpanel">
+            <div>
+                <label>Select Game:</label>
+                <select name="games" id="gamelist">
+                </select>
+                <button id="Load">Start</button>
+                <button class="check" id="Check">Check</button>
+            </div>
+            <br/>
+            <div>
+                <div id="title">Phrases</div>
+                <div id="drag-src">
+                </div>
             </div>
         </div>
+
+        <div id="rightpanel">
+
+            <svg class="circle" viewbox="0 0 99 99">
+                <circle cx="52" cy="33%" r="32" fill="none" stroke-width="1" stroke="red"></circle>
+                <circle cx="33" cy="60" r="32" fill="none" stroke-width="1" stroke="green"></circle>
+                <circle cx="66" cy="60" r="32" fill="none" stroke-width="1" stroke="blue"></circle>
+            </svg>
+
+            <div id="redlabel" class="RedGroup">red group</div>
+            <div id="bluelabel" class="BlueGroup">blue group</div>
+            <div id="greenlabel" class="GreenGroup">green group</div>
+
+            <div class="drop-target red" g1="true" id="slot1"></div>
+            <div class="drop-target red blue" g1="true" g2="true" id="slot2"></div>
+            <div class="drop-target blue" g2="true" id="slot3"></div>
+            <div class="drop-target blue green" g2="true" g3="true" id="slot4"></div>
+            <div class="drop-target green" g3="true" id="slot5"></div>
+            <div class="drop-target red blue green" g1="true" g2="true" g3="true" id="slot6"></div>
+            <div class="drop-target red green" g1="true" g3="true" id="slot7"></div>
+        </div>
     </div>
-
-    <div class="right">
-
-        <svg class="circle" viewbox="0 0 99 99">
-            <circle cx="52" cy="33%" r="32" fill="none" stroke-width="1" stroke="red"></circle>
-            <circle cx="33" cy="60" r="32" fill="none" stroke-width="1" stroke="green"></circle>
-            <circle cx="66" cy="60" r="32" fill="none" stroke-width="1" stroke="blue"></circle>
-        </svg>
-
-        <div id="redlabel" class="RedGroup">red group</div>
-        <div id="bluelabel" class="BlueGroup">blue group</div>
-        <div id="greenlabel" class="GreenGroup">green group</div>
-
-        <div class="drop-target red" g1="true" id="slot1"></div>
-        <div class="drop-target red blue" g1="true" g2="true" id="slot2"></div>
-        <div class="drop-target blue" g2="true" id="slot3"></div>
-        <div class="drop-target blue green" g2="true" g3="true" id="slot4"></div>
-        <div class="drop-target green" g3="true" id="slot5"></div>
-        <div class="drop-target red blue green" g1="true" g2="true" g3="true" id="slot6"></div>
-        <div class="drop-target red green" g1="true" g3="true" id="slot7"></div>
     
     <script src="./node_modules/dragula/dist/dragula.js"></script>
     <script src="./node_modules/lz-string/libs/lz-string.min.js"></script>
+    <script src="./node_modules/split.js/dist/split.min.js"></script>
     <script>
         games = []
     </script>

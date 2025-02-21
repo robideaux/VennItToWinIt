@@ -1,56 +1,33 @@
 game = {
     title: "Family Game 01",
     groups: [
-        {
-            id: 1,
-            label: "___ fish"
-        },
-        {
-            id: 2,
-            label: "Weren't in my house 2 months ago"
-        },
-        {
-            id: 3,
-            label: "Finn Likes This"
-        }
+        "___ fish",
+        "Weren't in my house 2 months ago",
+        "Finn Likes This"
     ],
-    phrases: [
-        {
-            phrase: "Puffer",
-            short: "",
+    phrases: {
+        "Puffer": {
             groupIds: [1]
         },
-        {
-            phrase: "Electric Car",
-            short: "",
+        "Electric Car": {
             groupIds: [2]
         },
-        {
-            phrase: "Borking",
-            short: "",
+        "Borking": {
             groupIds: [3]
         },
-        {
-            phrase: "Sword",
-            short: "",
+        "Sword": {
             groupIds: [1,2]
         },
-        {
-            phrase: "Piss",
-            short: "",
+        "Piss": {
             groupIds: [2,3]
         },
-        {
-            phrase: "Tuna",
-            short: "",
+        "Tuna": {
             groupIds: [1,3]
         },
-        {
-            phrase: "Cat",
-            short: "",
+        "Cat": {
             groupIds: [1,2,3]
         }
-    ]
+    }
 }
 
 games.push(game)
