@@ -7,10 +7,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "jdr",
-  "license": "ISC",
-  "dependencies": {
-    "dragula": "^3.7.3",
-    "lz-string": "^1.5.0",
-    "split.js": "^1.6.5"
-  }
+  "license": "ISC"
 }
