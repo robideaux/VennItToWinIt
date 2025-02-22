@@ -7,20 +7,6 @@ function byClass(classname) {
   return document.getElementsByClassName(classname)
 }
 
-// Add game from query string
-query = document.location.search
-if (query) {
-  params = query.split(",")[0]
-  if (params) {
-    gameData = params.replace("?game=", "")
-    gameStr = LZString.decompressFromEncodedURIComponent(gameData)
-    game = JSON.parse(gameStr)
-    if (game && games.findIndex(x => x.title == game.title) < 0) {
-      games.push(game)
-    }
-  }
-}
-
 gamelist = byId("gamelist")
 currentGame = []
 games.forEach(game => {
@@ -36,13 +22,35 @@ gamelist.onchange = () =>
   setGame(games[gamelist.selectedIndex])
 }
 
+// Add game from query string
+query = document.location.search
+if (query) {
+  params = query.split(",")[0]
+  if (params) {
+    gameData = params.replace("?game=", "")
+    gameStr = LZString.decompressFromEncodedURIComponent(gameData)
+    game = JSON.parse(gameStr)
+    if (game) {
+      index = games.findIndex(x => x.title == game.title)
+      if (index < 0) {
+        games.push(game)
+        index = games.length - 1
+      }
+      gamelist.selectedIndex = index
+      setGame(game)
+    }
+  }
+}
+
 function setGame(game) {
   currentGame = game
   title = byId('title')
   title.textContent = "Phrases for: " + currentGame.title
 
   strGame = JSON.stringify(currentGame)
-  console.log(LZString.compressToEncodedURIComponent(strGame))
+
+  console.log("URL for this game:")
+  console.log(document.location.href + "?game=" + LZString.compressToEncodedURIComponent(strGame))
 }
 
 editButton = byId("Edit")
