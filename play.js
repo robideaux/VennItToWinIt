@@ -8,6 +8,19 @@ checkButton.onclick = () => {
   checkGame()
 }
 
+isSourceSelected = false
+selectedSource = null
+
+document.addEventListener('click', e => {
+  if (e.currentTarget == document) {
+    console.log("Document Clicked")
+  } else if (e.currentTarget.classList.contains('phrase')) {
+    console.log("Phrase Clicked")
+  } else {
+    console.log("Something else was clicked")
+  }
+})
+
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -20,22 +33,65 @@ for (let i=1; i<=7; i++) {
   slot = byId('slot' + i)
   slot.textContent = ''
   slots.push(slot)
+
+  slot.onclick = (event) => {
+    if (isSourceSelected && selectedSource) {
+      dropSlot = event.currentTarget
+      if (dropSlot.children.length == 0)
+      {
+        srcParent = selectedSource.parentElement
+        srcParent.removeChild(selectedSource)
+        // set short name
+        shortname = selectedSource.getAttribute('shortname')
+        if (shortname) {
+          selectedSource.children[0].textContent = shortname
+        }
+        dropSlot.appendChild(selectedSource)    
+        cancelSelections()
+      }
+    }
+  }
 }
 
 drake = dragula(slots, {
   revertOnSpill: true,
   accepts: function(el, target) {
     return target !== byId('drag-src')
-  }
-}).on('drop', function(el, target, source, sib) {
+  },
+  slideFactorX: 5,
+  slideFactorY: 5
+})
+drake.on('drop', function(el, target, source) {
   if (target.children.length >= 2) {
     source.appendChild(target.children[0])
   }
-  title = el.getAttribute('title')
-  text = el.children[0].textContent
-  el.setAttribute('title', text)
-  el.children[0].textContent = title
+  shortname = el.getAttribute('shortname')
+  if (shortname) {
+    el.children[0].textContent = shortname
+  }
 })
+drake.on('drag', (el, src) => {
+  cancelSelections()
+  el.classList.add('source')
+  highlightDrops(true)
+  isSourceSelected = true
+  selectedSource = el
+})
+
+drake.on('dragend', () => {
+  cancelSelections()
+})
+
+function cancelSelections() {
+  sources = byClass('source')
+  for (let source of sources) {
+    source.classList.remove('source')
+  }
+  highlightDrops(false)
+  isSourceSelected = false
+  selectedSource = null
+}
+
 
 function loadGame() {
   // clear labels
@@ -64,7 +120,7 @@ function loadGame() {
     phraseEl.classList.add("phrase")
     phraseEl.setAttribute('title', phrase)
     if (phraseObj.short) {
-      phraseEl.setAttribute('title', phraseObj.short)
+      phraseEl.setAttribute('shortname', phraseObj.short)
     }
     div = document.createElement('div')
     text = document.createTextNode(phrase)
@@ -73,6 +129,33 @@ function loadGame() {
       div.classList.add("G" + (id))
     })
     phraseEl.appendChild(div)
+    phraseEl.onclick = (event) => {
+      // check for deselection
+      if (event.currentTarget.classList.contains('source')) {
+        cancelSelections()
+        return
+      }
+
+      // if already a selection, then swap
+      if (isSourceSelected && selectedSource) {
+        target = event.currentTarget
+        targetParent = target.parentElement
+        srcParent = selectedSource.parentElement
+        targetParent.removeChild(target)
+        srcParent.removeChild(selectedSource)
+        targetParent.appendChild(selectedSource)
+        srcParent.appendChild(target)
+        cancelSelections()
+        return
+      }
+  
+      // otherwise, set this as the source
+      cancelSelections()
+      event.currentTarget.classList.add('source')
+      highlightDrops(true)
+      isSourceSelected = true
+      selectedSource = event.currentTarget
+    }
 
     srcPanel.appendChild(phraseEl)
     numPhrases = phraseList.length 
@@ -83,6 +166,18 @@ function loadGame() {
   for (let slot of slots) {
     slot.textContent = null
   }
+}
+
+function highlightDrops(yes) {
+  targets = byClass('drop-target')
+  for (let target of targets) {
+    if (yes) {
+      target.classList.add('highlight')
+    } else {
+      target.classList.remove('highlight')
+    }
+  }
+
 }
 
 function checkGame() {

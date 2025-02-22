@@ -9,19 +9,18 @@
   <link rel="stylesheet" href="./containers.css"/>
 </head>
 <body>
+    <div id="topPanel">
+        <label>Select Game:</label>
+        <select name="games" id="gamelist">
+        </select>
+        <button id="Load">Start</button>
+        <button id="Edit" class="editing">Edit</button>
+        <button id="Save" class="editing">Save</button>
+        <button id="Cancel" class="editing">Cancel</button>
+        <button class="check" id="Check">Check</button>
+    </div>
     <div class="gameboard">
         <div id="leftpanel">
-            <div>
-                <label>Select Game:</label>
-                <select name="games" id="gamelist">
-                </select>
-                <button id="Load">Start</button>
-                <button id="Edit" class="editing">Edit</button>
-                <button id="Save" class="editing">Save</button>
-                <button id="Cancel" class="editing">Cancel</button>
-                <button class="check" id="Check">Check</button>
-            </div>
-            <br/>
             <div>
                 <div id="title">Phrases</div>
                 <div id="drag-src">
