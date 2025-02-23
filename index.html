@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>Venn It To Win It!</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dragula@3.7.3/dist/dragula.min.css">  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dragula@3.7.3/dist/dragula.min.css">
   <link rel="stylesheet" href="./controls.css"/>
   <link rel="stylesheet" href="./containers.css"/>
 </head>
@@ -31,9 +31,17 @@
         <div id="rightpanel">
 
             <svg class="circle" viewbox="0 0 99 99">
-                <circle cx="52" cy="33%" r="32" fill="none" stroke-width="1" stroke="red"></circle>
-                <circle cx="33" cy="60" r="32" fill="none" stroke-width="1" stroke="green"></circle>
-                <circle cx="66" cy="60" r="32" fill="none" stroke-width="1" stroke="blue"></circle>
+              <g fill-opacity=".4">
+                <g fill="red">
+                <circle cx="52" cy="33%" r="32" stroke-width="1" style="mix-blend-mode:multiply" stroke="none"></circle>
+                </g>
+                <g fill="green">
+                <circle cx="33" cy="60" r="32" stroke-width="1" style="mix-blend-mode:multiply" stroke="none"></circle>
+                </g>
+                <g fill="blue">
+                <circle cx="66" cy="60" r="32" stroke-width="1" style="mix-blend-mode:multiply" stroke="none"></circle>
+                </g>
+              </g>
             </svg>
 
             <div id="redlabel" class="RedGroup">red group</div>
@@ -62,8 +70,9 @@
     <script src="./games/fam01.js"></script>
     <script src="./games/numbersgame.js"></script>
     <script src="./games/relaxgame.js"></script>
+    <script src="./games/builttough.js"></script>
     <script src="./games/winding.js"></script>
- 
+
     <script src="./board.js"></script>
     <script src="./play.js"></script>
 </body>
