@@ -99,9 +99,11 @@ linkButton.onclick = () => {
   }
 }
 
-Split(['#leftpanel', '#rightpanel'], {
+/*
+split = Split(['#leftpanel', '#rightpanel'], {
   sizes: [20, 80],
   minSize: [200,450],
   direction: 'horizontal',
   gutterSize: 2
 })
+*/
