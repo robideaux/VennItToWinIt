@@ -9,7 +9,7 @@ game = {
         "Nightmare": {
             groupIds: [1]
         },
-        "Sneeze": {
+        "Regurgitate": {
             groupIds: [2]
         },
         "Juicy": {
