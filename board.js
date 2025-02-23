@@ -8,7 +8,7 @@ function byClass(classname) {
 }
 
 gamelist = byId("gamelist")
-currentGame = []
+currentGame = null
 games.forEach(game => {
   option = document.createElement('option')
   text = document.createTextNode(game.title)
@@ -56,6 +56,7 @@ function setGame(game) {
 editButton = byId("Edit")
 saveButton = byId("Save")
 cancelButton = byId("Cancel")
+linkButton = byId("link")
 
 editButton.onclick = () => {
   editButton.classList.remove("live")
@@ -85,6 +86,17 @@ cancelButton.onclick = () => {
   saveButton.classList.add("editing")
   cancelButton.classList.remove("live")
   cancelButton.classList.add("editing")
+}
+
+linkButton.onclick = () => {
+  if (currentGame) {
+    strGame = JSON.stringify(currentGame)
+    gameUrl = document.location.href + "?game=" + LZString.compressToEncodedURIComponent(strGame)
+    gameUrl = "https://robideaux.github.io/VennItToWinIt/" + "?game=" + LZString.compressToEncodedURIComponent(strGame)
+    alert("Link to current Game: " + gameUrl)
+  } else {
+    alert("No Game Selected")
+  }
 }
 
 Split(['#leftpanel', '#rightpanel'], {

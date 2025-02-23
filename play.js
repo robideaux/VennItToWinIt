@@ -11,16 +11,6 @@ checkButton.onclick = () => {
 isSourceSelected = false
 selectedSource = null
 
-document.addEventListener('click', e => {
-  if (e.currentTarget == document) {
-    console.log("Document Clicked")
-  } else if (e.currentTarget.classList.contains('phrase')) {
-    console.log("Phrase Clicked")
-  } else {
-    console.log("Something else was clicked")
-  }
-})
-
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
