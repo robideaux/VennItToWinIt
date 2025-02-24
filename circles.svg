@@ -1,16 +1,16 @@
 <!-- 
     <svg viewbox="0 0 99 99" xmlns="http://www.w3.org/2000/svg">
 -->
-<svg xmlns="http://www.w3.org/2000/svg">
+<svg width="100px" height="100px" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <g fill-opacity=".4">
         <g fill="red">
-            <circle cx="50%" cy="35%" r="30%" stroke-width="1" style="mix-blend-mode:multiply" stroke="none"></circle>
+            <circle cx="50px" cy="35px" r="30px" style="mix-blend-mode:multiply" stroke="none"></circle>
         </g>
         <g fill="green">
-            <circle cx="33%" cy="60%" r="30%" stroke-width="1" style="mix-blend-mode:multiply" stroke="none"></circle>
+            <circle cx="33px" cy="60px" r="30px" style="mix-blend-mode:multiply" stroke="none"></circle>
         </g>
         <g fill="blue">
-            <circle cx="66%" cy="60%" r="30%" stroke-width="1" style="mix-blend-mode:multiply" stroke="none"></circle>
+            <circle cx="66px" cy="60px" r="30px" style="mix-blend-mode:multiply" stroke="none"></circle>
         </g>
     </g>
 </svg>
