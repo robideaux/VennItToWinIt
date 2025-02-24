@@ -1,28 +1,77 @@
+body {
+    margin: 1px;
+}
+
+/* Style the navigation menu */
+.topnav {
+    overflow: hidden;
+    color: white;
+    background-color: black;
+    position: relative;
+}
+
+.right {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+button#hamburger {
+    background: black;
+    border: none;
+    color: white;
+    /*
+    position: absolute;
+    right: 0;
+    top: 0;
+    */
+}
+
+/* Hide the links inside the navigation menu */
+#menu {
+    display: none;
+    background: #333;
+    color: white;
+}
+#menu a {
+    /*
+    background: black;
+    */
+    color: white;    
+    padding: 14px 16px;
+    text-decoration: none;
+    display: block;
+}
+
 .controls {
     background-color: gainsboro;
 }
 
+/*
 #topPanel {
     width: 100%;
 }
+*/
 
 #phrasePanel {
     width: 100%;
 }
 
 label {
-    font-size: x-large;
+    font-size: large;
 }
 
 select {
+    background: #333;
+    color: white;
     font-size: large;
-    height: 60px;
+    height: 72px;
 }
 
 .gameboard {
     display: flex;
     flex-direction: column;
-    height: 90vh;
+    height: 80vh;
     background-color: aliceblue;
 }
 
@@ -34,14 +83,13 @@ button {
 
 button.check {
   background-color: #04AA6D; /* Green */
-  border: 2px solid transparent;
+  border: none;
   border-radius: 50%;
   color: white;
   padding: 8px 8px;
   text-align: center;
   margin: 4px 4px;
   width: 72px;
-  height: 72px;
 }
 
 button.check:hover {
@@ -49,12 +97,14 @@ button.check:hover {
     border-color: #04AA6D;
 }
 
+/*
 button.info {
     border: 2px solid blue;
     border-radius: 50%;
     width: 48px;
     height: 48px;
 }
+*/
 
 #vennPanel {
     background-image: url('./circles.svg');
@@ -85,9 +135,6 @@ button.info {
     }
     .phrase {
         min-height: 40px;
-        /*
-        max-width: 14%;
-        */
     }
 }
 
@@ -107,8 +154,5 @@ button.info {
     .phrase {
         max-height: 10vh;
         min-height: 7vh;
-        /*
-        max-width: 45%;
-        */
     }
 }

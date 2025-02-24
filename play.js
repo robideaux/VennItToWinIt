@@ -1,7 +1,9 @@
+/*
 startButton = byId("Load")
 startButton.onclick = () => {
   loadGame()
 }
+*/
 
 checkButton = byId("Check")
 checkButton.onclick = () => {

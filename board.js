@@ -7,6 +7,32 @@ function byClass(classname) {
   return document.getElementsByClassName(classname)
 }
 
+menuButton = byId("hamburger")
+menuButton.onclick = () => {
+  menu = byId("menu")
+  icon = byId("hamburger")
+  if (menu.style.display === "block") {
+    menu.style.display = "none"
+    icon.classList.remove("fa-times")
+    icon.classList.add("fa-bars")
+  } else {
+    menu.style.display = "block";
+    icon.classList.remove("fa-bars")
+    icon.classList.add("fa-times")
+  }
+}
+
+
+infoButton = byId("info")
+infoButton.onclick = () => {
+    alert("Click and place or drag the phrases to the correct area in the diagram. Hit the Check button to check your answers. If all the correct pharses are in a circle the title of the group will be revealed; even if they are misplaced withing the circle");
+}
+
+/*
+startButton = byId("Load")
+startButton.disabled = true;
+*/
+
 gamelist = byId("gamelist")
 currentGame = null
 games.forEach(game => {
@@ -23,6 +49,7 @@ gamelist.onchange = () =>
 }
 
 // Add game from query string
+setGame(null)
 query = document.location.search
 if (query) {
   params = query.split(",")[0]
@@ -38,14 +65,26 @@ if (query) {
       }
       gamelist.selectedIndex = index
       setGame(game)
+    } else {
+      gamelist.selectedIndex = -1
+      setGame(null)
     }
   }
 }
 
 function setGame(game) {
-  currentGame = game
-  title = byId('title')
-  title.textContent = "Phrases for: " + currentGame.title
+  if (game) {
+    currentGame = game
+    title = byId('title')
+    title.textContent = "Phrases for: " + currentGame.title
+    // startButton.disabled = false;
+    loadGame()
+  } else {
+    currentGame = null
+    title = byId('title')
+    title.textContent = "No game selected"
+    // startButton.disabled = true;
+  }
 
   strGame = JSON.stringify(currentGame)
 
@@ -53,10 +92,10 @@ function setGame(game) {
   console.log(document.location.href + "?game=" + LZString.compressToEncodedURIComponent(strGame))
 }
 
+/*
 editButton = byId("Edit")
 saveButton = byId("Save")
 cancelButton = byId("Cancel")
-linkButton = byId("link")
 
 editButton.onclick = () => {
   editButton.classList.remove("live")
@@ -87,7 +126,9 @@ cancelButton.onclick = () => {
   cancelButton.classList.remove("live")
   cancelButton.classList.add("editing")
 }
+*/
 
+/*
 linkButton.onclick = () => {
   if (currentGame) {
     strGame = JSON.stringify(currentGame)
@@ -98,16 +139,4 @@ linkButton.onclick = () => {
     alert("No Game Selected")
   }
 }
-
-function info() {
-    alert("Click and place or drag the phrases to the correct area in the diagram. Hit the Check button to check your answers. If all the correct pharses are in a circle the title of the group will be revealed; even if they are misplaced withing the circle");
-  }
-
-/*
-split = Split(['#leftpanel', '#rightpanel'], {
-  sizes: [20, 80],
-  minSize: [200,450],
-  direction: 'horizontal',
-  gutterSize: 2
-})
 */

@@ -5,23 +5,38 @@
   <title>Venn It To Win It!</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dragula@3.7.3/dist/dragula.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="./controls.css"/>
   <link rel="stylesheet" href="./containers.css"/>
 </head>
 <body>
+    <div class="topnav">
+        <div class="title">
+            <label>Venn It To Winn It: </label>
+            <select name="games" id="gamelist"></select>
+            <div class="right">
+                <button class="check" id="Check">Check</button>
+                <button id="hamburger" class="fa fa-bars"></button>
+            </div>
+        </div>
+        <!-- Menu (hidden by default) -->
+        <div id="menu">
+            <a id="info" href="#info">How to play</a>
+            <a id="link" href="#link">Link to current game</a>
+            <a id="about" href="#about">About</a>
+        </div>
+    </div>
+
     <div class="gameboard">
         <div class="controls">
+            <!--
             <div id="topPanel">
-            <label>Select Game:</label>
-            <select name="games" id="gamelist">
-            </select>
-            <button id="Load">Start</button>
-            <button id="Edit" class="editing">Edit</button>
-            <button id="Save" class="editing">Save</button>
-            <button id="Cancel" class="editing">Cancel</button>
-            <button class="info" onclick="info()">info</button>
-            <button class="check" id="Check">Check</button>
+                <button id="Load">Start</button>
+                <button id="Edit" class="editing">Edit</button>
+                <button id="Save" class="editing">Save</button>
+                <button id="Cancel" class="editing">Cancel</button>
             </div>
+            -->
             <div id="phrasePanel">
                 <div id="title">Phrases</div>
                 <div id="drag-src">
@@ -32,7 +47,7 @@
         <div id="vennPanel">
             <table>
                 <tr>
-                    <td id="redlabel" class="groupLabels">red group</td>
+                    <td id="redlabel" colspan="4" class="groupLabels">red group</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -86,11 +101,8 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td id="greenlabel" class="groupLabels">green group</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td id="bluelabel" class="groupLabels">blue group</td>
+                    <td id="greenlabel" colspan="3" class="groupLabels">green group</td>
+                    <td id="bluelabel" colspan="3" class="groupLabels">blue group</td>
                 </tr>
             </table>
         </div>
