@@ -99,6 +99,10 @@ linkButton.onclick = () => {
   }
 }
 
+function info() {
+    alert("Click and place or drag the phrases to the correct area in the diagram. Hit the Check button to check your answers. If all the correct pharses are in a circle the title of the group will be revealed; even if they are misplaced withing the circle");
+  }
+
 /*
 split = Split(['#leftpanel', '#rightpanel'], {
   sizes: [20, 80],
