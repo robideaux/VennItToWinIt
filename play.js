@@ -112,7 +112,7 @@ function loadGame() {
     if (phraseObj.short) {
       phraseEl.setAttribute('shortname', phraseObj.short)
     }
-    div = document.createElement('div')
+    div = document.createElement('p')
     text = document.createTextNode(phrase)
     div.appendChild(text)
     phraseObj.groupIds.forEach(id => {

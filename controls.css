@@ -1,31 +1,59 @@
+.controls {
+    background-color: gainsboro;
+}
+
 #topPanel {
     width: 100%;
+}
+
+#phrasePanel {
+    width: 100%;
+}
+
+label {
+    font-size: x-large;
+}
+
+select {
+    font-size: large;
+    height: 60px;
 }
 
 .gameboard {
     display: flex;
     flex-direction: column;
     height: 90vh;
+    background-color: aliceblue;
 }
 
+button {
+    font-size: large;
+    width: 60px;
+    height: 60px;
+}
 
 button.check {
   background-color: #04AA6D; /* Green */
   border: 2px solid transparent;
   border-radius: 50%;
   color: white;
-  padding: 8px 6px;
+  padding: 8px 8px;
   text-align: center;
-  font-size: 16px;
-  margin: 2px 2px;
+  margin: 4px 4px;
+  width: 72px;
+  height: 72px;
 }
 
 button.check:hover {
-    border-color: limegreen;
+    background-color: limegreen;
+    border-color: #04AA6D;
 }
 
-button#link {
-    display: none;
+button.info {
+    border: 2px solid blue;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
 }
 
 #vennPanel {
@@ -48,8 +76,18 @@ button#link {
         display: flex;
         flex-direction: column;
     }
-    #phrasePanel {
+    .controls {
         width: 100%;
+        margin-bottom: 10px;
+    }
+    #vennPanel {
+        height: 100%;
+    }
+    .phrase {
+        min-height: 40px;
+        /*
+        max-width: 14%;
+        */
     }
 }
 
@@ -58,7 +96,19 @@ button#link {
         display: flex;
         flex-direction: row;
     }
-    #phrasePanel {
-        width: 20%;
+    .controls {
+        width: 40%;
+        height: 100%;
+        margin-right: 10px;
+    }
+    #vennPanel {
+        width: 100%;
+    }
+    .phrase {
+        max-height: 10vh;
+        min-height: 7vh;
+        /*
+        max-width: 45%;
+        */
     }
 }
