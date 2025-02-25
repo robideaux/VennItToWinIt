@@ -1,5 +1,5 @@
 body {
-    margin: 1px;
+    margin: 0px;
 }
 
 /* Style the navigation menu */
@@ -11,20 +11,28 @@ body {
 }
 
 .right {
-    position: absolute;
-    right: 0;
-    top: 0;
+    position: relative;
+    float: right;
+    font-size: 4rem;
+
+    height: 50%;
 }
 
 button#hamburger {
     background: black;
     border: none;
     color: white;
+    float: right;
+    height: 100%;
     /*
     position: absolute;
     right: 0;
     top: 0;
     */
+}
+
+.title {
+    height: 10vh;
 }
 
 /* Hide the links inside the navigation menu */
@@ -43,19 +51,11 @@ button#hamburger {
     display: block;
 }
 
-.controls {
-    background-color: gainsboro;
-}
-
 /*
 #topPanel {
     width: 100%;
 }
 */
-
-#phrasePanel {
-    width: 100%;
-}
 
 label {
     font-size: large;
@@ -65,7 +65,7 @@ select {
     background: #333;
     color: white;
     font-size: large;
-    height: 72px;
+    height: 90%;
 }
 
 .gameboard {
@@ -86,10 +86,15 @@ button.check {
   border: none;
   border-radius: 50%;
   color: white;
-  padding: 8px 8px;
+  padding: 0px 10px;
   text-align: center;
+  /*
   margin: 4px 4px;
   width: 72px;
+  */
+  height: 100%;
+  width: auto;
+  font-size: x-large;
 }
 
 button.check:hover {
@@ -106,13 +111,6 @@ button.info {
 }
 */
 
-#vennPanel {
-    background-image: url('./circles.svg');
-    background-size: 100% 100%;
-    width: 100%;
-    height: 100%;
-}
-
 .live {
     display: block;
 }
@@ -122,37 +120,39 @@ button.info {
 }
 
 @media screen and (orientation: portrait) {
+    .title {
+        height: 6vh;
+    }
+    .right {
+        height: 90%;
+        font-size: 2rem;
+    }
+    button.check {
+        width: 10vh;
+        height: 100%;
+        font-size: xx-large;
+    }
     .gameboard {
         display: flex;
         flex-direction: column;
     }
-    .controls {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    #vennPanel {
-        height: 100%;
-    }
-    .phrase {
-        min-height: 40px;
-    }
 }
 
 @media screen and (orientation: landscape) {
+    .title {
+        height: 10vh;
+    }
+    .right {
+        height: 90%;
+        font-size: 2rem;
+    }
+    button.check {
+        height: 100%;
+        width: auto;
+        font-size: x-large;
+    }
     .gameboard {
         display: flex;
         flex-direction: row;
-    }
-    .controls {
-        width: 40%;
-        height: 100%;
-        margin-right: 10px;
-    }
-    #vennPanel {
-        width: 100%;
-    }
-    .phrase {
-        max-height: 10vh;
-        min-height: 7vh;
     }
 }
