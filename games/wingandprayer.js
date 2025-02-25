@@ -9,7 +9,7 @@ game = {
         "Guru": {
             groupIds: [1]
         },
-        "Onyx": {
+        "Salmon": {
             groupIds: [2]
         },
         "Pigeon": {
