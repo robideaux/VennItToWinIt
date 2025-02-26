@@ -2,7 +2,6 @@ body {
     margin: 0px;
 }
 
-/* Style the navigation menu */
 .topnav {
     overflow: hidden;
     color: white;
@@ -20,7 +19,9 @@ body {
 .right {
     position: static;
     float: right;
+    /*
     font-size: 2rem;
+    */
     height: 100%;
     width: 30%;
 }
@@ -32,13 +33,7 @@ button#hamburger {
     float: right;
     height: auto;
     width: auto;
-    /*
-    position: absolute;
-    right: 0;
-    top: 0;
-    */
 }
-
 
 button#check {
     background-color: #04AA6D; /* Green */
@@ -48,26 +43,18 @@ button#check {
     text-align: center;
     float: right;
     /*
-    margin: 4px 4px;
-    width: 72px;
-    */
     padding: 5px 10px;
+    font-size: large;
+    */
     height: 100%;
     width: auto;
-    font-size: large;
 }
-
 
 button#check:hover {
     background-color: limegreen;
     border-color: #04AA6D;
 }
 
-/*
-.title {
-    height: 10vh;
-}
-*/
 
 /* Hide the links inside the navigation menu */
 #menu {
@@ -77,54 +64,38 @@ button#check:hover {
 }
 #menu a {
     /*
-    background: black;
+    padding: 14px 16px;
     */
     color: white;    
-    padding: 14px 16px;
     text-decoration: none;
     display: block;
 }
 
 /*
-#topPanel {
-    width: 100%;
-}
-*/
-
 label {
     font-size: large;
 }
+*/
 
 select {
     background: #333;
     color: white;
+    /*
     font-size: large;
     height: 5vh;
+    */
 }
 
 .gameboard {
     display: flex;
     flex-direction: column;
-    height: 80vh;
     background-color: aliceblue;
+    width: 100%;
+    height: 100;
+    /*
+    height: 80vh;
+    */
 }
-
-/*
-button {
-    font-size: large;
-    width: 60px;
-    height: 60px;
-}
-*/
-
-/*
-button.info {
-    border: 2px solid blue;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-}
-*/
 
 .live {
     display: block;
@@ -136,14 +107,6 @@ button.info {
 
 @media screen and (orientation: portrait) {
     /*
-    .title {
-        height: 6vh;
-    }
-    .right {
-        height: 90%;
-        font-size: 2rem;
-    }
-    */
     label {
         font-size: x-large;
     }
@@ -152,31 +115,14 @@ button.info {
         height: 4vh;
         font-size: x-large;
     }
+    */
     .gameboard {
-        display: flex;
         flex-direction: column;
     }
 }
 
 @media screen and (orientation: landscape) {
-    /*
-    .title {
-        height: 10vh;
-    }
-    .right {
-        height: 90%;
-        font-size: 2rem;
-    }
-    */
-    /*
-    button.check {
-        height: 100%;
-        width: auto;
-        font-size: x-large;
-    }
-    */
     .gameboard {
-        display: flex;
         flex-direction: row;
     }
 }

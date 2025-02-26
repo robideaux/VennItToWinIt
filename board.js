@@ -1,6 +1,8 @@
 (async () => {
 try {
-  response = await fetch('./games/')
+  href = document.location
+  gamesPath = href.origin + href.pathname + "/games/"
+  response = await fetch(gamesPath)
   data = await response.json()
   console.log("data2: ")
   console.log(data)
@@ -55,17 +57,10 @@ fullscreen.onclick = () => {
 
   if (document.fullscreenElement) {
     document.exitFullscreen()
-    fullscreen.textContent = "Full Screen Mode"
   } else {
     document.body.requestFullscreen()
-    fullscreen.textContent = "Exit Full Screen"
   }
 }
-
-/*
-startButton = byId("Load")
-startButton.disabled = true;
-*/
 
 gamelist = byId("gamelist")
 currentGame = null
