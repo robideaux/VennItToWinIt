@@ -1,3 +1,23 @@
+(async () => {
+try {
+  response = await fetch('./games/')
+  data = await response.json()
+  console.log("data2: ")
+  console.log(data)
+} catch (error) {
+  console.log("err2: ")
+  console.log(error)
+}
+try {
+  response = await fetch('https://api.github.com/repos/robideaux/VennItToWinIt/contents/games/')
+  data = await response.json()
+  console.log("data3: ")
+  console.log(data)
+} catch (error) {
+  console.log("err3: ")
+  console.log(error)
+}
+})()
 
 function byId(id) {
     return document.getElementById(id)
@@ -22,10 +42,24 @@ menuButton.onclick = () => {
   }
 }
 
-
 infoButton = byId("info")
 infoButton.onclick = () => {
     alert("Click and place or drag the phrases to the correct area in the diagram. Hit the Check button to check your answers. If all the correct pharses are in a circle the title of the group will be revealed; even if they are misplaced withing the circle");
+}
+
+fullscreen = byId("fullscreen")
+fullscreen.onclick = () => {
+  if (!document.fullscreenEnabled) {
+    return
+  }
+
+  if (document.fullscreenElement) {
+    document.exitFullscreen()
+    fullscreen.textContent = "Full Screen Mode"
+  } else {
+    document.body.requestFullscreen()
+    fullscreen.textContent = "Exit Full Screen"
+  }
 }
 
 /*
@@ -46,6 +80,7 @@ gamelist.selectedIndex = -1
 gamelist.onchange = () =>
 {
   setGame(games[gamelist.selectedIndex])
+  document.body.requestFullscreen()
 }
 
 // Add game from query string
