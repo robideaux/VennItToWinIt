@@ -1,5 +1,7 @@
 #phrasePanel {
     background-color: gainsboro;
+    width: auto;
+    height: auto;
 }
 
 #drag-src {
@@ -17,10 +19,13 @@
     border-style: solid;
     border-width: 2px;
     background: #F7F7F7;
+    margin: 3px;
+    padding: 6px;
+    min-width: 40%;
 }
 
 .phrase > p {
-    text-align: left;
+    text-align: center;
     margin: 0;
     padding: 0;
 }
@@ -103,11 +108,11 @@ td {
 @media screen and (orientation: landscape) {
     #phrasePanel {
         max-width: 40%;
-        height: 100%;
         margin-right: 10px;
     }
     #vennPanel {
         height: 90vh;
+        max-width: 90vw;
     }
     /*
     .phrase {
