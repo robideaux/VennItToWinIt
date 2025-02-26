@@ -3,10 +3,6 @@
     background-color: gainsboro;
 }
 
-#title {
-    font-size: x-large;
-}
-
 #drag-src {
     display: flex;
     flex-direction: row;

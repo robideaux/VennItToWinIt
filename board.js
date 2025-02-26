@@ -80,7 +80,6 @@ gamelist.selectedIndex = -1
 gamelist.onchange = () =>
 {
   setGame(games[gamelist.selectedIndex])
-  document.body.requestFullscreen()
 }
 
 // Add game from query string
@@ -110,15 +109,9 @@ if (query) {
 function setGame(game) {
   if (game) {
     currentGame = game
-    title = byId('title')
-    title.textContent = "Phrases for: " + currentGame.title
-    // startButton.disabled = false;
     loadGame()
   } else {
     currentGame = null
-    title = byId('title')
-    title.textContent = "No game selected"
-    // startButton.disabled = true;
   }
 
   strGame = JSON.stringify(currentGame)

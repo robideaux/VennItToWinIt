@@ -10,12 +10,19 @@ body {
     position: relative;
 }
 
-.right {
+.left {
     position: relative;
-    float: right;
-    font-size: 4rem;
+    float: left;
+    width: 70%;
+    height: 100%;
+}
 
-    height: 50%;
+.right {
+    position: static;
+    float: right;
+    font-size: 2rem;
+    height: 100%;
+    width: 30%;
 }
 
 button#hamburger {
@@ -23,7 +30,8 @@ button#hamburger {
     border: none;
     color: white;
     float: right;
-    height: 100%;
+    height: auto;
+    width: auto;
     /*
     position: absolute;
     right: 0;
@@ -31,9 +39,35 @@ button#hamburger {
     */
 }
 
+
+button#check {
+    background-color: #04AA6D; /* Green */
+    border: none;
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+    float: right;
+    /*
+    margin: 4px 4px;
+    width: 72px;
+    */
+    padding: 5px 10px;
+    height: 100%;
+    width: auto;
+    font-size: large;
+}
+
+
+button#check:hover {
+    background-color: limegreen;
+    border-color: #04AA6D;
+}
+
+/*
 .title {
     height: 10vh;
 }
+*/
 
 /* Hide the links inside the navigation menu */
 #menu {
@@ -65,7 +99,7 @@ select {
     background: #333;
     color: white;
     font-size: large;
-    height: 90%;
+    height: 5vh;
 }
 
 .gameboard {
@@ -75,32 +109,13 @@ select {
     background-color: aliceblue;
 }
 
+/*
 button {
     font-size: large;
     width: 60px;
     height: 60px;
 }
-
-button.check {
-  background-color: #04AA6D; /* Green */
-  border: none;
-  border-radius: 50%;
-  color: white;
-  padding: 0px 10px;
-  text-align: center;
-  /*
-  margin: 4px 4px;
-  width: 72px;
-  */
-  height: 100%;
-  width: auto;
-  font-size: x-large;
-}
-
-button.check:hover {
-    background-color: limegreen;
-    border-color: #04AA6D;
-}
+*/
 
 /*
 button.info {
@@ -120,6 +135,7 @@ button.info {
 }
 
 @media screen and (orientation: portrait) {
+    /*
     .title {
         height: 6vh;
     }
@@ -127,10 +143,14 @@ button.info {
         height: 90%;
         font-size: 2rem;
     }
-    button.check {
-        width: 10vh;
-        height: 100%;
-        font-size: xx-large;
+    */
+    label {
+        font-size: x-large;
+    }
+    button#check {
+        padding: 0px 20px;
+        height: 4vh;
+        font-size: x-large;
     }
     .gameboard {
         display: flex;
@@ -139,6 +159,7 @@ button.info {
 }
 
 @media screen and (orientation: landscape) {
+    /*
     .title {
         height: 10vh;
     }
@@ -146,11 +167,14 @@ button.info {
         height: 90%;
         font-size: 2rem;
     }
+    */
+    /*
     button.check {
         height: 100%;
         width: auto;
         font-size: x-large;
     }
+    */
     .gameboard {
         display: flex;
         flex-direction: row;
