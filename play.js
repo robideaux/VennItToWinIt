@@ -5,7 +5,7 @@ startButton.onclick = () => {
 }
 */
 
-checkButton = byId("Check")
+checkButton = byId("check")
 checkButton.onclick = () => {
   checkGame()
 }
