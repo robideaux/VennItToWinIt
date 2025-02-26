@@ -9,10 +9,15 @@ body {
     position: relative;
 }
 
+#header {
+    width: 100%;
+    height: 6vh;
+}
+
 .left {
     position: relative;
     float: left;
-    width: 70%;
+    width: 80%;
     height: 100%;
 }
 
@@ -23,7 +28,21 @@ body {
     font-size: 2rem;
     */
     height: 100%;
-    width: 30%;
+    width: 20%;
+}
+
+label {
+    font-size: large;
+}
+
+select {
+    background: #222;
+    color: white;
+    height: 100%;
+    /*
+    font-size: large;
+    height: 5vh;
+    */
 }
 
 button#hamburger {
@@ -59,31 +78,19 @@ button#check:hover {
 /* Hide the links inside the navigation menu */
 #menu {
     display: none;
-    background: #333;
     color: white;
+    background: #222;
+    /*
+    background: #333;
+    */
 }
 #menu a {
     /*
-    padding: 14px 16px;
     */
+    padding: 4px 6px;
     color: white;    
     text-decoration: none;
     display: block;
-}
-
-/*
-label {
-    font-size: large;
-}
-*/
-
-select {
-    background: #333;
-    color: white;
-    /*
-    font-size: large;
-    height: 5vh;
-    */
 }
 
 .gameboard {
