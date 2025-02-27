@@ -1,0 +1,31 @@
+{
+    "title": "Foul Play",
+    "groups": [
+        "More Birds",
+        "Dirty Words",
+        "Local Places"
+    ],
+    "phrases": {
+        "Swallow" : {
+            "groupIds": [1]
+        },
+        "Prick" : {
+            "groupIds": [2]
+        },
+        "Pack & Paddle" : {
+            "groupIds": [3]
+        },
+        "Tits" : {
+            "groupIds": [1,2]
+        },
+        "Dicks" : {
+            "groupIds": [2,3]
+        },
+        "Spoonbill" : {
+            "groupIds": [1,3]
+        },
+        "Hooters" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
