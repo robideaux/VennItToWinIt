@@ -11,7 +11,7 @@ body {
 
 #header {
     width: 100%;
-    height: 6vh;
+    height: 10vh;
 }
 
 .left {
@@ -32,13 +32,16 @@ body {
 }
 
 label {
+    display: contents;
     font-size: large;
+    width: 50%;
 }
 
 select {
     background: #222;
     color: white;
     height: 100%;
+    width: 50%;
     /*
     font-size: large;
     height: 5vh;
@@ -50,8 +53,9 @@ button#hamburger {
     border: none;
     color: white;
     float: right;
-    height: auto;
-    width: auto;
+    font-size: 2em;
+    height: 100%;
+    width: 50%;
 }
 
 button#check {
@@ -66,7 +70,7 @@ button#check {
     font-size: large;
     */
     height: 100%;
-    width: auto;
+    width: 50%;
 }
 
 button#check:hover {
@@ -87,7 +91,8 @@ button#check:hover {
 #menu a {
     /*
     */
-    padding: 4px 6px;
+    font-size: 2em;
+    padding: 6px 6px;
     color: white;    
     text-decoration: none;
     display: block;
@@ -98,10 +103,7 @@ button#check:hover {
     flex-direction: column;
     background-color: aliceblue;
     width: 100%;
-    height: 100;
-    /*
     height: 80vh;
-    */
 }
 
 .live {
@@ -131,5 +133,11 @@ button#check:hover {
 @media screen and (orientation: landscape) {
     .gameboard {
         flex-direction: row;
+    }
+}
+
+@media screen and (display-mode: fullscreen) and (orientation: portrait) {
+    #menu a {
+        font-size: 1em;
     }
 }

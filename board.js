@@ -1,7 +1,7 @@
 (async () => {
 try {
   href = document.location
-  gamesPath = href.origin + href.pathname + "/games/"
+  gamesPath = href.origin + href.pathname + "games/"
   response = await fetch(gamesPath)
   data = await response.json()
   console.log("data2: ")

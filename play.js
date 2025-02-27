@@ -1,10 +1,3 @@
-/*
-startButton = byId("Load")
-startButton.onclick = () => {
-  loadGame()
-}
-*/
-
 checkButton = byId("check")
 checkButton.onclick = () => {
   checkGame()
@@ -45,6 +38,7 @@ for (let i=1; i<=7; i++) {
   }
 }
 
+/*
 drake = dragula(slots, {
   revertOnSpill: true,
   accepts: function(el, target) {
@@ -73,6 +67,7 @@ drake.on('drag', (el, src) => {
 drake.on('dragend', () => {
   cancelSelections()
 })
+*/
 
 function cancelSelections() {
   sources = byClass('source')
@@ -83,7 +78,6 @@ function cancelSelections() {
   isSourceSelected = false
   selectedSource = null
 }
-
 
 function loadGame() {
   // clear labels
