@@ -1,4 +1,4 @@
-checkButton = byId("check")
+checkButton = byId("checkBtn")
 checkButton.onclick = () => {
   checkGame()
 }
@@ -12,12 +12,9 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-slots = []
-slots.push(byId('drag-src'))
 for (let i=1; i<=7; i++) {
   slot = byId('slot' + i)
   slot.textContent = ''
-  slots.push(slot)
 
   slot.onclick = (event) => {
     if (isSourceSelected && selectedSource) {
@@ -26,11 +23,6 @@ for (let i=1; i<=7; i++) {
       {
         srcParent = selectedSource.parentElement
         srcParent.removeChild(selectedSource)
-        // set short name
-        shortname = selectedSource.getAttribute('shortname')
-        if (shortname) {
-          selectedSource.children[0].textContent = shortname
-        }
         dropSlot.appendChild(selectedSource)    
         cancelSelections()
       }
@@ -84,14 +76,14 @@ function loadGame() {
   circles = ["red", "blue", "green"]
   for (let circle of circles) {
     label = byId(circle+"label")
-      label.textContent = circle + ' group'
+    label.textContent = circle + ' group'
   }
 
   currentPhrases = currentGame.phrases
   phraseList = [...Object.keys(currentPhrases)]
 
   // Clear source
-  srcPanel = byId('drag-src')
+  srcPanel = byId('choices')
   srcPanel.textContent = null
 
   // add phrases in random order
@@ -104,10 +96,6 @@ function loadGame() {
 
     phraseEl = document.createElement('div')
     phraseEl.classList.add("phrase")
-    phraseEl.setAttribute('title', phrase)
-    if (phraseObj.short) {
-      phraseEl.setAttribute('shortname', phraseObj.short)
-    }
     div = document.createElement('p')
     text = document.createTextNode(phrase)
     div.appendChild(text)
@@ -115,6 +103,7 @@ function loadGame() {
       div.classList.add("G" + (id))
     })
     phraseEl.appendChild(div)
+    
     phraseEl.onclick = (event) => {
       // check for deselection
       if (event.currentTarget.classList.contains('source')) {

@@ -21,7 +21,13 @@
     background: #F7F7F7;
     margin: 3px;
     padding: 6px;
-    min-width: 40%;
+    min-width: 10vh;
+    align-content: center;
+    /*
+    margin: 6px;
+    padding: 10px;
+    min-width: 120px;
+    */
 }
 
 .phrase > p {
@@ -54,6 +60,10 @@ tr {
     height: 6%;
 }
 
+tr.emptyRow {
+    height: 3%;
+}
+
 td {
     width: 20%;
     vertical-align: middle;
@@ -81,9 +91,7 @@ td {
 
 .groupLabels {
     position: relative;
-    /*
-    font-size: x-large;
-    */
+    font-size: 1.5em;
 }
 
 

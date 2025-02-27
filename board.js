@@ -6,24 +6,28 @@ function byClass(classname) {
   return document.getElementsByClassName(classname)
 }
 
-menuButton = byId("hamburger")
+menuButton = byId("bars")
 menuButton.onclick = () => {
-  menu = byId("menu")
-  icon = byId("hamburger")
+  toggleMenu()
+}
+
+function toggleMenu() {
+  menu = byId("menupanel")
   if (menu.style.display === "block") {
     menu.style.display = "none"
-    icon.classList.remove("fa-times")
-    icon.classList.add("fa-bars")
+    menuButton.classList.remove("fa-times")
+    menuButton.classList.add("fa-bars")
   } else {
     menu.style.display = "block";
-    icon.classList.remove("fa-bars")
-    icon.classList.add("fa-times")
+    menuButton.classList.remove("fa-bars")
+    menuButton.classList.add("fa-times")
   }
 }
 
 infoButton = byId("info")
 infoButton.onclick = () => {
-    alert("Click and place or drag the phrases to the correct area in the diagram. Hit the Check button to check your answers. If all the correct pharses are in a circle the title of the group will be revealed; even if they are misplaced withing the circle");
+  toggleMenu()
+  alert("Click and place or drag the phrases to the correct area in the diagram. Hit the Check button to check your answers. If all the correct pharses are in a circle the title of the group will be revealed; even if they are misplaced withing the circle");
 }
 
 fullscreen = byId("fullscreen")
@@ -32,12 +36,14 @@ fullscreen.onclick = () => {
     return
   }
 
+  toggleMenu()
   if (document.fullscreenElement) {
     document.exitFullscreen()
   } else {
     document.body.requestFullscreen()
   }
 }
+
 
 gamelist = byId("gamelist")
 currentGame = null

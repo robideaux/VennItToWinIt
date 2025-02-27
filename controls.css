@@ -1,7 +1,103 @@
 body {
     margin: 0px;
+    width: 100vw;
+    height: 100vh;    
 }
 
+.cssTable {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.cssRow {
+    display: table-row;
+}
+
+.cssRow.titlebar {
+    height: 0%;
+}
+
+.cssRow.full {
+    height: 100%;
+}
+
+#titlebar {
+    display: table-row;
+    color: white;
+    background-color: black;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    align-items: center;
+}
+
+.left {
+    position: relative;
+    float: left;
+}
+
+.right {
+    position: relative;
+    float: right;
+}
+
+#title {
+    font-size: 2rem;
+}
+#selection {
+    /*
+    height: 100%;
+    */
+    margin: 3px 0px;
+}
+
+#gamelist {
+    background: #222;
+    color: white;
+    height: 6vh;
+    align-self: center;
+}
+
+#controls {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+    font-size: 1em;
+}
+
+#checkBtn {
+    background-color: #04AA6D;
+    border-radius: 50%;
+    padding: 1em;
+    margin: 3px;
+    justify-self: right;
+}
+
+#bars {
+    font-size: 2em;
+    margin: 3px;
+    justify-self: center;
+}
+
+#menupanel {
+    display: none;
+    color: white;
+    background-color: #222222e0;
+    width: 100%;
+    position: absolute;
+    height: auto;
+}
+
+#menupanel div {
+    font-size: 2em;
+    padding: 6px 6px;
+    color: white;    
+    text-decoration: none;
+    display: block;
+}
+
+/*
 .topnav {
     overflow: hidden;
     color: white;
@@ -24,9 +120,6 @@ body {
 .right {
     position: static;
     float: right;
-    /*
-    font-size: 2rem;
-    */
     height: 100%;
     width: 20%;
 }
@@ -42,10 +135,6 @@ select {
     color: white;
     height: 100%;
     width: 50%;
-    /*
-    font-size: large;
-    height: 5vh;
-    */
 }
 
 button#hamburger {
@@ -59,16 +148,12 @@ button#hamburger {
 }
 
 button#check {
-    background-color: #04AA6D; /* Green */
+    background-color: #04AA6D;
     border: none;
     border-radius: 50%;
     color: white;
     text-align: center;
     float: right;
-    /*
-    padding: 5px 10px;
-    font-size: large;
-    */
     height: 100%;
     width: 50%;
 }
@@ -77,20 +162,15 @@ button#check:hover {
     background-color: limegreen;
     border-color: #04AA6D;
 }
-
+*/
 
 /* Hide the links inside the navigation menu */
 #menu {
     display: none;
     color: white;
     background: #222;
-    /*
-    background: #333;
-    */
 }
 #menu a {
-    /*
-    */
     font-size: 2em;
     padding: 6px 6px;
     color: white;    
@@ -98,6 +178,7 @@ button#check:hover {
     display: block;
 }
 
+/*
 .gameboard {
     display: flex;
     flex-direction: column;
@@ -115,16 +196,6 @@ button#check:hover {
 }
 
 @media screen and (orientation: portrait) {
-    /*
-    label {
-        font-size: x-large;
-    }
-    button#check {
-        padding: 0px 20px;
-        height: 4vh;
-        font-size: x-large;
-    }
-    */
     .gameboard {
         flex-direction: column;
     }
@@ -138,6 +209,89 @@ button#check:hover {
 
 @media screen and (display-mode: fullscreen) and (orientation: portrait) {
     #menu a {
+        font-size: 1em;
+    }
+}
+*/
+
+#board {
+    background-color: blanchedalmond;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+#circles {
+    background-image: url('./circles.svg');
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
+/*
+    width: 90vh;
+    height: 90vh;
+*/
+}
+
+#choices {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #dfdfdf;
+    border-radius: 5px;
+
+    /*
+    position: fixed;
+    bottom: 10px;
+    */
+}
+
+@media screen and (orientation: landscape) {
+    #gamelist {
+        height: 10vh;
+    }
+    #board {
+        flex-direction: row;
+    }
+    #circles {
+        height: 100%;
+        max-width: 90%;
+    }
+    #choices {
+        height: 100%;
+        max-width: 50%;
+        min-width: 20%;
+        flex-direction: column;
+    }
+}
+
+@media screen and (orientation: portrait) {
+    #gamelist {
+        height: 4vh;
+    }
+    #controls {
+        font-size: 2em;
+    }
+    #menupanel div {
+        font-size: 2em;
+    }
+    #board {
+        flex-direction: column;
+    }
+    #circles {
+        width: 100%;
+        max-height: 90%;
+    }
+    #choices {
+        width: 100%;
+        max-height: 40%;
+        flex-direction: row;
+    }
+}
+
+@media screen and (display-mode: fullscreen) and (orientation: portrait) {
+    #controls {
+        font-size: 1em;
+    }
+    #menupanel div {
         font-size: 1em;
     }
 }
