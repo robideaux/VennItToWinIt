@@ -1,18 +1,20 @@
 (async () => {
 try {
-  href = document.location
-  gamesPath = href.origin + href.pathname + "games/"
-  response = await fetch(gamesPath)
-  data = await response.json()
-  console.log("data2: ")
-  console.log(data)
-} catch (error) {
-  console.log("err2: ")
-  console.log(error)
-}
-try {
   response = await fetch('https://api.github.com/repos/robideaux/VennItToWinIt/contents/games/')
   data = await response.json()
+  if (data) {
+    data.forEach(async(fileInfo) => {
+      fileName = fileInfo.name
+      if (fileName && fileName.endsWith(".json"))
+      {
+        defResponse = await fetch(fileInfo.download_url)
+        gameDef = await defResponse.json()
+        if (gameDef) {
+          games.push(gameDef)
+        }
+      }
+    })    
+  }
   console.log("data3: ")
   console.log(data)
 } catch (error) {
