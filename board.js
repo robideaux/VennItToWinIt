@@ -64,65 +64,38 @@ function setGame(game) {
 
 // Load up games
 (async () => {
-  try {
-    response = await fetch('https://api.github.com/repos/robideaux/VennItToWinIt/contents/games/')
-    data = await response.json()
-    if (data) {
-      for (fileInfo of data) {
-        fileName = fileInfo.name
-        if (fileName && fileName.endsWith(".json"))
-        {
-          defResponse = await fetch(fileInfo.download_url)
-          gameDef = await defResponse.json()
-          if (gameDef) {
-            games.push(gameDef)
-          }
-        }
-      }    
-    }
-    console.log(data)
-  } catch (error) {
-    console.log("err3: ")
-    console.log(error)
-  } finally {
-    // build dropdown list
-    games.forEach(game => {
-      option = document.createElement('option')
-      text = document.createTextNode(game.title)
-      option.appendChild(text)
-      gamelist.appendChild(option)
-    })
-    gamelist.selectedIndex = -1
 
-    gamelist.onchange = () =>
-    {
-      setGame(games[gamelist.selectedIndex])
-    }
+  await loadGames()
+  qGame = addQueryGame()
 
-    // Add game from query string
-    query = document.location.search
-    if (query) {
-      params = query.split(",")[0]
-      if (params) {
-        gameData = params.replace("?game=", "")
-        gameStr = LZString.decompressFromEncodedURIComponent(gameData)
-        game = JSON.parse(gameStr)
-        if (game) {
-          index = games.findIndex(x => x.title == game.title)
-          if (index < 0) {
-            games.push(game)
-            index = games.length - 1
-          }
-          gamelist.selectedIndex = index
-          setGame(game)
-        } else {
-          gamelist.selectedIndex = -1
-          setGame(null)
-        }
-      }
+
+  // build dropdown list
+  games = getAllGames()
+  games.forEach(game => {
+    option = document.createElement('option')
+    text = document.createTextNode(game.title)
+    option.appendChild(text)
+    gamelist.appendChild(option)
+  })
+  gamelist.selectedIndex = -1
+
+  gamelist.onchange = () =>
+  {
+    setGame(games[gamelist.selectedIndex])
+  }
+
+  // Add game from query string
+  if (qGame) {
+    index = games.findIndex(x => x.title == qGame.title)
+    gamelist.selectedIndex = index
+    if (index >= 0) {
+        setGame(qGame)
+    } else {
+        setGame(null)
     }
   }
-  })()
+
+})()
   
 /*
 editButton = byId("Edit")
