@@ -4,21 +4,10 @@ body {
     height: 100vh;    
 }
 
-.cssTable {
-    display: table;
+#topLayout {
+    display: grid;
+    grid-template-rows: auto 1fr;
     width: 100%;
-    height: 100%;
-}
-
-.cssRow {
-    display: table-row;
-}
-
-.cssRow.titlebar {
-    height: 0%;
-}
-
-.cssRow.full {
     height: 100%;
 }
 
@@ -45,6 +34,7 @@ body {
 #title {
     font-size: 2rem;
 }
+
 #selection {
     /*
     height: 100%;
@@ -97,73 +87,6 @@ body {
     display: block;
 }
 
-/*
-.topnav {
-    overflow: hidden;
-    color: white;
-    background-color: black;
-    position: relative;
-}
-
-#header {
-    width: 100%;
-    height: 10vh;
-}
-
-.left {
-    position: relative;
-    float: left;
-    width: 80%;
-    height: 100%;
-}
-
-.right {
-    position: static;
-    float: right;
-    height: 100%;
-    width: 20%;
-}
-
-label {
-    display: contents;
-    font-size: large;
-    width: 50%;
-}
-
-select {
-    background: #222;
-    color: white;
-    height: 100%;
-    width: 50%;
-}
-
-button#hamburger {
-    background: black;
-    border: none;
-    color: white;
-    float: right;
-    font-size: 2em;
-    height: 100%;
-    width: 50%;
-}
-
-button#check {
-    background-color: #04AA6D;
-    border: none;
-    border-radius: 50%;
-    color: white;
-    text-align: center;
-    float: right;
-    height: 100%;
-    width: 50%;
-}
-
-button#check:hover {
-    background-color: limegreen;
-    border-color: #04AA6D;
-}
-*/
-
 /* Hide the links inside the navigation menu */
 #menu {
     display: none;
@@ -179,21 +102,6 @@ button#check:hover {
 }
 
 /*
-.gameboard {
-    display: flex;
-    flex-direction: column;
-    background-color: aliceblue;
-    width: 100%;
-    height: 80vh;
-}
-
-.live {
-    display: block;
-}
-
-.editing {
-    display: none;
-}
 
 @media screen and (orientation: portrait) {
     .gameboard {
@@ -215,8 +123,8 @@ button#check:hover {
 */
 
 #board {
-    background-color: blanchedalmond;
-    display: flex;
+    background-color: #FFF;
+    display: grid;
     width: 100%;
     height: 100%;
 }
@@ -235,10 +143,11 @@ button#check:hover {
 #choices {
     display: flex;
     flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+    /*
     background-color: #dfdfdf;
     border-radius: 5px;
-
-    /*
     position: fixed;
     bottom: 10px;
     */
@@ -249,8 +158,9 @@ button#check:hover {
         height: 10vh;
     }
     #board {
-        flex-direction: row;
+        grid-template-columns: auto 1fr;
     }
+    /*
     #circles {
         height: 100%;
         max-width: 90%;
@@ -259,6 +169,10 @@ button#check:hover {
         height: 100%;
         max-width: 50%;
         min-width: 20%;
+        flex-direction: column;
+    }
+    */
+    #choices {
         flex-direction: column;
     }
 }
@@ -274,8 +188,9 @@ button#check:hover {
         font-size: 2em;
     }
     #board {
-        flex-direction: column;
+        grid-template-rows: auto 1fr;
     }
+    /*
     #circles {
         width: 100%;
         max-height: 90%;
@@ -284,6 +199,11 @@ button#check:hover {
         width: 100%;
         max-height: 40%;
         flex-direction: row;
+    }
+    */
+    #choices {
+        flex-direction: row;
+        width: 100vw;
     }
 }
 
