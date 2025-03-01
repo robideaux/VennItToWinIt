@@ -1,0 +1,31 @@
+{
+    "title": "Under Pressure",
+    "groups": [
+        "Group of Buildings",
+        "Complicated",
+        "Mental Hurdles"
+    ],
+    "phrases": {
+        "Campus" : {
+            "groupIds": [1]
+        },
+        "Tricky" : {
+            "groupIds": [2]
+        },
+        "Psychosis" : {
+            "groupIds": [3]
+        },
+        "Cluster" : {
+            "groupIds": [1,2]
+        },
+        "Ordeal" : {
+            "groupIds": [2,3]
+        },
+        "Block" : {
+            "groupIds": [1,3]
+        },
+        "Complex" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
