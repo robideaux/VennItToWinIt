@@ -1,0 +1,31 @@
+{
+    "title": "Time to Shine",
+    "groups": [
+        "Seasons",
+        "Sudden Movements",
+        "Watches"
+    ],
+    "phrases": {
+        "Bikini" : {
+            "groupIds": [1]
+        },
+        "Vault" : {
+            "groupIds": [2]
+        },
+        "Crown" : {
+            "groupIds": [3]
+        },
+        "Fall" : {
+            "groupIds": [1,2]
+        },
+        "Buckle" : {
+            "groupIds": [2,3]
+        },
+        "Sweeps" : {
+            "groupIds": [1,3]
+        },
+        "Spring" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
