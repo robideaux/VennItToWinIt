@@ -2,10 +2,11 @@ body {
     margin: 0px;
     width: 100vw;
     height: 100vh;
-    background-color: #222; 
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #topLayout {
+    background-color: #222; 
     display: grid;
     grid-template-rows: auto 1fr;
     width: 100%;
@@ -13,28 +14,35 @@ body {
 }
 
 #mainMenu {
-    font-size: 2em;
+    font-size: 3em;
     display: grid;
-    align-self: baseline;
+    grid-template-rows: auto auto auto auto 1fr;
     justify-self: center;
-    justify-content: center;
-    justify-items: center;
+    align-self: baseline;
     width: 80%;
-    margin: 10% 0%;
+    height: 100%;
 }
-#mainMenu a {
+#mainMenu div {
     color: whitesmoke;
-    margin: 10% 0%;
-    padding: 5% 0%;
+    margin: 10px 5px;
+    width: 100%;
+    text-align: center;
+    align-self: center;
+}
+#mainMenu div:hover {
+    color: skyblue;
+}
+#mainMenu div.enabled:hover {
+    text-decoration: underline;
 }
 
 #titlebar {
-    display: table-row;
     color: white;
     background-color: black;
+    font-size: 2em;
     width: 100%;
     display: grid;
-    grid-template-columns: 7fr 3fr;
+    grid-template-columns: 1fr 8fr 1fr;
     align-items: center;
 }
 
@@ -48,44 +56,50 @@ body {
     float: right;
 }
 
+/*
 #title {
-    font-size: 2rem;
 }
+*/
 
-#selection {
-    margin: 3px 0px;
+#scoreboard {
+    color: white;
+    width: 100%;
+    font-size: 2em;
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    align-items: center;
 }
 
 #gamelist {
     background: #222;
     color: white;
-    height: 6vh;
-    align-self: center;
-}
-
-#controls {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    align-items: center;
     font-size: 1em;
+    min-height: 4vh;
+    height: 90%;
+    align-self: center;
 }
 
 #checkBtn {
     background-color: #04AA6D;
     border-radius: 50%;
-    padding: 1em;
+    padding: 0.5em;
     margin: 3px;
     justify-self: right;
 }
 
+#home {
+    margin: 3px;
+    justify-self: center;
+}
+
 #bars {
-    font-size: 2em;
     margin: 3px;
     justify-self: center;
 }
 
 #menupanel {
     display: none;
+    z-index: 9;
     color: white;
     background-color: #222222e0;
     width: 100%;
@@ -116,7 +130,7 @@ body {
 }
 
 #board {
-    background-color: #FFF;
+    background-color: #AAA;
     display: grid;
     width: 100%;
     height: 100%;
@@ -132,13 +146,15 @@ body {
 #choices {
     display: flex;
     flex-wrap: wrap;
+    /*
     width: 100%;
     height: 100%;
+    */
 }
 
 @media screen and (orientation: landscape) {
-    #gamelist {
-        height: 10vh;
+    #titlebar {
+        font-size: 2em;
     }
     #board {
         grid-template-columns: auto 1fr;
@@ -149,11 +165,8 @@ body {
 }
 
 @media screen and (orientation: portrait) {
-    #gamelist {
-        height: 4vh;
-    }
-    #controls {
-        font-size: 2em;
+    #titlebar {
+        font-size: xxx-large;
     }
     #menupanel div {
         font-size: 2em;
@@ -164,13 +177,11 @@ body {
     #choices {
         flex-direction: row;
         width: 100vw;
+        font-size: 2em;
     }
 }
 
 @media screen and (display-mode: fullscreen) and (orientation: portrait) {
-    #controls {
-        font-size: 1em;
-    }
     #menupanel div {
         font-size: 1em;
     }

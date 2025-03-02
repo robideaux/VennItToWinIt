@@ -1,3 +1,9 @@
+homeBtn = byId("home")
+homeBtn.onclick = () => {
+  location.href = "./home.html"
+}
+
+
 checkButton = byId("checkBtn")
 checkButton.onclick = () => {
   checkGame()

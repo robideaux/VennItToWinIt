@@ -3,29 +3,34 @@
 <head>
   <meta charset="utf-8">
   <title>Venn It To Win It!</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="./controls.css"/>
   <link rel="stylesheet" href="./containers.css"/>
 </head>
 <body>
     <div id="topLayout">
+
         <div id="headerbar">
+
             <div id="titlebar">
-                <div id="selection">
-                    <label id="title">Venn It To Winn It: </label>
-                    <select id="gamelist"></select>
-                </div>
-                <div id="controls">
-                    <div id="checkBtn">CHECK</div>
-                    <div id="bars" class="fa fa-bars"></div>
-                </div>
+                <div id="home" class="fa fa-home"></div>
+                <label id="title">Venn It To Winn It</label>
+                <div id="bars" class="fa fa-bars"></div>
             </div>
+<!--    
+                    <div id="checkBtn">CHECK</div>
+-->
             <div id="menupanel">
                 <div id="info">How to play</div>
                 <div id="link">Link to current game</div>
                 <div id="fullscreen">Toggle Full Screen</div>
                 <div id="about">About</div>
+            </div>
+            <div id="scoreboard">
+                <label>Game:</label>
+                <select id="gamelist"></select>
+                <div id="checkBtn">CHECK</div>
             </div>
         </div>
         <div id="board" class="gridCols2">
@@ -79,7 +84,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td id="greenlabel" colspan="4" class="groupLabels">green group</td>
+                        <td id="greenlabel" colspan="3" class="groupLabels">green group</td>
                         <td id="bluelabel" colspan="3" class="groupLabels">blue group</td>
                     </tr>
                 </table>
@@ -91,6 +96,7 @@
     <script>
         games = []
     </script>
+    <script src="./common.js"></script>
     <script src="./loader.js"></script>
     <script src="./board.js"></script>
     <script src="./play.js"></script>

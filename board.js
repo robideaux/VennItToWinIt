@@ -1,10 +1,3 @@
-function byId(id) {
-    return document.getElementById(id)
-}
-
-function byClass(classname) {
-  return document.getElementsByClassName(classname)
-}
 
 menuButton = byId("bars")
 menuButton.onclick = () => {
