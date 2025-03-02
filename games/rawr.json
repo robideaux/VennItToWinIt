@@ -1,0 +1,31 @@
+{
+    "title": "RAWR!",
+    "groups": [
+        "NFL Teams",
+        "NHL Teams",
+        "Predators"
+    ],
+    "phrases": {
+        "Rams" : {
+            "groupIds": [1]
+        },
+        "Wild" : {
+            "groupIds": [2]
+        },
+        "Ladybugs" : {
+            "groupIds": [3]
+        },
+        "Jets" : {
+            "groupIds": [1,2]
+        },
+        "Sharks" : {
+            "groupIds": [2,3]
+        },
+        "Falcons" : {
+            "groupIds": [1,3]
+        },
+        "Panthers" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
