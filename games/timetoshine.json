@@ -6,7 +6,7 @@
         "Watches"
     ],
     "phrases": {
-        "Bikini" : {
+        "Monsoon" : {
             "groupIds": [1]
         },
         "Vault" : {
@@ -15,7 +15,7 @@
         "Crown" : {
             "groupIds": [3]
         },
-        "Fall" : {
+        "Duck" : {
             "groupIds": [1,2]
         },
         "Buckle" : {
