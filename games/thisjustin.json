@@ -1,0 +1,31 @@
+{
+    "title": "This Just In",
+    "groups": [
+        "Break/Broken",
+        "Heteronyms",
+        "Written Account"
+    ],
+    "phrases": {
+        "Weather" : {
+            "groupIds": [1]
+        },
+        "Read" : {
+            "groupIds": [2]
+        },
+        "Annals" : {
+            "groupIds": [3]
+        },
+        "Wind" : {
+            "groupIds": [1,2]
+        },
+        "Digest" : {
+            "groupIds": [2,3]
+        },
+        "News" : {
+            "groupIds": [1,3]
+        },
+        "Record" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
