@@ -1,0 +1,31 @@
+{
+    "title": "Got Punch?",
+    "groups": [
+        "Animals",
+        "To Drink",
+        "A Hard Hit"
+    ],
+    "phrases": {
+        "Worm" : {
+            "groupIds": [1]
+        },
+        "Swill" : {
+            "groupIds": [2]
+        },
+        "Strap" : {
+            "groupIds": [3]
+        },
+        "Swallow" : {
+            "groupIds": [1,2]
+        },
+        "Belt" : {
+            "groupIds": [2,3]
+        },
+        "Whale" : {
+            "groupIds": [1,3]
+        },
+        "Slug" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
