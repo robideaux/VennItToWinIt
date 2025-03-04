@@ -1,0 +1,31 @@
+{
+    "title": "More like MidBest",
+    "groups": [
+        "Big 10 College Towns",
+        "Founding Figures",
+        "US Presidents"
+    ],
+    "phrases": {
+        "Ann Arbor" : {
+            "groupIds": [1]
+        },
+        "Hamilton" : {
+            "groupIds": [2]
+        },
+        "Cleveland" : {
+            "groupIds": [3]
+        },
+        "Lincoln" : {
+            "groupIds": [1,2]
+        },
+        "Jefferson" : {
+            "groupIds": [2,3]
+        },
+        "Lafayette" : {
+            "groupIds": [1,3]
+        },
+        "Madison" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
