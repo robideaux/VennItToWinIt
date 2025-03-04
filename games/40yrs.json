@@ -1,0 +1,31 @@
+{
+    "title": "I Hope this Doesn't Take 40 years",
+    "groups": [
+        "Biblical Figures",
+        "Found In Desert",
+        "Animals"
+    ],
+    "phrases": {
+        "David" : {
+            "groupIds": [1]
+        },
+        "Fremen" : {
+            "groupIds": [2]
+        },
+        "Cat" : {
+            "groupIds": [3]
+        },
+        "Moses" : {
+            "groupIds": [1,2]
+        },
+        "Scorpion" : {
+            "groupIds": [2,3]
+        },
+        "Whale" : {
+            "groupIds": [1,3]
+        },
+        "Locust" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
