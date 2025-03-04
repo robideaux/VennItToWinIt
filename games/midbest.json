@@ -15,13 +15,13 @@
         "Cleveland" : {
             "groupIds": [3]
         },
-        "Lincoln" : {
+        "Lafayette" : {
             "groupIds": [1,2]
         },
         "Jefferson" : {
             "groupIds": [2,3]
         },
-        "Lafayette" : {
+        "Lincoln" : {
             "groupIds": [1,3]
         },
         "Madison" : {
