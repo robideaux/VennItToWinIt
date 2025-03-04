@@ -19,17 +19,17 @@ if (shareBtn) {
 
 
 
-gamelist = byId("gamelist")
-currentGame = null
-
-setGame(null)
+gameSelector = byId("gamelist")
+// setGame(null)
 
 function setGame(game) {
   if (game) {
     currentGame = game
+    storeCurrentGame(game)
     loadGame()
   } else {
     currentGame = null
+    storeCurrentGame(game)
   }
 }
 
@@ -38,7 +38,9 @@ function setGame(game) {
 
   await loadGames()
   qGame = addQueryGame()
-
+  if (qGame) {
+    storeCurrentGame(game)
+  }
 
   // build dropdown list
   games = getAllGames()
@@ -46,24 +48,24 @@ function setGame(game) {
     option = document.createElement('option')
     text = document.createTextNode(game.title)
     option.appendChild(text)
-    gamelist.appendChild(option)
+    gameSelector.appendChild(option)
   })
-  gamelist.selectedIndex = -1
+  gameSelector.selectedIndex = -1
 
-  gamelist.onchange = () =>
+  gameSelector.onchange = () =>
   {
-    setGame(games[gamelist.selectedIndex])
+    setGame(games[gameSelector.selectedIndex])
   }
 
   // Add game from query string
-  if (qGame) {
-    index = games.findIndex(x => x.title == qGame.title)
-    gamelist.selectedIndex = index
+  currentGame = loadCurrentGame()
+  if (currentGame) {
+    index = games.findIndex(x => x.title == currentGame.title)
+    gameSelector.selectedIndex = index
     if (index >= 0) {
         setGame(qGame)
     } else {
         setGame(null)
     }
   }
-
 })()

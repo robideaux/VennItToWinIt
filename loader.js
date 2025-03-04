@@ -1,4 +1,23 @@
 const gamePrefix = "game:"
+const currentKey = "current"
+
+function storeCurrentGame(game) {
+    compressed = compressGame(game)
+    if (compressed) {
+        localStorage.setItem(currentKey, compressed)
+    } else {
+        localStorage.setItem(currentKey, null)
+    }
+}
+
+function loadCurrentGame() {
+    game = null
+    compressed = localStorage.getItem(currentKey)
+    if (compressed) {
+        game = decompressGame(compressed)
+    }
+    return game
+}
 
 async function loadGames() {
     try {
@@ -69,6 +88,8 @@ function addQueryGame()
             gameStr = params.replace("?game=", "")
             game = decompressGame(gameStr)
             if (game) {
+                game.isLocal = true
+                gameStr = compressGame(game)
                 localStorage.setItem(gamePrefix + game.title, gameStr)
             }
         }
