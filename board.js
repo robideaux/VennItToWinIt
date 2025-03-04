@@ -63,7 +63,7 @@ function setGame(game) {
     index = games.findIndex(x => x.title == currentGame.title)
     gameSelector.selectedIndex = index
     if (index >= 0) {
-        setGame(qGame)
+        setGame(currentGame)
     } else {
         setGame(null)
     }
