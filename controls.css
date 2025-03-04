@@ -93,6 +93,9 @@ body {
     margin: 3px;
     justify-self: center;
 }
+img#home {
+    max-width: 100%;
+}
 
 #bars {
     margin: 3px;

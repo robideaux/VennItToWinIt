@@ -1,16 +1,9 @@
-play = byId("play")
 fullscreen = byId("fullscreen")
-settings = byId("settings")
-
-// Play Game
-play.onclick = () => {
-    document.location.href = "./play.html"
-}
 
 
 // If fullscreen is available, wire it up
 if (!document.fullscreenEnabled) {
-    fullscreen.textContent = "Fullscreen (not available"
+    fullscreen.textContent = "Fullscreen (n/a)"
     fullscreen.classList.remove("enabled")
     fullscreen.onclick = null
 } else {

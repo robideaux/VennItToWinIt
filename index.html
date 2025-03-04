@@ -3,102 +3,36 @@
 <head>
   <meta charset="utf-8">
   <title>Venn It To Win It!</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="./controls.css"/>
   <link rel="stylesheet" href="./containers.css"/>
 </head>
 <body>
 
-  <div class="cssTable">
-    <div class="cssRow titlebar">
-        <div id="titlebar">
-            <div id="selection">
-                <label id="title">Venn It To Winn It: </label>
-                <select id="gamelist"></select>
-            </div>
-            <div id="controls">
-                <div id="checkBtn">CHECK</div>
+    <div id="topLayout">
+        <div id="headerbar">
+            <div id="titlebar">
+                <img id="home" src="favicon.png">
+                <label id="title">Venn It To Winn It</label>
                 <div id="bars" class="fa fa-bars"></div>
             </div>
+            <div id="menupanel">
+                <div id="settings">Settings (n/a)</div>
+                <div id="about">About</div>
+            </div>
         </div>
-    </div>
-    <div class="cssRow">
-        <div id="menupanel">
-            <div id="info">How to play</div>
-            <div id="link">Link to current game</div>
-            <div id="fullscreen">Toggle Full Screen</div>
-            <div id="about">About</div>
+        <div id="mainMenu">
+            <div id="play" class="enabled">Play Now</div>
+            <div id="howto" class="enabled">How To</div>
+            <div class="empty"></div>
         </div>
-    </div>
-    <div class="cssRow full">
-      <div id="board">
-        <div id="choices">
-        </div>
-        <div id="circles">
-            <table>
-                <tr>
-                    <td></td>
-                    <td id="redlabel" colspan="2" class="groupLabels">red group</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td class="drop-target red" g1="true" id="slot1"></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr class="emptyRow"></tr>
-                <tr>
-                    <td></td>
-                    <td class="drop-target red green" g1="true" g3="true" id="slot7"></td>
-                    <td></td>
-                    <td class="drop-target red blue" g1="true" g2="true" id="slot2"></td>
-                    <td></td>
-                </tr>
-                <tr class="emptyRow"></tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td valign="center" class="drop-target red blue green" g1="true" g2="true" g3="true" id="slot6"></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr class="emptyRow"></tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td class="drop-target blue green" g2="true" g3="true" id="slot4"></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr class="emptyRow"></tr>
-                <tr>
-                    <td></td>
-                    <td class="drop-target green" g3="true" id="slot5"></td>
-                    <td></td>
-                    <td class="drop-target blue" g2="true" id="slot3"></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td id="greenlabel" colspan="4" class="groupLabels">green group</td>
-                    <td id="bluelabel" colspan="3" class="groupLabels">blue group</td>
-                </tr>
-            </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
-    <script>
-        games = []
-    </script>
+    </div>
+
+    <script src="./common.js"></script>
     <script src="./loader.js"></script>
-    <script src="./board.js"></script>
-    <script src="./play.js"></script>
+    <script src="./home.js"></script>
+
 </body>
 </html>

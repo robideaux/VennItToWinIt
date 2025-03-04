@@ -1,8 +1,3 @@
-homeBtn = byId("home")
-homeBtn.onclick = () => {
-  location.href = "./home.html"
-}
-
 
 checkButton = byId("checkBtn")
 checkButton.onclick = () => {
@@ -36,36 +31,6 @@ for (let i=1; i<=7; i++) {
   }
 }
 
-/*
-drake = dragula(slots, {
-  revertOnSpill: true,
-  accepts: function(el, target) {
-    return target !== byId('drag-src')
-  },
-  slideFactorX: 5,
-  slideFactorY: 5
-})
-drake.on('drop', function(el, target, source) {
-  if (target.children.length >= 2) {
-    source.appendChild(target.children[0])
-  }
-  shortname = el.getAttribute('shortname')
-  if (shortname) {
-    el.children[0].textContent = shortname
-  }
-})
-drake.on('drag', (el, src) => {
-  cancelSelections()
-  el.classList.add('source')
-  highlightDrops(true)
-  isSourceSelected = true
-  selectedSource = el
-})
-
-drake.on('dragend', () => {
-  cancelSelections()
-})
-*/
 
 function cancelSelections() {
   sources = byClass('source')

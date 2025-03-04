@@ -7,27 +7,72 @@ function byClass(classname) {
 }
 
 homeBtn = byId("home")
-homeBtn.onclick = () => {
-  location.href = "./home.html"
+if (homeBtn) {
+  homeBtn.onclick = () => {
+    location.href = "./index.html"
+  }
 }
 
 menuButton = byId("bars")
-menuButton.onclick = () => {
-  toggleMenu()
+if (menuButton) {
+  menuButton.onclick = () => {
+    toggleMenu()
+  }
 }
 
+backBtn = byId("back")
+if (backBtn) {
+  backBtn.onclick = () => {
+    history.back()
+  }
+}
+
+infoBtn = byId("howto")
+if (infoBtn) {
+  infoBtn.onclick = () => {
+    closeMenu()
+    location.href = "./howto.html"
+  }
+}
+
+settingsBtn = byId("settings")
+if (settingsBtn) {
+  settingsBtn.onclick = () => {
+    closeMenu()
+    location.href = "./settings.html"
+  }
+}
+
+menuPanel = byId("menupanel")
+
 function toggleMenu() {
-  menu = byId("menupanel")
-  if (menu.style.display === "block") {
-    menu.style.display = "none"
-    menuButton.classList.remove("fa-times")
-    menuButton.classList.add("fa-bars")
+  if (!menuPanel) {
+    return
+  }
+  
+  if (menuPanel.style.display === "block") {
+    closeMenu()
   } else {
-    menu.style.display = "block";
+    openMenu()
+  }
+}
+
+function openMenu() {
+  if (menuPanel && menuButton) {
+    menuPanel.style.display = "block";
     menuButton.classList.remove("fa-bars")
     menuButton.classList.add("fa-times")
   }
 }
+
+function closeMenu() {
+  if (menuPanel && menuButton) {
+    menuPanel.style.display = "none"
+    menuButton.classList.remove("fa-times")
+    menuButton.classList.add("fa-bars")
+  }
+}
+
 
 function compressGame(game) {
   strGame = null
