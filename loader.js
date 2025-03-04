@@ -58,36 +58,6 @@ async function downloadGame(fileInfo) {
     }
 }
 
-function compressGame(game) {
-    strGame = null
-
-    try {
-        gameJson = JSON.stringify(game)
-        strGame = LZString.compressToEncodedURIComponent(gameJson)
-    } catch (error) {
-        strGame = null
-        console.log("error compressing game definition.")
-        console.error(error)
-    } finally {
-        return strGame;
-    }
-}
-
-function decompressGame(strGame) {
-    game = null
-
-    try {
-        gameJson = LZString.decompressFromEncodedURIComponent(strGame)
-        game = JSON.parse(gameJson)
-    } catch (error) {
-        game = null
-        console.log("error decompressing game definition.")
-        console.error(error)
-    } finally {
-        return game;
-    }
-}
-
 function addQueryGame()
 {
     game = null
