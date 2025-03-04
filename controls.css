@@ -11,6 +11,7 @@ body {
     grid-template-rows: auto 1fr;
     width: 100%;
     height: 100%;
+    font-size: clamp(1rem, 3vb, 2vh);
 }
 
 #mainMenu {
@@ -42,7 +43,7 @@ body {
     font-size: 2em;
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 8fr 1fr;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
 }
 
@@ -68,7 +69,7 @@ body {
     font-size: 2em;
     */
     display: grid;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
 }
 
@@ -84,14 +85,16 @@ body {
 #checkBtn {
     background-color: #04AA6D;
     border-radius: 50%;
+    /*
     padding: 0.5em;
+    */
     margin: 3px;
     justify-self: right;
 }
 
 #home {
     margin: 3px;
-    justify-self: center;
+    justify-self: left;
 }
 img#home {
     max-width: 100%;
@@ -99,7 +102,7 @@ img#home {
 
 #bars {
     margin: 3px;
-    justify-self: center;
+    justify-self: right;
 }
 
 #menupanel {
@@ -139,7 +142,9 @@ img#home {
     display: grid;
     width: 100%;
     height: 100%;
-    font-size: clamp(1rem, 4vw, 3vh);
+    /*
+    font-size: clamp(1rem, 3vb 2vh);
+    */
 }
 
 #circles {
@@ -147,7 +152,11 @@ img#home {
     background-size: 100% 100%;
     width: 100%;
     height: 100%;
+    align-self: center;
+    justify-self: center;
+    /*
     font-size: clamp(0.5rem, 3vw, 2vh);
+    */
 }
 
 #choices {
@@ -168,6 +177,13 @@ img#home {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.groupLabels {
+    position: relative;
+    /*
+    font-size: 1.5em;
+    */
 }
 
 #redlabel {
@@ -221,6 +237,9 @@ img#home {
     #choices {
         flex-direction: column;
     }
+    #circles {
+        height: 80vh;
+    }
 }
 
 @media screen and (orientation: portrait) {
@@ -236,12 +255,19 @@ img#home {
     #choices {
         flex-direction: row;
         width: 100vw;
+        /*
         font-size: 2em;
+        */
+    }
+    #circles {
+        width: 100vw;
     }
 }
 
+/*
 @media screen and (display-mode: fullscreen) and (orientation: portrait) {
     #menupanel div {
         font-size: 1em;
     }
 }
+*/
