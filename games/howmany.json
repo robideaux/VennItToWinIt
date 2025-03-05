@@ -1,0 +1,31 @@
+{
+    "title": "How Manet Do You Know?",
+    "groups": [
+        "Painters",
+        "Inventors",
+        "Architects"
+    ],
+    "phrases": {
+        "O'Keeffe" : {
+            "groupIds": [1]
+        },
+        "McCoy" : {
+            "groupIds": [2]
+        },
+        "Pei" : {
+            "groupIds": [3]
+        },
+        "Morse" : {
+            "groupIds": [1,2]
+        },
+        "Fuller" : {
+            "groupIds": [2,3]
+        },
+        "Le Corbusier" : {
+            "groupIds": [1,3]
+        },
+        "Leonardo" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
