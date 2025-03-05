@@ -18,7 +18,6 @@ if (shareBtn) {
 }
 
 
-
 gameSelector = byId("gamelist")
 // setGame(null)
 

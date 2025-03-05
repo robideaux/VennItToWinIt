@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="./controls.css"/>
   <link rel="stylesheet" href="./containers.css"/>
+  <link rel="stylesheet" href="./editor.css"/>
 </head>
 <body>
     <div id="topLayout">
@@ -14,38 +15,41 @@
         <div id="headerbar">
 
             <div id="titlebar">
-                <div id="home" class="fa fa-home"></div>
+                <div id="back" class="fa fa-chevron-left"></div>
                 <label id="title">Venn It To Winn It</label>
                 <div id="bars" class="fa fa-bars"></div>
             </div>
             <div id="menupanel">
                 <div id="howto" class="enabled">How To Play</div>
                 <div id="link" class="enabled">Share current game</div>
-                <div id="edit" class="enabled">Edit game</div>
                 <div id="settings" class="enabled">Settings (n/a)</div>
                 <div id="about" class="enabled">About</div>
             </div>
             <div id="scoreboard">
                 <label>Game:</label>
-                <select id="gamelist"></select>
-                <div id="checkBtn">CHECK</div>
+                <input type="text" id="name" required placeholder="game title"/>
+                <!--
+                <div id="saveBtn">SAVE</div>
+                -->
+                <input type="submit" id="saveBtn">SAVE</input>
             </div>
         </div>
         <div id="board">
-            <div id="choices">
-            </div>    
             <div id="circles">
                 <div id="targets">
-                    <div id="redlabel" class="groupLabels">red group</div>
+                    <input type="text" id="redlabel" required placeholder="group 1 name"/>
+                    <!--
                     <div id="slot1" class="drop-target red" g1="true"></div>
-                    <div id="slot2" class="drop-target red green" g1="true" g3="true"></div>
-                    <div id="slot3" class="drop-target red blue" g1="true" g2="true"></div>
-                    <div id="slot4" class="drop-target red blue green" g1="true" g2="true" g3="true"></div>
-                    <div id="slot5" class="drop-target green" g3="true"></div>
-                    <div id="slot6" class="drop-target blue" g2="true"></div>
-                    <div id="slot7" class="drop-target blue green" g2="true" g3="true"></div>
-                    <div id="greenlabel" class="groupLabels">green group</div>
-                    <div id="bluelabel" class="groupLabels">blue group</div>
+                    -->
+                    <input type="text" id="slot1" g1="true" required placeholder="only in group 1"/>
+                    <input type="text" id="slot2" g1="true" g3="true" placeholder="in groups 1 & 3"/>
+                    <input type="text" id="slot3" g1="true" g2="true" placeholder="in groups 1 & 2"/>
+                    <input type="text" id="slot4" g1="true" g2="true" g3="true" placeholder="in all groups"/>
+                    <input type="text" id="slot5" g3="true" placeholder="only in group 3"/>
+                    <input type="text" id="slot6" g2="true" placeholder="only in group 2"/>
+                    <input type="text" id="slot7" g2="true" g3="true" placeholder="in groups 2 & 3"/>
+                    <input type="text" id="greenlabel" placeholder="group 3 name"/>
+                    <input type="text" id="bluelabel" placeholder="group 2 name"/>
                 </div>
             </div>
         </div>
@@ -53,8 +57,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
     <script src="./common.js"></script>
-    <script src="./loader.js"></script>
-    <script src="./play.js"></script>
-    <script src="./board.js"></script>
+    <script src="./editor.js"></script>
 </body>
 </html>

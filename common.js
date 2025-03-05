@@ -45,6 +45,15 @@ if (settingsBtn) {
   }
 }
 
+editBtn = byId("edit")
+if (editBtn) {
+  editBtn.onclick = () => {
+    closeMenu()
+    location.href = "./edit.html"
+  }
+}
+
+
 menuPanel = byId("menupanel")
 
 function toggleMenu() {

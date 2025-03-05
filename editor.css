@@ -1,0 +1,102 @@
+#name {
+    background: #222;
+    color: white;
+    font-size: 1em;
+    min-height: 4vh;
+    height: 90%;
+    width: 90%;
+    align-self: center;    
+}
+
+#saveBtn {
+    background-color: firebrick;
+    border-radius: 50%;
+    padding: 6px;
+    margin: 3px;
+    justify-self: right;
+}
+
+#board {
+    background-color: #AAA;
+    width: 100%;
+    height: 100%;
+}
+
+#circles {
+    background-image: url('./circles.svg');
+    background-size: 100% 100%;
+    width: 100%;
+    height: 100%;
+    align-self: center;
+    justify-self: center;
+}
+
+#targets {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.groupLabels {
+    position: relative;
+    align-self: center;
+}
+
+.slots {
+    align-self: center;
+}
+
+#redlabel {
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+#greenlabel {
+    grid-column-start: 1;
+    grid-row-start: 7;
+}
+#bluelabel {
+    grid-column-start: 5;
+    grid-row-start: 7;
+}
+#slot1 {
+    grid-column-start: 3;
+    grid-row-start: 2;
+}
+#slot2 {
+    grid-column-start: 2;
+    grid-row-start: 3;
+}
+#slot3 {
+    grid-column-start: 4;
+    grid-row-start: 3;
+}
+#slot4 {
+    grid-column-start: 3;
+    grid-row-start: 4;
+}
+#slot5 {
+    grid-column-start: 1;
+    grid-row-start: 5;
+}
+#slot6 {
+    grid-column-start: 5;
+    grid-row-start: 5;
+}
+#slot7 {
+    grid-column-start: 3;
+    grid-row-start: 6;
+}
+
+@media screen and (orientation: landscape) {
+    #circles {
+        height: 80vh;
+    }
+}
+
+@media screen and (orientation: portrait) {
+    #circles {
+        width: 100vw;
+    }
+}
