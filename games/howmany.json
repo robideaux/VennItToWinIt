@@ -6,25 +6,25 @@
         "Architects"
     ],
     "phrases": {
-        "O'Keeffe" : {
+        "Georgia <br> O'Keeffe" : {
             "groupIds": [1]
         },
-        "McCoy" : {
+        "Elijah<br>McCoy" : {
             "groupIds": [2]
         },
-        "Pei" : {
+        "I.M.<br>Pei" : {
             "groupIds": [3]
         },
-        "Morse" : {
+        "Samuel<br>Morse" : {
             "groupIds": [1,2]
         },
-        "Fuller" : {
+        "Buckminster<br>Fuller" : {
             "groupIds": [2,3]
         },
         "Le Corbusier" : {
             "groupIds": [1,3]
         },
-        "Leonardo" : {
+        "Leonardo<br>da Vinci" : {
             "groupIds": [1,2,3]
         }
     }
