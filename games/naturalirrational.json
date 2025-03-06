@@ -1,0 +1,31 @@
+{
+    "title": "Natrually Irrational",
+    "groups": [
+        "Reasonable",
+        "Number Sets",
+        "Describing Health Food"
+    ],
+    "phrases": {
+        "Logical" : {
+            "groupIds": [1]
+        },
+        "Complex" : {
+            "groupIds": [2]
+        },
+        "Clean" : {
+            "groupIds": [3]
+        },
+        "Rational" : {
+            "groupIds": [1,2]
+        },
+        "Natural" : {
+            "groupIds": [2,3]
+        },
+        "Honest" : {
+            "groupIds": [1,3]
+        },
+        "Real" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
