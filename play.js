@@ -7,6 +7,8 @@ checkButton.onclick = (event) => {
 
 isSourceSelected = false
 selectedSource = null
+maxChecks = byClass("checks").length
+checksRemaining = maxChecks
 
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
@@ -113,6 +115,9 @@ function loadGame() {
   for (let slot of slots) {
     slot.textContent = null
   }
+
+  checksRemaining = maxChecks
+  UpdateChecksLeft()
 }
 
 function highlightDrops(yes) {
@@ -125,6 +130,22 @@ function highlightDrops(yes) {
     }
   }
 
+}
+
+function UpdateChecksLeft()
+{
+  for (let i=1; i<=maxChecks; i++) {
+    check = byId("check" + i);
+    if (i <= checksRemaining) {
+      check.classList.remove("used")
+      check.classList.remove("fa-times-circle")
+      check.classList.add("fa-circle-thin")
+    } else {
+      check.classList.remove("fa-circle-thin")
+      check.classList.add("fa-times-circle")
+      check.classList.add("used")
+    }
+  }
 }
 
 function checkGame() {
@@ -147,6 +168,23 @@ function checkGame() {
       }
     }
   })
+
+  checksRemaining--
+  UpdateChecksLeft()
+
+  if (checksRemaining <= 0)
+  {
+    setTimeout(() => {
+      if (confirm("No more checks available. So sorry. :(\nClick OK to reveal the answer; Cancel to start over.")) {
+        // reveal answer
+        revealGame()
+      } else {
+        // reload
+        location.reload()
+      }
+    }, 1000)
+  }
+
 }
 
 function arePhrasesInCircle(phrases, circle) {
@@ -165,3 +203,47 @@ function arePhrasesInCircle(phrases, circle) {
   return found
 }
 
+function revealGame() {
+  g1Name = byId("redlabel")
+  g2Name = byId("bluelabel")
+  g3Name = byId("greenlabel")
+  phrase1 = byId("slot1")
+  phrase13 = byId("slot2")
+  phrase12 = byId("slot3")
+  phrase123 = byId("slot4")
+  phrase3 = byId("slot5")
+  phrase2 = byId("slot6")
+  phrase23 = byId("slot7")
+
+  if (g1Name) {
+      g1Name.textContent = currentGame.groups[0]
+  }
+  if (g2Name) {
+      g2Name.textContent = currentGame.groups[1]
+  }
+  if (g3Name) {
+      g3Name.textContent = currentGame.groups[2]
+  }
+
+  if (phrase1) {
+      phrase1.textContent = getPhraseFromGroups(currentGame.phrases, [1])
+  }
+  if (phrase2) {
+      phrase2.textContent = getPhraseFromGroups(currentGame.phrases, [2])
+  }
+  if (phrase3) {
+      phrase3.textContent = getPhraseFromGroups(currentGame.phrases, [3])
+  }
+  if (phrase12) {
+      phrase12.textContent = getPhraseFromGroups(currentGame.phrases, [1,2])
+  }
+  if (phrase13) {
+      phrase13.textContent = getPhraseFromGroups(currentGame.phrases, [1,3])
+  }
+  if (phrase23) {
+      phrase23.textContent = getPhraseFromGroups(currentGame.phrases, [2,3])
+  }
+  if (phrase123) {
+      phrase123.textContent = getPhraseFromGroups(currentGame.phrases, [1,2,3])
+  }
+}

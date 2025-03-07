@@ -74,6 +74,7 @@ body {
     */
     display: grid;
     grid-template-columns: auto 1fr auto auto;
+    grid-template-rows: auto auto;
     align-items: center;
 }
 
@@ -106,6 +107,7 @@ option.local {
     color: orangered;
     font-size: 2em;
     margin: 3px;
+    justify-self: center;
 }
 
 #saveBtn {
@@ -114,6 +116,25 @@ option.local {
     border-radius: 50%;
     padding: 6px;
     margin: 3px;
+}
+
+#checksLabel {
+    font-size: 0.8em;
+    grid-column-start: 1;
+    grid-row-start: 2;
+}
+
+#checksLeft {
+    justify-self: center;
+    grid-column-start: 2;
+    grid-row-start: 2;
+}
+
+.checks {
+    margin: 0.5em 2vw;
+}
+.checks.used {
+    color: orangered;
 }
 
 #home {
