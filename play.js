@@ -182,7 +182,7 @@ function checkGame() {
         // reload
         location.reload()
       }
-    }, 1000)
+    }, 500)
   }
 
 }
