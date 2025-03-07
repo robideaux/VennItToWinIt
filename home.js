@@ -6,3 +6,9 @@ settings = byId("settings")
 play.onclick = () => {
     document.location.href = "./play.html"
 }
+
+qGame = getQueryGame()
+if (qGame) {
+  storeCurrentGame(qGame)
+  document.location.href = "./play.html"
+}

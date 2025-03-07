@@ -1,6 +1,7 @@
 
 checkButton = byId("checkBtn")
-checkButton.onclick = () => {
+checkButton.onclick = (event) => {
+  event.preventDefault()
   checkGame()
 }
 

@@ -1,13 +1,10 @@
 const gamePrefix = "game:"
+const localPrefix = "local:"
 const currentKey = "current"
 
 function storeCurrentGame(game) {
     compressed = compressGame(game)
-    if (compressed) {
-        localStorage.setItem(currentKey, compressed)
-    } else {
-        localStorage.setItem(currentKey, null)
-    }
+    localStorage.setItem(currentKey, compressed)
 }
 
 function loadCurrentGame() {
@@ -49,7 +46,27 @@ function getAllGames() {
                 games.push(game)
             }
         }
+        if (key.startsWith(localPrefix)) {
+            strGame = localStorage.getItem(key)
+            game = decompressGame(strGame)
+            if (game) {
+                games.push(game)
+            }
+        }
     }
+    games.sort((a,b) => {
+        aLocal = a.isLocal ?? false
+        bLocal = b.isLocal ?? false
+        if (aLocal == bLocal) {
+            return a.title.localeCompare(b.title)
+        }
+        if (aLocal == true) {
+            return 1
+        }
+        return -1
+        // return (aLocal < bLocal)
+    })
+
     return games
 }
 
@@ -77,7 +94,7 @@ async function downloadGame(fileInfo) {
     }
 }
 
-function addQueryGame()
+function getQueryGame()
 {
     game = null
     // Add game from query string
@@ -90,9 +107,25 @@ function addQueryGame()
             if (game) {
                 game.isLocal = true
                 gameStr = compressGame(game)
-                localStorage.setItem(gamePrefix + game.title, gameStr)
+                localStorage.setItem(localPrefix + game.title, gameStr)
             }
         }
     }
     return game
+}
+
+function saveLocalGame(game)
+{
+    if (game) {
+        game.isLocal = true
+        gameStr = compressGame(game)
+        localStorage.setItem(localPrefix + game.title, gameStr)
+    }
+}
+
+function deleteLocalGame(game)
+{
+    if (game) {
+        localStorage.removeItem(localPrefix + game.title)
+    }
 }

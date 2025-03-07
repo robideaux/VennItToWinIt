@@ -1,5 +1,5 @@
 #name {
-    background: #222;
+    background: #333;
     color: white;
     font-size: 1em;
     min-height: 4vh;
@@ -8,24 +8,16 @@
     align-self: center;    
 }
 
-#saveBtn {
-    background-color: firebrick;
-    border-radius: 50%;
-    padding: 6px;
-    margin: 3px;
-    justify-self: right;
-}
-
-#board {
+#editor {
     background-color: #AAA;
     width: 100%;
     height: 100%;
 }
 
-#circles {
+#background {
     background-image: url('./circles.svg');
     background-size: 100% 100%;
-    width: 100%;
+    width: 100vw;
     height: 100%;
     align-self: center;
     justify-self: center;
@@ -39,54 +31,11 @@
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
-.groupLabels {
-    position: relative;
+#targets input {
+    width: 15vw;
+    height: 10vh;
     align-self: center;
-}
-
-.slots {
-    align-self: center;
-}
-
-#redlabel {
-    grid-column-start: 1;
-    grid-row-start: 1;
-}
-#greenlabel {
-    grid-column-start: 1;
-    grid-row-start: 7;
-}
-#bluelabel {
-    grid-column-start: 5;
-    grid-row-start: 7;
-}
-#slot1 {
-    grid-column-start: 3;
-    grid-row-start: 2;
-}
-#slot2 {
-    grid-column-start: 2;
-    grid-row-start: 3;
-}
-#slot3 {
-    grid-column-start: 4;
-    grid-row-start: 3;
-}
-#slot4 {
-    grid-column-start: 3;
-    grid-row-start: 4;
-}
-#slot5 {
-    grid-column-start: 1;
-    grid-row-start: 5;
-}
-#slot6 {
-    grid-column-start: 5;
-    grid-row-start: 5;
-}
-#slot7 {
-    grid-column-start: 3;
-    grid-row-start: 6;
+    justify-self: center;
 }
 
 @media screen and (orientation: landscape) {
