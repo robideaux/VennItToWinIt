@@ -76,10 +76,11 @@ function setGame(game) {
   games = getAllGames()
   games.forEach(game => {
     option = document.createElement('option')
+    text = document.createTextNode(game.title)
     if (game.isLocal) {
       option.classList.add("local")
+      text = document.createTextNode(game.title + " (local copy)")
     }
-    text = document.createTextNode(game.title)
     option.appendChild(text)
     gameSelector.appendChild(option)
   })
