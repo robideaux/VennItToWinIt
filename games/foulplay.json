@@ -1,9 +1,9 @@
 {
     "title": "Foul Play",
     "groups": [
-        "More Birds",
+        "Birds",
         "Dirty Words",
-        "Local Places"
+        "Chain Stores"
     ],
     "phrases": {
         "Swallow" : {
@@ -12,7 +12,7 @@
         "Prick" : {
             "groupIds": [2]
         },
-        "Pack & Paddle" : {
+        "Piggly Wiggly" : {
             "groupIds": [3]
         },
         "Tits" : {
@@ -21,7 +21,7 @@
         "Dicks" : {
             "groupIds": [2,3]
         },
-        "Spoonbill" : {
+        "Red Robin" : {
             "groupIds": [1,3]
         },
         "Hooters" : {
