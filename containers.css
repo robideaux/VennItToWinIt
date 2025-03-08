@@ -73,6 +73,10 @@ td {
     border-radius: 30%;
     text-align: center;
     align-content: center;
+    display: block;
+    position: absolute;
+    width: 28%;
+    height: 14%;
     /*
     min-height: 20px;
     */

@@ -149,16 +149,49 @@ function UpdateChecksLeft()
 }
 
 function checkGame() {
+
+  if (isSolved()) {
+    board = byId("board")
+    if (board) {
+      board.classList.add("solved")
+    }
+    // fanfare
+  } else {
+    checksRemaining--
+    UpdateChecksLeft()
+  
+    if (checksRemaining <= 0)
+    {
+      setTimeout(() => {
+        if (confirm("No more checks available. So sorry. :(\nClick OK to reveal the answer; Cancel to start over.")) {
+          // reveal answer
+          revealGame()
+        } else {
+          // reload
+          location.reload()
+        }
+      }, 500)
+    }
+  }
+}
+
+function isSolved() {
+  solved = {
+    "red" : false,
+    "blue" : false,
+    "green" : false
+  }
+
   groups = ["G1", "G2", "G3"]
   circles = ["red", "blue", "green"]
   groups.forEach((group, index) => {
     phrases = byClass(group)
-
     for (let ci=0; ci<circles.length; ci++) {
       circle = circles[ci]
       label = byId(circle+"label")
       if (arePhrasesInCircle(phrases, circle))
       {
+        solved[circle] = true
         circles.splice(ci, 1)
         console.log(circle + " Circle is solved!")
         label.textContent = '"' + currentGame.groups[index] + '"'
@@ -169,22 +202,7 @@ function checkGame() {
     }
   })
 
-  checksRemaining--
-  UpdateChecksLeft()
-
-  if (checksRemaining <= 0)
-  {
-    setTimeout(() => {
-      if (confirm("No more checks available. So sorry. :(\nClick OK to reveal the answer; Cancel to start over.")) {
-        // reveal answer
-        revealGame()
-      } else {
-        // reload
-        location.reload()
-      }
-    }, 500)
-  }
-
+  return solved.red && solved.green && solved.blue
 }
 
 function arePhrasesInCircle(phrases, circle) {

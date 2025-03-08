@@ -6,7 +6,11 @@ if (shareBtn) {
     if (currentGame) {
       gzGame = compressGame(currentGame);
 //      href = location.href
-      href = location.origin + location.pathname.replace("play.html", "index.html")
+      path = location.pathname
+      path = path.replace("play.html", "")
+      path = path.replace("edit.html", "")
+      path = path + "index.html"
+      href = location.origin + path
       href = href + "?game=" + gzGame
 
       // Copy the text inside the text field
@@ -41,6 +45,11 @@ if (deleteBtn) {
 
 gameSelector = byId("gamelist")
 games = []
+
+board = byId("board")
+if (board) {
+  board.classList.remove("solved")
+}
 
 
 function setGame(game) {
@@ -79,7 +88,7 @@ function setGame(game) {
     text = document.createTextNode(game.title)
     if (game.isLocal) {
       option.classList.add("local")
-      text = document.createTextNode(game.title + " (local copy)")
+      text = document.createTextNode("* " + game.title)
     }
     option.appendChild(text)
     gameSelector.appendChild(option)
@@ -88,6 +97,9 @@ function setGame(game) {
 
   gameSelector.onchange = () =>
   {
+    if (board) {
+      board.classList.remove("solved")
+    }
     setGame(games[gameSelector.selectedIndex])
   }
 

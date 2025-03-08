@@ -191,6 +191,9 @@ img#home {
     font-size: clamp(1rem, 3vb 2vh);
     */
 }
+#board.solved {
+    background-color: rgb(169, 232, 169);
+}
 
 #circles {
     background-image: url('./circles.svg');
@@ -219,54 +222,66 @@ img#home {
     /*
     font-size: 1.2em;
     */
+    /*
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-}
-
-.groupLabels {
+    */
+    display: block;
     position: relative;
 }
 
+.groupLabels {
+    display: table;
+    position: absolute;
+    font-size: clamp(1rem, 2em, 3vmax);
+    font-weight: bold;
+    text-align: center;
+    align-content: center;
+    width: 28%;
+    height: 14%;
+    margin: 1%;
+}
+
 #redlabel {
-    grid-column-start: 1;
-    grid-row-start: 1;
+    top: 0%;
+    left: 0%;
 }
 #greenlabel {
-    grid-column-start: 1;
-    grid-row-start: 7;
+    bottom: 0%;
+    left: 0%;
 }
 #bluelabel {
-    grid-column-start: 5;
-    grid-row-start: 7;
+    bottom: 0%;
+    right: 0%
 }
 #slot1 {
-    grid-column-start: 3;
-    grid-row-start: 2;
+    top: 14%;
+    left: 35%;
 }
 #slot2 {
-    grid-column-start: 2;
-    grid-row-start: 3;
+    top: 28%;
+    left: 14%;
 }
 #slot3 {
-    grid-column-start: 4;
-    grid-row-start: 3;
+    top: 28%;
+    right: 14%;
 }
 #slot4 {
-    grid-column-start: 3;
-    grid-row-start: 4;
+    top: 42%;
+    left: 35%;
 }
 #slot5 {
-    grid-column-start: 1;
-    grid-row-start: 5;
+    bottom: 28%;
+    left: 7%;
 }
 #slot6 {
-    grid-column-start: 5;
-    grid-row-start: 5;
+    bottom: 28%;
+    right: 7%;
 }
 #slot7 {
-    grid-column-start: 3;
-    grid-row-start: 6;
+    bottom: 14%;
+    right: 35%;
 }
 
 #information{
@@ -285,9 +300,11 @@ img#home {
     #choices {
         flex-direction: column;
     }
+    /*
     #circles {
         height: 80vh;
     }
+    */
 }
 
 @media screen and (orientation: portrait) {
@@ -302,14 +319,16 @@ img#home {
     }
     #choices {
         flex-direction: row;
-        width: 100vw;
         /*
+        width: 100vw;
         font-size: 2em;
         */
     }
+    /*
     #circles {
         width: 100vw;
     }
+    */
 }
 
 /*
