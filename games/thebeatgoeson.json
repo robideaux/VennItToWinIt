@@ -1,0 +1,31 @@
+{
+    "title": "The Beat Goes On and On",
+    "groups": [
+        "Authority Figures",
+        "Seen in Medieval Europe",
+        "Costumes at a Pride Parade"
+    ],
+    "The Presidents of the United States of America": {
+        "Campus" : {
+            "groupIds": [1]
+        },
+        "The Smiths" : {
+            "groupIds": [2]
+        },
+        "Pixies" : {
+            "groupIds": [3]
+        },
+        "The Church" : {
+            "groupIds": [1,2]
+        },
+        "Village People" : {
+            "groupIds": [2,3]
+        },
+        "The Police" : {
+            "groupIds": [1,3]
+        },
+        "Queen" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}

@@ -269,6 +269,12 @@ img#home {
     grid-row-start: 6;
 }
 
+#information{
+  font-size: 1.5em;
+  text-align: center;
+  color: white;
+}
+
 @media screen and (orientation: landscape) {
     #titlebar {
         font-size: 2em;
