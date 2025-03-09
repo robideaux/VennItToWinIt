@@ -50,8 +50,12 @@ games = []
 board = byId("board")
 if (board) {
   board.classList.remove("solved")
+  board.classList.remove("failed")
 }
-
+targets = byId("targets")
+if (targets) {
+  targets.classList.remove("solution")
+}
 
 function setGame(game) {
   if (deleteBtn) {
@@ -100,7 +104,12 @@ function setGame(game) {
   {
     if (board) {
       board.classList.remove("solved")
+      board.classList.remove("failed")
     }
+    targets = byId("targets")
+    if (targets) {
+      targets.classList.remove("solution")
+    }    
     setGame(games[gameSelector.selectedIndex])
   }
 

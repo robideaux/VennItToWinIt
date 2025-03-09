@@ -10,6 +10,11 @@ selectedSource = null
 maxChecks = byClass("checks").length
 checksRemaining = maxChecks
 
+targets = byId("targets")
+if (targets) {
+  targets.classList.remove("solution")
+}
+
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -52,6 +57,7 @@ function loadGame() {
     label = byId(circle+"label")
     label.textContent = circle + ' group'
   }
+  clearGame()
 
   currentPhrases = currentGame.phrases
   phraseList = [...Object.keys(currentPhrases)]
@@ -149,9 +155,9 @@ function UpdateChecksLeft()
 }
 
 function checkGame() {
+  board = byId("board")
 
   if (isSolved()) {
-    board = byId("board")
     if (board) {
       board.classList.add("solved")
     }
@@ -165,6 +171,9 @@ function checkGame() {
       setTimeout(() => {
         if (confirm("No more checks available. So sorry. :(\nClick OK to reveal the answer; Cancel to start over.")) {
           // reveal answer
+          if (board) {
+            board.classList.add("failed")
+          }      
           revealGame()
         } else {
           // reload
@@ -222,6 +231,11 @@ function arePhrasesInCircle(phrases, circle) {
 }
 
 function revealGame() {
+  targets = byId("targets")
+  if (targets) {
+    targets.classList.add("solution")
+  }
+
   g1Name = byId("redlabel")
   g2Name = byId("bluelabel")
   g3Name = byId("greenlabel")
@@ -263,5 +277,55 @@ function revealGame() {
   }
   if (phrase123) {
       phrase123.textContent = getPhraseFromGroups(currentGame.phrases, [1,2,3])
+  }
+}
+
+function clearGame() {
+  targets = byId("targets")
+  if (targets) {
+    targets.classList.remove("solution")
+  }
+
+  g1Name = byId("redlabel")
+  g2Name = byId("bluelabel")
+  g3Name = byId("greenlabel")
+  phrase1 = byId("slot1")
+  phrase13 = byId("slot2")
+  phrase12 = byId("slot3")
+  phrase123 = byId("slot4")
+  phrase3 = byId("slot5")
+  phrase2 = byId("slot6")
+  phrase23 = byId("slot7")
+
+  if (g1Name) {
+      g1Name.textContent = ""
+  }
+  if (g2Name) {
+      g2Name.textContent = ""
+  }
+  if (g3Name) {
+      g3Name.textContent = ""
+  }
+
+  if (phrase1) {
+      phrase1.textContent = ""
+  }
+  if (phrase2) {
+      phrase2.textContent = ""
+  }
+  if (phrase3) {
+      phrase3.textContent = ""
+  }
+  if (phrase12) {
+      phrase12.textContent = ""
+  }
+  if (phrase13) {
+      phrase13.textContent = ""
+  }
+  if (phrase23) {
+      phrase23.textContent = ""
+  }
+  if (phrase123) {
+      phrase123.textContent = ""
   }
 }

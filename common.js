@@ -106,6 +106,7 @@ function decompressGame(strGame) {
   try {
       gameJson = LZString.decompressFromEncodedURIComponent(strGame)
       game = JSON.parse(gameJson)
+      game = loosenGame(game)
   } catch (error) {
       game = null
       console.log("error decompressing game definition.")
@@ -120,25 +121,33 @@ function tryCompress(game) {
   gzGame = compressGame(game)
   console.log("Current compression: " + gzGame)
   console.log("Length: " + gzGame.length)
+  console.log()
 
-  tight = tightenGame(game)
+  tight = tightenGame1(game)
   console.log("Tight def:")
   console.log(tight)
+  def = JSON.stringify(tight)
+  console.log(def)
+  console.log("Def Length: " + def.length)
 
   gzGame = compressGame(tight)
   console.log("Tight compression: " + gzGame)
   console.log("Length: " + gzGame.length)
+  console.log()
 
-  tight = tightenGame2(game)
+  tight = tightenGame(game)
   console.log("Tighter def:")
   console.log(tight)
+  def = JSON.stringify(tight)
+  console.log(def)
+  console.log("Def Length: " + def.length)
 
   gzGame = compressGame(tight)
   console.log("Tighter compression: " + gzGame)
   console.log("Length: " + gzGame.length)
 }
 
-function tightenGame(game) {
+function tightenGame1(game) {
   tight = []
   tight.push(game.title)
   tight = tight.concat(game.groups)
@@ -154,7 +163,7 @@ function tightenGame(game) {
   return tight
 }
 
-function tightenGame2(game) {
+function tightenGame(game) {
   tight = []
   tight.push(game.title)
   tight = tight.concat(game.groups)
@@ -169,6 +178,49 @@ function tightenGame2(game) {
   tight = tight.concat(getPhraseFromGroups(phrases, [1,2,3]))
 
   return tight
+}
+
+function loosenGame(game) {
+  loose = {}
+  if (Array.isArray(game)) {
+    p1 = game[4]
+    p2 = game[5]
+    p3 = game[6]
+    p4 = game[7]
+    p5 = game[8]
+    p6 = game[9]
+    p7 = game[10]
+    loose = {
+      "title": game[0],
+      "groups": [game[1], game[2], game[3]],
+      "phrases": {
+          p1 : {
+              "groupIds": [1]
+          },
+          p2 : {
+              "groupIds": [2]
+          },
+          p3 : {
+              "groupIds": [3]
+          },
+          p4 : {
+              "groupIds": [1,2]
+          },
+          p5 : {
+              "groupIds": [2,3]
+          },
+          p6 : {
+              "groupIds": [1,3]
+          },
+          p7 : {
+              "groupIds": [1,2,3]
+          }
+      }
+    }
+  } else {
+    loose = game
+  }
+  return loose
 }
 
 function getPhraseFromGroups(phrases, groupIds) {

@@ -77,9 +77,10 @@ td {
     position: absolute;
     width: 28%;
     height: 14%;
-    /*
-    min-height: 20px;
-    */
+}
+
+#targets.solution .drop-target {
+    background-color: ghostwhite;
 }
 
 .drop-target > div {

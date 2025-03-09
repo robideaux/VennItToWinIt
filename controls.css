@@ -194,6 +194,9 @@ img#home {
 #board.solved {
     background-color: rgb(169, 232, 169);
 }
+#board.failed {
+    background-color: dimgray;
+}
 
 #circles {
     background-image: url('./circles.svg');

@@ -78,6 +78,17 @@ function getAllGames() {
     return games
 }
 
+function getStoredGameNames() {
+    storedKeys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        key = localStorage.key(i);
+        if (key.startsWith(gamePrefix)) {
+            storedKeys.push(key)
+        }
+    }
+    return storedKeys
+}
+
 function isGameFile(info) {
     return (info.name && info.name.endsWith(".json"))
 }
