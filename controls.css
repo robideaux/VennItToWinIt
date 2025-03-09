@@ -81,7 +81,7 @@ body {
 #gamelist {
     background: #333;
     color: white;
-    font-size: 1em;
+    font-size: clamp(1em, 1.5em, 3rem);
     min-height: 4vh;
     height: 90%;
     width: 90%;
@@ -95,10 +95,13 @@ option.local {
 #checkBtn {
     background-color: #04AA6D;
     border-radius: 50%;
+    grid-column-start: 4;
+    grid-row-start: 1;
+    grid-row-end: 3;
     /*
     padding: 0.5em;
     */
-    padding: 6px;
+    padding: 8px;
     margin: 3px;
     justify-self: right;
 }
@@ -106,6 +109,9 @@ option.local {
 #deleteBtn {
     color: orangered;
     font-size: 2em;
+    grid-column-start: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
     margin: 3px;
     justify-self: center;
 }
@@ -217,6 +223,14 @@ img#home {
     width: 100%;
     height: 100%;
     */
+}
+
+.fanfare {
+    position: absolute;
+    top: 10%;
+    left: 40%;
+    width: 50%;
+    height: 50%;
 }
 
 #targets {
