@@ -25,6 +25,14 @@ async function loadGames() {
             for (info of gameInfos) {
                 await downloadGame(info)
             }
+            // clean up old/renamed games (from server only)
+            storedNames = getStoredGameNames()
+            for (keyName of storedNames) {
+                fileName = keyName.replace(gamePrefix, "")
+                if (gameInfos.findIndex(info => info.name == fileName) < 0) {
+                    localStorage.removeItem(keyName)
+                }
+            }
         }
       } catch (error) {
         console.log("error reading game definitions: ")

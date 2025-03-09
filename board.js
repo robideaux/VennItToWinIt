@@ -30,6 +30,7 @@ if (deleteBtn) {
         if (confirm("This will delete your locally stored game, " + currentGame.title + "\nAre you sure?")) {
           deleteLocalGame(currentGame)
           setGame(null)
+          location.reload()
         } else {
           // do nothing
         }
