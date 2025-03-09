@@ -1,0 +1,31 @@
+{
+    "title": "Calling All Units",
+    "groups": [
+        "Distance",
+        "Elemental Symbol",
+        "Temperature"
+    ],
+    "phrases": {
+        "m" : {
+            "groupIds": [1]
+        },
+        "Zn" : {
+            "groupIds": [2]
+        },
+        "R" : {
+            "groupIds": [3]
+        },
+        "In" : {
+            "groupIds": [1,2]
+        },
+        "C" : {
+            "groupIds": [2,3]
+        },
+        "°" : {
+            "groupIds": [1,3]
+        },
+        "K" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
