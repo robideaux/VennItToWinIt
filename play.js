@@ -9,6 +9,8 @@ isSourceSelected = false
 selectedSource = null
 maxChecks = byClass("checks").length
 checksRemaining = maxChecks
+currentConfig = []
+configHistory = []
 
 targets = byId("targets")
 if (targets) {
@@ -157,6 +159,12 @@ function UpdateChecksLeft()
 function checkGame() {
   board = byId("board")
 
+  if (isPreviousSubmission()) {
+    alert("Hey, looks like you've already submitted this configuration.\nNot going to count this one against you.  You're welcome.")
+    return
+  }
+  configHistory.push(currentConfig)
+
   if (isSolved()) {
     if (board) {
       board.classList.add("solved")
@@ -235,6 +243,47 @@ function arePhrasesInCircle(phrases, circle) {
   return found
 }
 
+function isPreviousSubmission()
+{
+  // build current configuration
+  currentConfig = []
+  circles = ["red", "blue", "green"]
+  for (let circle of circles) {
+    phrases = []
+    slots = byClass(circle)
+    for (let slot of slots) {
+      phrase = slot.children[0]?.children[0]?.textContent ?? ""
+      phrases.push(phrase)
+    }
+    currentConfig.push(phrases)
+  }
+
+  // check config against previous ones
+  isDuplicate = false
+  for (let config of configHistory) {
+    if (doConfigsMatch(currentConfig, config)) {
+      isDuplicate = true
+      break
+    }
+  }
+
+  return isDuplicate
+}
+
+function doConfigsMatch(config1, config2) {
+  for (let phrase of config1) {
+    keepGoing = config2[0].every(p => phrase.includes(p)) ||
+                config2[1].every(p => phrase.includes(p)) ||
+                config2[2].every(p => phrase.includes(p))
+
+    if (!keepGoing) {
+      return false
+    }
+  }
+
+  return true
+}
+
 function revealGame() {
   targets = byId("targets")
   if (targets) {
@@ -286,6 +335,9 @@ function revealGame() {
 }
 
 function clearGame() {
+  currentConfig = []
+  configHistory = []
+
   targets = byId("targets")
   if (targets) {
     targets.classList.remove("solution")

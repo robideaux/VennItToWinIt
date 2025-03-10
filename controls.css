@@ -61,11 +61,6 @@ body {
     display: none;
 }
 
-/*
-#title {
-}
-*/
-
 #scoreboard {
     color: white;
     width: 100%;
@@ -74,7 +69,7 @@ body {
     */
     display: grid;
     grid-template-columns: auto 1fr auto auto;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto 0px;
     align-items: center;
 }
 
@@ -83,8 +78,8 @@ body {
     color: white;
     font-size: clamp(1em, 1.5em, 3rem);
     min-height: 4vh;
-    height: 90%;
-    width: 90%;
+    height: 100%;
+    width: 100%;
     align-self: center;
 }
 
@@ -98,11 +93,8 @@ option.local {
     grid-column-start: 4;
     grid-row-start: 1;
     grid-row-end: 3;
-    /*
-    padding: 0.5em;
-    */
     padding: 8px;
-    margin: 3px;
+    margin: 6px;
     justify-self: right;
 }
 
@@ -112,7 +104,7 @@ option.local {
     grid-column-start: 3;
     grid-row-start: 1;
     grid-row-end: 3;
-    margin: 3px;
+    margin: 6px;
     justify-self: center;
 }
 
@@ -120,8 +112,9 @@ option.local {
     background-color: #04AA6D;
     color: white;
     border-radius: 50%;
-    padding: 6px;
-    margin: 3px;
+    padding: 8px;
+    margin: 6px;
+    font-size: clamp(1rem, 3vb, 2vh);
 }
 
 #checksLabel {
