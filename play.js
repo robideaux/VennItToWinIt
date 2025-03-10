@@ -15,6 +15,8 @@ missAudio = new Audio("./miss.mp3")
 missAudio.load()
 solvedAudio = new Audio("./solved.mp3")
 solvedAudio.load()
+failedAudio = new Audio("./failed.mp3")
+failedAudio.load()
 
 targets = byId("targets")
 if (targets) {
@@ -39,6 +41,7 @@ for (let i=1; i<=7; i++) {
         srcParent = selectedSource.parentElement
         srcParent.removeChild(selectedSource)
         dropSlot.appendChild(selectedSource)    
+        setCurrentConfiguration()
         cancelSelections()
       }
     }
@@ -107,6 +110,7 @@ function loadGame() {
         targetParent.appendChild(selectedSource)
         srcParent.appendChild(target)
         cancelSelections()
+        setCurrentConfiguration()
         return
       }
   
@@ -168,6 +172,7 @@ function checkGame() {
     return
   }
   configHistory.push(currentConfig)
+  setCurrentConfiguration()
 
   if (isSolved()) {
     solvedAudio.play()
@@ -187,6 +192,7 @@ function checkGame() {
   
     if (checksRemaining <= 0)
     {
+      failedAudio.play()
       setTimeout(() => {
         if (confirm("No more checks available. So sorry. :(\nClick OK to reveal the answer; Cancel to start over.")) {
           // reveal answer
@@ -249,9 +255,8 @@ function arePhrasesInCircle(phrases, circle) {
   return found
 }
 
-function isPreviousSubmission()
+function setCurrentConfiguration()
 {
-  // build current configuration
   currentConfig = []
   circles = ["red", "blue", "green"]
   for (let circle of circles) {
@@ -264,10 +269,19 @@ function isPreviousSubmission()
     currentConfig.push(phrases)
   }
 
+  if (isPreviousSubmission()) {
+    checkButton.classList.add("disable")
+  } else {
+    checkButton.classList.remove("disable")
+  }
+}
+
+function isPreviousSubmission()
+{
   // check config against previous ones
   isDuplicate = false
   for (let config of configHistory) {
-    if (doConfigsMatch(currentConfig, config)) {
+    if (doConfigsMatch(config)) {
       isDuplicate = true
       break
     }
@@ -276,18 +290,19 @@ function isPreviousSubmission()
   return isDuplicate
 }
 
-function doConfigsMatch(config1, config2) {
-  for (let phrase of config1) {
-    keepGoing = config2[0].every(p => phrase.includes(p)) ||
-                config2[1].every(p => phrase.includes(p)) ||
-                config2[2].every(p => phrase.includes(p))
-
+function doConfigsMatch(config) {
+  match = true
+  currentConfig.forEach(group => {
+    keepGoing = group.every(p => config[0].includes(p)) ||
+                group.every(p => config[1].includes(p)) ||
+                group.every(p => config[2].includes(p))
     if (!keepGoing) {
+      match = false
       return false
     }
-  }
+  })
 
-  return true
+  return match
 }
 
 function revealGame() {
@@ -341,7 +356,6 @@ function revealGame() {
 }
 
 function clearGame() {
-  currentConfig = []
   configHistory = []
 
   targets = byId("targets")
@@ -391,4 +405,6 @@ function clearGame() {
   if (phrase123) {
       phrase123.textContent = ""
   }
+
+  setCurrentConfiguration()
 }

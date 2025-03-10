@@ -117,18 +117,13 @@ function getQueryGame()
 {
     game = null
     // Add game from query string
-    query = document.location.search
-    if (query) {
-        params = query.split(",")[0]
-        if (params) {
-            gameStr = params.replace("?game=", "")
-            game = decompressGame(gameStr)
-            if (game) {
-                game.isLocal = true
-                gameStr = compressGame(game)
-                localStorage.setItem(localPrefix + game.title, gameStr)
-            }
-        }
+    query = new URLSearchParams(document.location.search)
+    gameStr = query.get("game")
+    game = decompressGame(gameStr)
+    if (game) {
+        game.isLocal = true
+        gameStr = compressGame(game)
+        localStorage.setItem(localPrefix + game.title, gameStr)
     }
     return game
 }

@@ -145,6 +145,7 @@ function tryCompress(game) {
   gzGame = compressGame(tight)
   console.log("Tighter compression: " + gzGame)
   console.log("Length: " + gzGame.length)
+  return gzGame
 }
 
 function tightenGame1(game) {
@@ -193,30 +194,15 @@ function loosenGame(game) {
     loose = {
       "title": game[0],
       "groups": [game[1], game[2], game[3]],
-      "phrases": {
-          p1 : {
-              "groupIds": [1]
-          },
-          p2 : {
-              "groupIds": [2]
-          },
-          p3 : {
-              "groupIds": [3]
-          },
-          p4 : {
-              "groupIds": [1,2]
-          },
-          p5 : {
-              "groupIds": [2,3]
-          },
-          p6 : {
-              "groupIds": [1,3]
-          },
-          p7 : {
-              "groupIds": [1,2,3]
-          }
-      }
+      "phrases": {}
     }
+    loose.phrases[p1] = { "groupIds": [1] }
+    loose.phrases[p2] = { "groupIds": [2] }
+    loose.phrases[p3] = { "groupIds": [3] }
+    loose.phrases[p4] = { "groupIds": [1,2] }
+    loose.phrases[p5] = { "groupIds": [2,3] }
+    loose.phrases[p6] = { "groupIds": [1,3] }
+    loose.phrases[p7] = { "groupIds": [1,2,3] }
   } else {
     loose = game
   }

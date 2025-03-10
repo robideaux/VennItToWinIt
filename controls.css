@@ -97,6 +97,9 @@ option.local {
     margin: 6px;
     justify-self: right;
 }
+#checkBtn.disable {
+    background-color: darkolivegreen;
+}
 
 #deleteBtn {
     color: orangered;

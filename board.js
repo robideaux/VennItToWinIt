@@ -11,6 +11,8 @@ if (shareBtn) {
       path = path.replace("edit.html", "")
       path = path + "index.html"
       href = location.origin + path
+      // href = href + "?title=" + currentGame.title.replaceAll(" ", "+")
+      // href = href + "&game=" + gzGame
       href = href + "?game=" + gzGame
 
       // Copy the text inside the text field
