@@ -83,7 +83,6 @@ function setGame(game) {
 
 // Load up games
 (async () => {
-
   await loadGames()
 
   // build dropdown list

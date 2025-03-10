@@ -11,6 +11,10 @@ maxChecks = byClass("checks").length
 checksRemaining = maxChecks
 currentConfig = []
 configHistory = []
+missAudio = new Audio("./miss.mp3")
+missAudio.load()
+solvedAudio = new Audio("./solved.mp3")
+solvedAudio.load()
 
 targets = byId("targets")
 if (targets) {
@@ -166,6 +170,7 @@ function checkGame() {
   configHistory.push(currentConfig)
 
   if (isSolved()) {
+    solvedAudio.play()
     if (board) {
       board.classList.add("solved")
     }
@@ -176,6 +181,7 @@ function checkGame() {
       origin: { y: 0.6 },
     });
   } else {
+    missAudio.play()
     checksRemaining--
     UpdateChecksLeft()
   
