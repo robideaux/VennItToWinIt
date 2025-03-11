@@ -1,0 +1,31 @@
+{
+    "title": "Out and About",
+    "groups": [
+        "Skiing",
+        "At the Opera",
+        "At the Ballgame"
+    ],
+    "phrases": {
+        "Chap Stick" : {
+            "groupIds": [1]
+        },
+        "Lip Stick" : {
+            "groupIds": [2]
+        },
+        "Scorecard" : {
+            "groupIds": [3]
+        },
+        "Special Eyeware" : {
+            "groupIds": [1,2]
+        },
+        "Program" : {
+            "groupIds": [2,3]
+        },
+        "Passing Hot Dogs" : {
+            "groupIds": [1,3]
+        },
+        "Gloves" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
