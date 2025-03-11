@@ -1,0 +1,31 @@
+{
+    "title": "Lettuce Eat!",
+    "groups": [
+        "Burger & Fries",
+        "Tacos",
+        "Sheppard's Pie"
+    ],
+    "phrases": {
+        "Ketchup" : {
+            "groupIds": [1]
+        },
+        "Salsa" : {
+            "groupIds": [2]
+        },
+        "Peas" : {
+            "groupIds": [3]
+        },
+        "Cheese" : {
+            "groupIds": [1,2]
+        },
+        "Corn" : {
+            "groupIds": [2,3]
+        },
+        "Potato" : {
+            "groupIds": [1,3]
+        },
+        "Ground Meat" : {
+            "groupIds": [1,2,3]
+        }
+    }
+}
