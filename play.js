@@ -228,7 +228,7 @@ function isSolved() {
         solved[circle] = true
         circles.splice(ci, 1)
         console.log(circle + " Circle is solved!")
-        label.textContent = '"' + currentGame.groups[index] + '"'
+        label.textContent = currentGame.groups[index]
         break
       } else {
         label.textContent = circle + ' group'
