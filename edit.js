@@ -63,10 +63,9 @@ editedGame = {
 }
 
 if (currentGame) {
-    editedGame = JSON.parse(JSON.stringify(currentGame))
-    editedGame.isLocal = true
-    if (!currentGame.isLocal) {
-        editedGame.title = editedGame.title + " (copy)"
+    if (currentGame.isLocal) {
+        editedGame = JSON.parse(JSON.stringify(currentGame))
+        editedGame.isLocal = true
     }
 }
 

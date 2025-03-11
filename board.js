@@ -28,7 +28,7 @@ deleteBtn = byId("deleteBtn")
 if (deleteBtn) {
   deleteBtn.onclick = () => {
     if (currentGame) {
-      if (currentGame.isLocal) {
+      if (currentGame.isLocal || currentGame.isShared) {
         if (confirm("This will delete your locally stored game, " + currentGame.title + "\nAre you sure?")) {
           deleteLocalGame(currentGame)
           setGame(null)
@@ -68,7 +68,7 @@ function setGame(game) {
     currentGame = game
     storeCurrentGame(game)
 
-    if (deleteBtn && currentGame.isLocal) {
+    if (deleteBtn && (currentGame.isLocal || currentGame.isShared)) {
       deleteBtn.classList.remove("hidden")
     }
 
@@ -92,9 +92,13 @@ function setGame(game) {
   games.forEach(game => {
     option = document.createElement('option')
     text = document.createTextNode(game.title)
+    if (game.isShared) {
+      option.classList.add("shared")
+      text = document.createTextNode("* " + game.title)
+    }
     if (game.isLocal) {
       option.classList.add("local")
-      text = document.createTextNode("* " + game.title)
+      text = document.createTextNode("[" + game.title + "]")
     }
     option.appendChild(text)
     gameSelector.appendChild(option)

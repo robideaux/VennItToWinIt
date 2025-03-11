@@ -86,6 +86,9 @@ body {
 option.local {
     font-style: italic;
 }
+option.shared {
+    font-style: italic;
+}
 
 #checkBtn {
     background-color: #04AA6D;

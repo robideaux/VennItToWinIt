@@ -1,5 +1,6 @@
 const gamePrefix = "game:"
 const localPrefix = "local:"
+const sharedPrefix = "share:"
 const currentKey = "current"
 
 function storeCurrentGame(game) {
@@ -47,14 +48,7 @@ function getAllGames() {
     games = [];
     for (let i = 0; i < localStorage.length; i++) {
         key = localStorage.key(i);
-        if (key.startsWith(gamePrefix)) {
-            strGame = localStorage.getItem(key)
-            game = decompressGame(strGame)
-            if (game) {
-                games.push(game)
-            }
-        }
-        if (key.startsWith(localPrefix)) {
+        if (key.startsWith(gamePrefix) || key.startsWith(localPrefix) || key.startsWith(sharedPrefix)) {
             strGame = localStorage.getItem(key)
             game = decompressGame(strGame)
             if (game) {
@@ -63,16 +57,33 @@ function getAllGames() {
         }
     }
     games.sort((a,b) => {
+        aFirst = -1
+        bFirst = 1
         aLocal = a.isLocal ?? false
         bLocal = b.isLocal ?? false
-        if (aLocal == bLocal) {
+        aShared = a.isShared ?? false
+        bShared = b.isShared ?? false
+
+        // If same type, sort alphabetically
+        if ((aLocal == bLocal) && (aShared == bShared)) {
             return a.title.localeCompare(b.title)
         }
+
+        // always put locals at the end
         if (aLocal == true) {
-            return 1
+            return bFirst
         }
+        if (bLocal == true) {
+            return aFirst
+        }
+
+        // source games go first
+        if (aShared == true) {
+            return bFirst
+        }
+
+        // put source first
         return -1
-        // return (aLocal < bLocal)
     })
 
     return games
@@ -121,9 +132,10 @@ function getQueryGame()
     gameStr = query.get("game")
     game = decompressGame(gameStr)
     if (game) {
-        game.isLocal = true
+        game.isLocal = false
+        game.isShared = true
         gameStr = compressGame(game)
-        localStorage.setItem(localPrefix + game.title, gameStr)
+        localStorage.setItem(sharedPrefix + game.title, gameStr)
     }
     return game
 }
@@ -132,6 +144,7 @@ function saveLocalGame(game)
 {
     if (game) {
         game.isLocal = true
+        game.isShared = false
         gameStr = compressGame(game)
         localStorage.setItem(localPrefix + game.title, gameStr)
     }
@@ -141,5 +154,6 @@ function deleteLocalGame(game)
 {
     if (game) {
         localStorage.removeItem(localPrefix + game.title)
+        localStorage.removeItem(sharedPrefix + game.title)
     }
 }
