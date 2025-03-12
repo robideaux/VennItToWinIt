@@ -38,6 +38,7 @@ for (let i=1; i<=7; i++) {
       dropSlot = event.currentTarget
       if (dropSlot.children.length == 0)
       {
+        navigator.vibrate(50)
         srcParent = selectedSource.parentElement
         srcParent.removeChild(selectedSource)
         dropSlot.appendChild(selectedSource)    
@@ -94,6 +95,7 @@ function loadGame() {
     phraseEl.appendChild(div)
     
     phraseEl.onclick = (event) => {
+      navigator.vibrate(50)
       // check for deselection
       if (event.currentTarget.classList.contains('source')) {
         cancelSelections()
@@ -164,6 +166,12 @@ function UpdateChecksLeft()
   }
 }
 
+function playSound(sound) {
+  if (audioEnabled()) {
+    sound.play()
+  }
+}
+
 function checkGame() {
   board = byId("board")
 
@@ -175,8 +183,8 @@ function checkGame() {
   setCurrentConfiguration()
 
   if (isSolved()) {
-    solvedAudio.play()
-    navigator.vibrate([100, 30, 300])
+    playSound(solvedAudio)
+    navigator.vibrate([50, 10, 200])
     if (board) {
       board.classList.add("solved")
     }
@@ -187,16 +195,16 @@ function checkGame() {
       origin: { y: 0.6 },
     });
   } else {
-    missAudio.play()
-    navigator.vibrate(200) // vibrate for 200ms
+    playSound(missAudio)
+    navigator.vibrate(100) // vibrate for 100ms
 
     checksRemaining--
     UpdateChecksLeft()
   
     if (checksRemaining <= 0)
     {
-      navigator.vibrate([0, 300])
-      failedAudio.play()
+      playSound(failedAudio)
+      navigator.vibrate(20)
       setTimeout(() => {
         if (confirm("No more checks available. So sorry. :(\nClick OK to reveal the answer; Cancel to start over.")) {
           // reveal answer

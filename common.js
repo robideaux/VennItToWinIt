@@ -84,6 +84,22 @@ function closeMenu() {
   }
 }
 
+settingsKey = "settings:"
+
+audioKey = "audio"
+
+function audioEnabled() {
+  enabled = localStorage.getItem(settingsKey+audioKey) ?? "false"
+  return JSON.parse(enabled)
+}
+
+function enableAudio() {
+  localStorage.setItem(settingsKey+audioKey, true)
+}
+
+function disableAudio() {
+  localStorage.setItem(settingsKey+audioKey, false)
+}
 
 function compressGame(game) {
   strGame = null

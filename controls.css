@@ -187,6 +187,10 @@ img#home {
     display: block;
 }
 
+input#audio-toggle {
+    display: none;
+}
+
 #board {
     background-color: #AAA;
     display: grid;
