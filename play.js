@@ -176,6 +176,7 @@ function checkGame() {
 
   if (isSolved()) {
     solvedAudio.play()
+    navigator.vibrate([100, 30, 300])
     if (board) {
       board.classList.add("solved")
     }
@@ -187,11 +188,14 @@ function checkGame() {
     });
   } else {
     missAudio.play()
+    navigator.vibrate(200) // vibrate for 200ms
+
     checksRemaining--
     UpdateChecksLeft()
   
     if (checksRemaining <= 0)
     {
+      navigator.vibrate([0, 300])
       failedAudio.play()
       setTimeout(() => {
         if (confirm("No more checks available. So sorry. :(\nClick OK to reveal the answer; Cancel to start over.")) {
