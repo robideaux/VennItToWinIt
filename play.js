@@ -38,7 +38,7 @@ for (let i=1; i<=7; i++) {
       dropSlot = event.currentTarget
       if (dropSlot.children.length == 0)
       {
-        navigator.vibrate(50)
+        hapticMS(50)
         srcParent = selectedSource.parentElement
         srcParent.removeChild(selectedSource)
         dropSlot.appendChild(selectedSource)    
@@ -95,7 +95,7 @@ function loadGame() {
     phraseEl.appendChild(div)
     
     phraseEl.onclick = (event) => {
-      navigator.vibrate(50)
+      hapticMS(50)
       // check for deselection
       if (event.currentTarget.classList.contains('source')) {
         cancelSelections()
@@ -172,6 +172,13 @@ function playSound(sound) {
   }
 }
 
+const canVibrate = window.navigator.vibrate
+function hapticMS(miliseconds) {
+  if (canVibrate) {
+    window.navigator.vibrate(miliseconds)
+  }
+}
+
 function checkGame() {
   board = byId("board")
 
@@ -184,7 +191,7 @@ function checkGame() {
 
   if (isSolved()) {
     playSound(solvedAudio)
-    navigator.vibrate([50, 10, 200])
+    hapticMS([50, 10, 200])
     if (board) {
       board.classList.add("solved")
     }
@@ -196,7 +203,7 @@ function checkGame() {
     });
   } else {
     playSound(missAudio)
-    navigator.vibrate(100) // vibrate for 100ms
+    hapticMS(100) // vibrate for 100ms
 
     checksRemaining--
     UpdateChecksLeft()
@@ -204,7 +211,7 @@ function checkGame() {
     if (checksRemaining <= 0)
     {
       playSound(failedAudio)
-      navigator.vibrate(20)
+      hapticMS(20)
       setTimeout(() => {
         if (confirm("No more checks available. So sorry. :(\nClick OK to reveal the answer; Cancel to start over.")) {
           // reveal answer
