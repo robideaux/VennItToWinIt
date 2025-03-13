@@ -1,5 +1,5 @@
 {
-    "title": "Solve: G1=300; G2=200; G3=150",
+    "title": "Solve:Total=500; G1=300; G2=200; G3=150; G1∩G2=75; G1∩G3=70; G2∩G3=50",
     "groups": [
         "G1",
         "G2",
