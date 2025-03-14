@@ -1,0 +1,32 @@
+{
+    "title": "Belle Morte",
+    "groups": [
+        "Lived in Italy",
+ 	"Epithet for a Flirt",
+	"Tragic Protagonists"
+    ],
+    "phrases": {
+        "Portia": {
+            "groupIds": [1]
+        },
+        "Prince Charming": {
+            "groupIds": [2]
+        },
+        "Hamlet": {
+            "groupIds": [3]
+        },
+        "Casanova": {
+            "groupIds": [1,2]
+        },
+        "Don Juan": {
+            "groupIds": [2,3]
+        },
+        "Othello": {
+            "groupIds": [1,3]
+        },
+        "Romeo": {
+            "groupIds": [1,2,3]
+        }
+    }
+}
+

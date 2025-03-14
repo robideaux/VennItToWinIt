@@ -1,0 +1,32 @@
+{
+    "title": "Yes and No",
+    "groups": [
+        "Willing to Particpate",
+ 	"Negative words with opposites in other group",
+	"Positive words with opposites in other group"
+    ],
+    "phrases": {
+        "Interested": {
+            "groupIds": [1]
+        },
+        "Low": {
+            "groupIds": [2]
+        },
+        "High": {
+            "groupIds": [3]
+        },
+        "Down": {
+            "groupIds": [1,2]
+        },
+        "Up": {
+            "groupIds": [2,3]
+        },
+        "Sanction": {
+            "groupIds": [1,3]
+        },
+        "Go": {
+            "groupIds": [1,2,3]
+        }
+    }
+}
+
