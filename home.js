@@ -1,6 +1,7 @@
 play = byId("play")
 fullscreen = byId("fullscreen")
 settings = byId("settings")
+scoreIcon = byId("scoreIcon")
 
 // Play Game
 play.onclick = () => {
@@ -11,4 +12,8 @@ qGame = getQueryGame()
 if (qGame) {
   storeCurrentGame(qGame)
   document.location.href = "./play.html"
+}
+
+if (scoreIcon) {
+  scoreIcon.textContent = "\u2BBF\u2460\u2461\u2462\u2463"
 }
