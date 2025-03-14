@@ -12,6 +12,7 @@ checksRemaining = maxChecks
 currentConfig = []
 configHistory = []
 scoreHistory = []
+/*
 scoreTypes = [
   "&#11199;", // 0
   "&#9312;", // 1
@@ -23,6 +24,14 @@ scoreTypes2 = [
   "\u2460", // 1
   "\u2461", // 2
   "\u2462"  // 3
+]
+*/
+scoreTypes = [
+"\u2612",
+"\u2780",
+"\u2781",
+"\u2782",
+"\u2783"
 ]
 scorePanel = byId("score")
 finalScore = byId("finalscore")
@@ -307,7 +316,7 @@ function isSolved() {
       }
     }
   })
-  scoreHistory.push(scoreTypes2[solvedCount])
+  scoreHistory.push(scoreTypes[solvedCount])
 
   return solved.red && solved.green && solved.blue
 }

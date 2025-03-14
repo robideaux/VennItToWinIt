@@ -15,5 +15,6 @@ if (qGame) {
 }
 
 if (scoreIcon) {
-  scoreIcon.textContent = "\u2BBF\u2460\u2461\u2462\u2463"
+  // scoreIcon.textContent = "\u2BBF\u2460\u2461\u2462\u2463"
+  scoreIcon.textContent = "\u2612\u2780\u2781\u2782\u2783"
 }
