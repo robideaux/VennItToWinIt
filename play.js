@@ -26,6 +26,7 @@ scoreTypes2 = [
 ]
 scorePanel = byId("score")
 finalScore = byId("finalscore")
+scoreTitle = byId("scoreTitle")
 
 missAudio = new Audio("./miss.mp3")
 missAudio.load()
@@ -220,11 +221,14 @@ function checkGame() {
     });
 
     if (scorePanel && finalScore) {
+      if (scoreTitle) {
+        scoreTitle.textContent = "You're a Venner!"
+      }
       results = scoreHistory.join(" ")
       finalScore.textContent = results
 
       href = getGameLink(currentGame)
-      resultsLink = "You solved: " + currentGame.title + "!"
+      resultsLink = "I solved: " + currentGame.title + "!"
       resultsLink += "\n"
       resultsLink += results
       resultsLink += "\n"
@@ -243,6 +247,23 @@ function checkGame() {
     {
       playSound(failedAudio)
       hapticMS(20)
+
+      if (scorePanel && finalScore) {
+        if (scoreTitle) {
+          scoreTitle.textContent = "You did not Venn.  :("
+        }
+        results = scoreHistory.join(" ")
+        finalScore.textContent = results
+        href = getGameLink(currentGame)
+        resultsLink = "Beaten by: " + currentGame.title
+        resultsLink += "\n"
+        resultsLink += results
+        resultsLink += "\n"
+        resultsLink += href
+        navigator.clipboard.writeText(resultsLink);
+        scorePanel.classList.add("shown")
+      }
+  
       setTimeout(() => {
         if (confirm("No more checks available. So sorry. :(\nClick OK to reveal the answer; Cancel to start over.")) {
           // reveal answer

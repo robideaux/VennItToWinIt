@@ -198,7 +198,7 @@ function tightenGame(game) {
   tight = tight.concat(getPhraseFromGroups(phrases, [1,2,3]))
 
   tight.push(game.isLocal ?? false)
-  tight.push(game.isShared ?? true)
+  tight.push(game.isShared ?? false)
 
   return tight
 }
