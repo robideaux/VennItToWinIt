@@ -27,6 +27,12 @@ scoreTypes2 = [
 scorePanel = byId("score")
 finalScore = byId("finalscore")
 scoreTitle = byId("scoreTitle")
+if (scorePanel) {
+  scorePanel.onclick = (event) => {
+    event.preventDefault()
+    scorePanel.classList.remove("shown")
+  }
+}
 
 missAudio = new Audio("./miss.mp3")
 missAudio.load()
@@ -220,22 +226,7 @@ function checkGame() {
       origin: { y: 0.6 },
     });
 
-    if (scorePanel && finalScore) {
-      if (scoreTitle) {
-        scoreTitle.textContent = "You're a Venner!"
-      }
-      results = scoreHistory.join(" ")
-      finalScore.textContent = results
-
-      href = getGameLink(currentGame)
-      resultsLink = "I solved: " + currentGame.title + "!"
-      resultsLink += "\n"
-      resultsLink += results
-      resultsLink += "\n"
-      resultsLink += href
-      navigator.clipboard.writeText(resultsLink);
-      scorePanel.classList.add("shown")
-    }
+    showScoreResults(true)
   } else {
     playSound(missAudio)
     hapticMS(100) // vibrate for 100ms
@@ -247,23 +238,7 @@ function checkGame() {
     {
       playSound(failedAudio)
       hapticMS(20)
-
-      if (scorePanel && finalScore) {
-        if (scoreTitle) {
-          scoreTitle.textContent = "You did not Venn.  :("
-        }
-        results = scoreHistory.join(" ")
-        finalScore.textContent = results
-        href = getGameLink(currentGame)
-        resultsLink = "Beaten by: " + currentGame.title
-        resultsLink += "\n"
-        resultsLink += results
-        resultsLink += "\n"
-        resultsLink += href
-        navigator.clipboard.writeText(resultsLink);
-        scorePanel.classList.add("shown")
-      }
-  
+      showScoreResults(false)
       setTimeout(() => {
         if (confirm("No more checks available. So sorry. :(\nClick OK to reveal the answer; Cancel to start over.")) {
           // reveal answer
@@ -278,6 +253,29 @@ function checkGame() {
       }, 500)
     }
   }
+}
+
+function showScoreResults(won) {
+  if (!scorePanel || !finalScore || !scoreTitle) {
+    return
+  }
+
+  scoreTitle.textContent = won ? "You're a Venner!" : "You did not Venn. :("
+  results = scoreHistory.join(" ")
+  finalScore.textContent = results
+
+  resultsLink = "Beaten by: " + currentGame.title
+  if (won) {
+    resultsLink = "I solved: " + currentGame.title + "!"
+  }
+
+  href = getGameLink(currentGame)
+  resultsLink += "\n"
+  resultsLink += results
+  resultsLink += "\n"
+  resultsLink += href
+  navigator.clipboard.writeText(resultsLink);
+  scorePanel.classList.add("shown")
 }
 
 function isSolved() {
