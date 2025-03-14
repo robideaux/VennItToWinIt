@@ -11,6 +11,22 @@ maxChecks = byClass("checks").length
 checksRemaining = maxChecks
 currentConfig = []
 configHistory = []
+scoreHistory = []
+scoreTypes = [
+  "&#11199;", // 0
+  "&#9312;", // 1
+  "&#9313;", // 2
+  "&#9314;"  // 3
+]
+scoreTypes2 = [
+  "\u2BBF", // 0
+  "\u2460", // 1
+  "\u2461", // 2
+  "\u2462"  // 3
+]
+scorePanel = byId("score")
+finalScore = byId("finalscore")
+
 missAudio = new Audio("./miss.mp3")
 missAudio.load()
 solvedAudio = new Audio("./solved.mp3")
@@ -65,7 +81,8 @@ function loadGame() {
   circles = ["red", "blue", "green"]
   for (let circle of circles) {
     label = byId(circle+"label")
-    label.textContent = circle + ' group'
+    // label.textContent = circle + ' group'
+    label.textContent = ""
   }
   clearGame()
 
@@ -201,6 +218,20 @@ function checkGame() {
       spread: 70,
       origin: { y: 0.6 },
     });
+
+    if (scorePanel && finalScore) {
+      results = scoreHistory.join(" ")
+      finalScore.textContent = results
+
+      href = getGameLink(currentGame)
+      resultsLink = "You solved: " + currentGame.title + "!"
+      resultsLink += "\n"
+      resultsLink += results
+      resultsLink += "\n"
+      resultsLink += href
+      navigator.clipboard.writeText(resultsLink);
+      scorePanel.classList.add("shown")
+    }
   } else {
     playSound(missAudio)
     hapticMS(100) // vibrate for 100ms
@@ -237,6 +268,7 @@ function isSolved() {
 
   groups = ["G1", "G2", "G3"]
   circles = ["red", "blue", "green"]
+  solvedCount = 0
   groups.forEach((group, index) => {
     phrases = byClass(group)
     for (let ci=0; ci<circles.length; ci++) {
@@ -245,15 +277,18 @@ function isSolved() {
       if (arePhrasesInCircle(phrases, circle))
       {
         solved[circle] = true
+        solvedCount++
         circles.splice(ci, 1)
         console.log(circle + " Circle is solved!")
         label.textContent = currentGame.groups[index]
         break
       } else {
-        label.textContent = circle + ' group'
+        // label.textContent = circle + ' group'
+        label.textContent = ""
       }
     }
   })
+  scoreHistory.push(scoreTypes2[solvedCount])
 
   return solved.red && solved.green && solved.blue
 }
@@ -376,6 +411,11 @@ function revealGame() {
 
 function clearGame() {
   configHistory = []
+  scoreHistory = []
+
+  if (scorePanel) {
+    scorePanel.classList.remove("shown")
+  }
 
   targets = byId("targets")
   if (targets) {

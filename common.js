@@ -103,25 +103,28 @@ function disableAudio() {
 
 function compressGame(game) {
   strGame = null
-
+  if (!game) {
+    return strGame
+  }
+  
   try {
-      gameJson = JSON.stringify(game)
-      strGame = LZString.compressToEncodedURIComponent(gameJson)
+    tight = tightenGame(game)
+    gameJson = JSON.stringify(tight)
+    strGame = LZString.compressToEncodedURIComponent(gameJson)
   } catch (error) {
-      strGame = null
-      console.log("error compressing game definition.")
-      console.error(error)
+    strGame = null
+    console.log("error compressing game definition.")
+    console.error(error)
   } finally {
-      return strGame;
+    return strGame;
   }
 }
 
 function decompressGame(strGame) {
   game = null
-
   try {
-      gameJson = LZString.decompressFromEncodedURIComponent(strGame)
-      game = JSON.parse(gameJson)
+      json = LZString.decompressFromEncodedURIComponent(strGame)
+      game = JSON.parse(json)
       game = loosenGame(game)
   } catch (error) {
       game = null
@@ -194,6 +197,9 @@ function tightenGame(game) {
   tight = tight.concat(getPhraseFromGroups(phrases, [2,3]))
   tight = tight.concat(getPhraseFromGroups(phrases, [1,2,3]))
 
+  tight.push(game.isLocal ?? false)
+  tight.push(game.isShared ?? true)
+
   return tight
 }
 
@@ -210,14 +216,16 @@ function loosenGame(game) {
     loose = {
       "title": game[0],
       "groups": [game[1], game[2], game[3]],
-      "phrases": {}
+      "phrases": {},
+      "isLocal": game[11] ?? false,
+      "isShared": game[12] ?? false
     }
     loose.phrases[p1] = { "groupIds": [1] }
     loose.phrases[p2] = { "groupIds": [2] }
     loose.phrases[p3] = { "groupIds": [3] }
     loose.phrases[p4] = { "groupIds": [1,2] }
-    loose.phrases[p5] = { "groupIds": [2,3] }
-    loose.phrases[p6] = { "groupIds": [1,3] }
+    loose.phrases[p5] = { "groupIds": [1,3] }
+    loose.phrases[p6] = { "groupIds": [2,3] }
     loose.phrases[p7] = { "groupIds": [1,2,3] }
   } else {
     loose = game

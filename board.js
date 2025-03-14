@@ -4,17 +4,7 @@ if (shareBtn) {
   shareBtn.onclick = () => {
     closeMenu()
     if (currentGame) {
-      gzGame = compressGame(currentGame);
-//      href = location.href
-      path = location.pathname
-      path = path.replace("play.html", "")
-      path = path.replace("edit.html", "")
-      path = path + "index.html"
-      href = location.origin + path
-      // href = href + "?title=" + currentGame.title.replaceAll(" ", "+")
-      // href = href + "&game=" + gzGame
-      href = href + "?game=" + gzGame
-
+      href = getGameLink(currentGame)
       // Copy the text inside the text field
       navigator.clipboard.writeText(href);
       alert("Copied game link to the clipboard.\n" + href);
@@ -22,6 +12,26 @@ if (shareBtn) {
       alert("No active game selected.");
     }
   }
+}
+
+function getGameLink(game) {
+  href = null
+  if (game) {
+    path = location.pathname
+    path = path.replace("play.html", "")
+    path = path.replace("edit.html", "")
+    path = path + "index.html"
+    href = location.origin + path
+    href = href + "?title=" + game.title.replaceAll(" ", "+")
+
+    // use compressed link?
+    if (game.isLocal || game.isShared) {
+      gzGame = compressGame(game);
+      href = href + "&game=" + gzGame
+    }
+  }
+
+  return href
 }
 
 deleteBtn = byId("deleteBtn")

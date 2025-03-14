@@ -191,6 +191,29 @@ input#audio-toggle {
     display: none;
 }
 
+#score {
+    display: none;
+    z-index: 9;
+    font-size: 2em;
+    color: white;
+    background-color: #222222e0;
+    width: auto;
+    position: absolute;
+    height: auto;
+    align-self: auto;
+    justify-self: center;
+    text-align: center;
+}
+#score.shown {
+    display: block;
+}
+
+#finalscore {
+    text-align: center;
+    justify-self: center;
+    font-size: 2em;
+}
+
 #board {
     background-color: #AAA;
     display: grid;

@@ -129,6 +129,7 @@ function getQueryGame()
     game = null
     // Add game from query string
     query = new URLSearchParams(document.location.search)
+    titleStr = query.get("title").toLowerCase()
     gameStr = query.get("game")
     game = decompressGame(gameStr)
     if (game) {
@@ -136,6 +137,8 @@ function getQueryGame()
         game.isShared = true
         gameStr = compressGame(game)
         localStorage.setItem(sharedPrefix + game.title, gameStr)
+    } else {
+        game = getAllGames().find(x => x.title.toLowerCase() == titleStr)
     }
     return game
 }
