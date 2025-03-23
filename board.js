@@ -22,7 +22,7 @@ function getGameLink(game) {
     path = path.replace("edit.html", "")
     path = path + "index.html"
     href = location.origin + path
-    href = href + "?title=" + game.title.replaceAll(" ", "+")
+    href = href + "?title=" + encodeURIComponent(game.title)
 
     // use compressed link?
     if (game.isLocal || game.isShared) {
