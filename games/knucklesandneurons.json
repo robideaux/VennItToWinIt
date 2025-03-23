@@ -1,0 +1,32 @@
+{
+    "title": "Knuckles and Neurons",
+    "groups": [
+        "___ Handed",
+ 	"___ Minded",
+	"Descriptors of a Drinking Straw"
+    ],
+    "phrases": {
+        "Heavy": {
+            "groupIds": [1]
+        },
+        "Absent": {
+            "groupIds": [2]
+        },
+        "Cylindrical": {
+            "groupIds": [3]
+        },
+        "Single": {
+            "groupIds": [1,2]
+        },
+        "Empty": {
+            "groupIds": [2,3]
+        },
+        "Narrow": {
+            "groupIds": [1,3]
+        },
+        "Open": {
+            "groupIds": [1,2,3]
+        }
+    }
+}
+

@@ -1,0 +1,32 @@
+{
+    "title": "Scores and Scores",
+    "groups": [
+        "Basketball",
+ 	"Football",
+	"Hockey"
+    ],
+    "phrases": {
+        "Sphere": {
+            "groupIds": [1]
+        },
+        "Prolate Spheroid": {
+            "groupIds": [2]
+        },
+        "Solid Cylinder": {
+            "groupIds": [3]
+        },
+        "3 Points": {
+            "groupIds": [1,2]
+        },
+        "Offsides": {
+            "groupIds": [2,3]
+        },
+        "Goaltending": {
+            "groupIds": [1,3]
+        },
+        "Center": {
+            "groupIds": [1,2,3]
+        }
+    }
+}
+
