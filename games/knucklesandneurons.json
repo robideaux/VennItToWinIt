@@ -3,7 +3,7 @@
     "groups": [
         "___ Handed",
  	"___ Minded",
-	"Descriptors of a Drinking Straw"
+	"Using a Social Media App"
     ],
     "phrases": {
         "Heavy": {
@@ -12,16 +12,16 @@
         "Absent": {
             "groupIds": [2]
         },
-        "Cylindrical": {
+        "Comment": {
             "groupIds": [3]
         },
         "Single": {
             "groupIds": [1,2]
         },
-        "Narrow": {
+        "Like": {
             "groupIds": [2,3]
         },
-        "Empty": {
+        "Back": {
             "groupIds": [1,3]
         },
         "Open": {
