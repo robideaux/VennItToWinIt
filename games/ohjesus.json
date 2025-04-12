@@ -1,0 +1,32 @@
+{
+    "title": "Oh, Jesus!",
+    "groups": [
+        "Bank Robbers",
+ 	"Preachers",
+	"DJs"
+    ],
+    "phrases": {
+        "Put it in the bag": {
+            "groupIds": [1]
+        },
+        "Amen": {
+            "groupIds": [2]
+        },
+        "Make some noise": {
+            "groupIds": [3]
+        },
+        "Give me your money": {
+            "groupIds": [1,2]
+        },
+        "Are you with me": {
+            "groupIds": [2,3]
+        },
+        "Everybody on the floor": {
+            "groupIds": [1,3]
+        },
+        "Put your hands up": {
+            "groupIds": [1,2,3]
+        }
+    }
+}
+
