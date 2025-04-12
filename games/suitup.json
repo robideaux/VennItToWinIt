@@ -1,0 +1,32 @@
+{
+    "title": "Suit Up",
+    "groups": [
+        "Card Suits",
+ 	"Success According to Hip-Hop",
+	"#Engaged"
+    ],
+    "phrases": {
+        "Spades": {
+            "groupIds": [1]
+        },
+        "Bitches": {
+            "groupIds": [2]
+        },
+        "Smiley face": {
+            "groupIds": [3]
+        },
+        "Clubs": {
+            "groupIds": [1,2]
+        },
+        "Champagne": {
+            "groupIds": [2,3]
+        },
+        "Hearts": {
+            "groupIds": [1,3]
+        },
+        "Diamonds": {
+            "groupIds": [1,2,3]
+        }
+    }
+}
+
