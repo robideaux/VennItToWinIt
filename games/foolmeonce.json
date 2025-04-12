@@ -1,0 +1,32 @@
+{
+    "title": "Fool Me Once",
+    "groups": [
+        "Found in a Deck",
+ 	"DC Comic Villians",
+	"Prankster"
+    ],
+    "phrases": {
+        "One-eyed Jack": {
+            "groupIds": [1]
+        },
+        "Doomsday": {
+            "groupIds": [2]
+        },
+        "Teaser": {
+            "groupIds": [3]
+        },
+        "Ace of Clubs": {
+            "groupIds": [1,2]
+        },
+        "Comedian": {
+            "groupIds": [2,3]
+        },
+        "Card": {
+            "groupIds": [1,3]
+        },
+        "Joker": {
+            "groupIds": [1,2,3]
+        }
+    }
+}
+
