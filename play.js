@@ -55,6 +55,39 @@ if (targets) {
   targets.classList.remove("solution")
 }
 
+// resize to fit
+// layout-resize helper — add to play.js or a new layout.js
+function adjustLayoutForViewport() {
+  const title = byId('titlebar');
+  const board = byId('board');
+  const choices = byId('choices');
+  const circles = byId('circles');
+
+  if (!board || !title || !choices || !circles) return;
+
+  // available height under the header (includes small margins)
+  const headerH = title.getBoundingClientRect().height;
+  const availH = Math.max(window.innerHeight - headerH, 0);
+
+  // Force the board to the exact available area
+  board.style.height = availH + 'px';
+
+  // Make choices constrained to that area so column-fill will wrap properly
+  choices.style.maxHeight = availH + 'px';
+  choices.style.height = availH + 'px';
+
+  // Ensure the circles container uses remaining height and does not overflow
+  circles.style.height = availH + 'px';
+  circles.style.maxHeight = availH + 'px';
+  circles.style.boxSizing = 'border-box';
+}
+
+// run on load and resize/orientation change
+window.addEventListener('load', adjustLayoutForViewport);
+window.addEventListener('resize', adjustLayoutForViewport);
+window.addEventListener('orientationchange', () => setTimeout(adjustLayoutForViewport, 100));
+
+
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);

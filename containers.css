@@ -21,18 +21,14 @@
     border-style: solid;
     border-width: 2px;
     background: #F7F7F7;
-    margin: 3px;
-    padding: 10px;
-    /*
-    min-width: 15vw;
-    min-height: 5vh;
-    */
+    margin: 4px;
+    padding: 5px;
+    min-height: 4vh;
+    min-width: 10vw;
+    max-width: 40vw;
+    font-size: 0.9rem;
+    touch-action: manipulation;
     align-content: center;
-    /*
-    margin: 6px;
-    padding: 10px;
-    min-width: 120px;
-    */
 }
 
 .phrase > p {
@@ -75,8 +71,6 @@ td {
     align-content: center;
     display: block;
     position: absolute;
-    width: 28%;
-    height: 14%;
 }
 
 #targets.solution .drop-target {
@@ -101,14 +95,24 @@ td {
         width: 100%;
         margin-bottom: 40px;
     }
-    /*
-    .phrase {
-        min-height: 40px;
-        padding: 10px;
-        margin: 6px;
-        font-size: xx-large;
+    /* keep choices to at most 2 rows; use flex-wrap so items fill left-to-right then wrap */
+    #choices {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        /*
+        gap: 2px;
+        padding: 4px;
+        */
+        justify-content: center;
+        align-content: flex-start;
+        max-height: 40vh; /* leave room for the Venn area below */
     }
-    */
+    /* ensure drop targets are not off-screen on narrow layouts */
+    .drop-target {
+        min-width: 28vw;
+        min-height: 16vw;
+    }
 }
 
 @media screen and (orientation: landscape) {
@@ -116,15 +120,28 @@ td {
         max-width: 40%;
         margin-right: 10px;
     }
-    /*
-    .phrase {
-        max-height: 10vh;
-        min-height: 7vh;
-        padding: 3px;
-        margin: 4px;
-        font-size: large;
+
+    /* ensure drop targets are not off-screen */
+    .drop-target {
+        min-width: 28vh;
+        min-height: 10vh;
     }
-    */
+
+    /* keep choices to at most 2 columns on landscape; use multi-column layout to fill top-to-bottom first */
+    #choices {
+        column-count: 2;
+        column-gap: 12px;
+        column-fill: auto; /* fill columns sequentially (top-to-bottom) */
+        padding: 2px;
+        max-width: 40vw; /* leave room for the Venn area to the right */
+    }
+
+    /* ensure phrases remain intact inside columns */
+    .phrase {
+        display: inline-block;
+        width: 100%;
+        box-sizing: border-box;
+    }
 }
 
 /*

@@ -1,8 +1,13 @@
+html, body {
+    box-sizing: border-box;
+    height: 100%;
+}
 body {
     margin: 0px;
     width: 100vw;
     height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden; /* prevent page scrolling */
 }
 
 #topLayout {
@@ -12,6 +17,7 @@ body {
     width: 100%;
     height: 100%;
     font-size: clamp(1rem, 3vb, 2vh);
+    overflow: hidden;
 }
 
 #mainMenu {
@@ -40,11 +46,13 @@ body {
 #titlebar {
     color: white;
     background-color: black;
-    font-size: 2em;
+    font-size: clamp(1rem, 2.5vmin, 1.4rem);
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 10fr 1fr;
     align-items: center;
+    padding: 6px 8px;
+    line-height: 1;
 }
 
 .left {
@@ -76,8 +84,8 @@ body {
 #gamelist {
     background: #333;
     color: white;
-    font-size: clamp(1em, 1.5em, 3rem);
-    min-height: 4vh;
+    font-size: clamp(0.85rem, 1.2vmin, 1rem);
+    min-height: 3vh;
     height: 100%;
     width: 100%;
     align-self: center;
@@ -99,6 +107,35 @@ option.shared {
     padding: 8px;
     margin: 6px;
     justify-self: right;
+}
+
+/* Mobile-friendly header and controls */
+@media screen and (max-width: 600px) {
+    #titlebar #title {
+        font-size: 1.05rem;
+    }
+    #scoreboard {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 6px;
+        align-items: center;
+    }
+    #checkBtn {
+        padding: 10px 14px;
+        font-size: 1rem;
+        border-radius: 6px;
+    }
+    #checksLeft .checks {
+        font-size: 1.2rem;
+        padding: 6px;
+    }
+    #menupanel {
+        position: absolute;
+        right: 8px;
+        top: 44px;
+        z-index: 50;
+    }
 }
 #checkBtn.disable {
     background-color: darkolivegreen;
@@ -219,7 +256,9 @@ input#audio-toggle {
     display: grid;
     width: 100%;
     height: 100%;
+    min-height: 0; /* allow grid child to shrink inside viewport */
     font-size: clamp(1rem, 4vmin, 4rem);
+    overflow: hidden;
 }
 #board.solved {
     background-color: rgb(169, 232, 169);
@@ -231,6 +270,9 @@ input#audio-toggle {
 #circles {
     background-image: url('./circles.svg');
     background-size: 100% 100%;
+    background-size: 105% 112%;
+    background-position-x: -10px;
+    background-position-y: -14px;
     width: 100%;
     height: 100%;
     align-self: center;
@@ -297,32 +339,39 @@ input#audio-toggle {
     right: 0%
 }
 #slot1 {
-    top: 14%;
-    left: 35%;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 #slot2 {
-    top: 28%;
-    left: 14%;
+    top: 40%;
+    left: 30%;
+    transform: translate(-50%, -50%);
 }
 #slot3 {
-    top: 28%;
-    right: 14%;
+    top: 40%;
+    left: 70%;
+    transform: translate(-50%, -50%);
 }
 #slot4 {
-    top: 42%;
-    left: 35%;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 #slot5 {
-    bottom: 28%;
-    left: 7%;
+    top: 70%;
+    left: 20%;
+    transform: translate(-50%, -50%);
 }
 #slot6 {
-    bottom: 28%;
-    right: 7%;
+    top: 70%;
+    left: 80%;
+    transform: translate(-50%, -50%);
 }
 #slot7 {
-    bottom: 14%;
-    right: 35%;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #information{
