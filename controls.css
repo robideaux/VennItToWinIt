@@ -55,6 +55,15 @@ body {
     line-height: 1;
 }
 
+/* prevent the title and header controls from wrapping and growing the header height */
+#titlebar, #titlebar * {
+    white-space: nowrap;
+}
+#titlebar #title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .left {
     position: relative;
     float: left;
@@ -260,6 +269,10 @@ input#audio-toggle {
     font-size: clamp(1rem, 4vmin, 4rem);
     overflow: hidden;
 }
+#board {
+    /* keep a visible minimum so very tall+skinny windows still show the board */
+    min-height: 18vh;
+}
 #board.solved {
     background-color: rgb(169, 232, 169);
 }
@@ -399,6 +412,21 @@ input#audio-toggle {
         height: 80vh;
     }
     */
+}
+
+/* very narrow windows: reduce header chrome so content fits */
+@media screen and (max-width: 420px) {
+    #titlebar {
+        font-size: 0.95rem;
+        padding: 4px 6px;
+    }
+    #gamelist {
+        font-size: 0.8rem;
+    }
+    #checkBtn, #deleteBtn, #saveBtn {
+        padding: 6px;
+        margin: 4px;
+    }
 }
 
 @media screen and (orientation: portrait) {
