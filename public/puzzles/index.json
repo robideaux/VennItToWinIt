@@ -1,0 +1,6 @@
+{
+  "puzzles": [
+    { "id": "puzzle-001", "title": "Fly, Swim, or Cold?", "file": "puzzle-001.json" },
+    { "id": "puzzle-002", "title": "Just Relax", "file": "puzzle-002.json" }
+  ]
+}

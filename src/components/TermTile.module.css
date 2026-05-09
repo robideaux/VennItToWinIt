@@ -1,0 +1,32 @@
+.tile {
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 2px solid #ddd;
+  border-radius: 18px;
+  background: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  transition: border-color 0.12s, background 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.tile:hover {
+  border-color: #aaa;
+}
+
+.selected {
+  background: #fcc419;
+  border-color: #f59f00;
+  color: #1a1a1a;
+}
+
+/* Landscape: compact, sized to content */
+@media (orientation: landscape) {
+  .tile {
+    width: fit-content;
+    border-radius: 8px;
+    white-space: normal;
+    text-align: right;
+  }
+}

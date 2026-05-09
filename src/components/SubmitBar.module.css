@@ -1,0 +1,47 @@
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.pips {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.pip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ddd;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.active {
+  background: #6c5ce7;
+}
+
+.submitBtn {
+  min-height: 36px;
+  padding: 0 16px;
+  background: #6c5ce7;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.submitBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.submitBtn:not(:disabled):hover {
+  opacity: 0.88;
+}

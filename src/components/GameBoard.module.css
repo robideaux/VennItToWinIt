@@ -1,0 +1,80 @@
+/* ── Portrait (default) ── */
+.screen {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.vennSide {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.title {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #444;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vennWrap {
+  flex: 1;
+  min-height: 0;
+}
+
+.ctrlSide {
+  flex-shrink: 0;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* ── Landscape ── */
+@media (orientation: landscape) {
+  .screen {
+    flex-direction: row;
+    max-width: none;
+  }
+
+  .vennSide {
+    flex: 1;
+    min-width: 0;
+    height: 100dvh;
+  }
+
+  .header {
+    padding: 4px 10px;
+    border-bottom: 1px solid #e5e5e5;
+    border-right: none;
+  }
+
+  .title {
+    font-size: 0.8rem;
+  }
+
+  .ctrlSide {
+    width: fit-content;
+    min-width: 100px;
+    height: 100dvh;
+    overflow-y: auto;
+    border-top: none;
+    border-left: 1px solid #e5e5e5;
+    background: #f9f9f9;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,63 @@
+.strip {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 4px 12px;
+  gap: 12px;
+}
+
+/* ── Portrait ── */
+
+/* Top strip: circle 1 only, centered */
+.top {
+  justify-content: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+.top .chip2,
+.top .chip3 { display: none; }
+
+/* Bottom strip: circles 2 & 3, spread to edges */
+.bottom {
+  justify-content: space-between;
+  border-top: 1px solid #e5e5e5;
+}
+.bottom .chip1 { display: none; }
+
+/* ── Landscape ── */
+@media (orientation: landscape) {
+  /* Top strip shows all 3 chips in a compact centered row */
+  .top .chip2,
+  .top .chip3 { display: flex; }
+
+  /* Bottom strip disappears — top strip covers all 3 */
+  .bottom { display: none; }
+}
+
+/* ── Chip contents ── */
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+
+.label {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #999;
+  white-space: nowrap;
+  transition: color 0.3s, font-weight 0.3s;
+}
+
+.revealed {
+  font-weight: 700;
+  color: #1a1a1a;
+}

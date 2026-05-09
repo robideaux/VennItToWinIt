@@ -1,0 +1,17 @@
+.bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 10px;
+  justify-content: center;
+}
+
+/* Landscape: compact column, right-aligned */
+@media (orientation: landscape) {
+  .bank {
+    flex-direction: column;
+    align-items: flex-end;
+    padding: 8px;
+    gap: 5px;
+  }
+}

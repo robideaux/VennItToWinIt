@@ -1,0 +1,19 @@
+{
+  "id": "puzzle-001",
+  "title": "Fly, Swim, or Cold?",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Things that Fly",
+    "B": "Things that Swim",
+    "C": "Things that are Cold"
+  },
+  "terms": [
+    { "id": "t1", "label": "Eagle",       "regions": ["A"] },
+    { "id": "t2", "label": "Salmon",      "regions": ["B"] },
+    { "id": "t3", "label": "Snowflake",   "regions": ["C"] },
+    { "id": "t4", "label": "Flying Fish", "regions": ["A", "B"] },
+    { "id": "t5", "label": "Snow Goose",  "regions": ["A", "C"] },
+    { "id": "t6", "label": "Orca",        "regions": ["B", "C"] },
+    { "id": "t7", "label": "Arctic Tern", "regions": ["A", "B", "C"] }
+  ]
+}

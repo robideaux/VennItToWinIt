@@ -1,0 +1,20 @@
+{
+    "id": "puzzle-002",
+    "title": "Just Relax",
+    "maxAttempts": 5,
+    "categories": {
+        "A": "Tending a Boo-Boo",
+        "B": "Getting Mugged",
+        "C": "Beatles Albums"
+    },
+    "terms": [
+        { "id": "t1", "label": "Peroxide", "regions": ["A"] },
+        { "id": "t2", "label": "Wallet", "regions": ["B"] },
+        { "id": "t3", "label": "Please Please Me", "regions": ["C"] },
+        { "id": "t4", "label": "Don't Move", "regions": ["A", "B"] },
+        { "id": "t5", "label": "Revolver", "regions": ["B", "C"] },
+        { "id": "t6", "label": "Let It Be", "regions": ["A", "C"] },
+        { "id": "t7", "label": "Help!", "regions": ["A", "B", "C"] }
+    ]
+}
+
