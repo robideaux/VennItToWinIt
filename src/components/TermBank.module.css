@@ -6,12 +6,15 @@
   justify-content: center;
 }
 
-/* Landscape: compact column, right-aligned */
+/* Landscape: wrapping row — tiles flow into 2 columns, right-aligned */
 @media (orientation: landscape) {
   .bank {
-    flex-direction: column;
-    align-items: flex-end;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: flex-start;
     padding: 8px;
     gap: 5px;
+    flex-shrink: 0;
   }
 }

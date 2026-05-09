@@ -21,12 +21,9 @@
   color: #1a1a1a;
 }
 
-/* Landscape: compact, sized to content */
+/* Landscape: sized to content, no internal text wrapping */
 @media (orientation: landscape) {
   .tile {
     width: fit-content;
-    border-radius: 8px;
-    white-space: normal;
-    text-align: right;
   }
 }

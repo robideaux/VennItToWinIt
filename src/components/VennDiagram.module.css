@@ -8,3 +8,13 @@
   user-select: none;
   overflow: visible;
 }
+
+/* Landscape: fill available height, let width follow aspect ratio */
+@media (orientation: landscape) {
+  .svg {
+    width: auto;
+    height: 100%;
+    aspect-ratio: 320 / 380;
+    max-width: 100%;
+  }
+}

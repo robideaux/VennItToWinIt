@@ -62,8 +62,12 @@ export default function VennDiagram({
   function handleClick(e) {
     const svg = e.currentTarget
     const rect = svg.getBoundingClientRect()
-    const x = (e.clientX - rect.left) * (VB_W / rect.width)
-    const y = (e.clientY - rect.top)  * (VB_H / rect.height)
+    // xMidYMid meet: uniform scale, centered — compute offset before mapping
+    const scale   = Math.min(rect.width / VB_W, rect.height / VB_H)
+    const offsetX = (rect.width  - VB_W * scale) / 2
+    const offsetY = (rect.height - VB_H * scale) / 2
+    const x = (e.clientX - rect.left - offsetX) / scale
+    const y = (e.clientY - rect.top  - offsetY) / scale
 
     // 1. Inline placed regions — pill sits at centroid
     for (const k of REGION_KEYS) {
@@ -108,7 +112,7 @@ export default function VennDiagram({
     <svg
       className={styles.svg}
       viewBox={`0 0 ${VB_W} ${VB_H}`}
-      preserveAspectRatio="none"
+      preserveAspectRatio="xMidYMid meet"
       overflow="visible"
       onClick={handleClick}
     >

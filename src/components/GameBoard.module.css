@@ -65,9 +65,15 @@
     font-size: 0.8rem;
   }
 
+  .vennWrap {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+  }
+
   .ctrlSide {
-    width: fit-content;
-    min-width: 100px;
+    width: 200px;
+    min-width: unset;
     height: 100dvh;
     overflow-y: auto;
     border-top: none;
