@@ -9,8 +9,6 @@
 /* Landscape: wrapping row — tiles flow into 2 columns, right-aligned */
 @media (orientation: landscape) {
   .bank {
-    flex-direction: row;
-    flex-wrap: wrap;
     justify-content: flex-end;
     align-items: flex-start;
     padding: 8px;

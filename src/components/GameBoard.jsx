@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useGameState } from '../hooks/useGameState.js'
 import VennDiagram from './VennDiagram.jsx'
-import CircleLabels from './CircleLabels.jsx'
+import CircleLabel from './CircleLabels.jsx'
 import TermBank from './TermBank.jsx'
 import SubmitBar from './SubmitBar.jsx'
 import styles from './GameBoard.module.css'
@@ -30,25 +30,17 @@ export default function GameBoard({ puzzle, onWin, onGameOver }) {
   return (
     <div className={styles.screen}>
 
-      {/* Left/top: title + submit bar + diagram */}
+      {/* Left/top: title + diagram */}
       <div className={styles.vennSide}>
         <header className={styles.header}>
           <h2 className={styles.title}>{puzzle.title}</h2>
-          <SubmitBar
-            attemptsLeft={game.attemptsLeft}
-            maxAttempts={puzzle.maxAttempts}
-            canSubmit={game.allRegionsFilled}
-            onSubmit={game.submitGuess}
-          />
         </header>
 
-        {/* Portrait: circle 1 label above diagram; landscape: all 3 in one row */}
-        <CircleLabels
-          revealedCircles={game.revealedCircles}
-          position="top"
-        />
-
         <div className={styles.vennWrap}>
+          {/* Circle label chips — absolutely positioned over the diagram */}
+          <CircleLabel circleId="1" revealedCircles={game.revealedCircles} />
+          <CircleLabel circleId="2" revealedCircles={game.revealedCircles} />
+          <CircleLabel circleId="3" revealedCircles={game.revealedCircles} />
           <VennDiagram
             puzzle={puzzle}
             placements={game.placements}
@@ -59,23 +51,25 @@ export default function GameBoard({ puzzle, onWin, onGameOver }) {
           />
         </div>
 
-        {/* Portrait: circles 2 & 3 labels below diagram */}
-        <CircleLabels
-          revealedCircles={game.revealedCircles}
-          position="bottom"
-        />
       </div>
 
-      {/* Right/bottom: term bank only — disappears when empty */}
-      {game.unplacedTerms.length > 0 && (
-        <div className={styles.ctrlSide}>
+      {/* Right/bottom: term bank until all placed, then submit bar */}
+      <div className={styles.ctrlSide}>
+        {game.unplacedTerms.length > 0 ? (
           <TermBank
             terms={game.unplacedTerms}
             selectedTermId={game.selectedTermId}
             onSelectTerm={game.selectTerm}
           />
-        </div>
-      )}
+        ) : (
+          <SubmitBar
+            attemptsLeft={game.attemptsLeft}
+            maxAttempts={puzzle.maxAttempts}
+            canSubmit={game.allRegionsFilled}
+            onSubmit={game.submitGuess}
+          />
+        )}
+      </div>
 
     </div>
   )

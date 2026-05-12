@@ -59,6 +59,5 @@
 }
 
 .vennWrap {
-  flex: 1;
-  min-height: 0;
+  composes: vennWrap from '../styles/shared.module.css';
 }

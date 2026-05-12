@@ -1,36 +1,24 @@
 import styles from './CircleLabels.module.css'
 
-const CIRCLE_META = [
-  { id: '1', color: '#ff6b6b' },
-  { id: '2', color: '#51cf66' },
-  { id: '3', color: '#339af0' },
-]
+const CIRCLE_META = {
+  '1': { color: '#ff6b6b' },
+  '2': { color: '#51cf66' },
+  '3': { color: '#339af0' },
+}
 
-// position='top':
-//   portrait  → shows only circle 1 (centered above diagram)
-//   landscape → shows all 3 in one compact row
-// position='bottom':
-//   portrait  → shows circles 2 & 3 (spread below diagram)
-//   landscape → hidden entirely (top strip covers all 3)
-export default function CircleLabels({ revealedCircles, position }) {
-  const revealMap = Object.fromEntries(revealedCircles.map(r => [r.circleId, r]))
+export default function CircleLabel({ circleId, revealedCircles }) {
+  const revealed = revealedCircles.find(r => r.circleId === circleId)
+  const { color } = CIRCLE_META[circleId]
 
   return (
-    <div className={`${styles.strip} ${styles[position]}`}>
-      {CIRCLE_META.map(({ id, color }) => {
-        const revealed = revealMap[id]
-        return (
-          <div key={id} className={`${styles.chip} ${styles[`chip${id}`]}`}>
-            <span
-              className={styles.dot}
-              style={{ background: revealed ? color : '#bbb' }}
-            />
-            <span className={`${styles.label} ${revealed ? styles.revealed : ''}`}>
-              {revealed ? revealed.name : '?'}
-            </span>
-          </div>
-        )
-      })}
+    <div className={`${styles.chip} ${styles[`circle${circleId}`]}`} style={{ borderColor: color }}>
+      <span
+        className={styles.dot}
+        style={{ background: color }}
+      />
+      <span className={`${styles.label} ${revealed ? styles.revealed : styles.placeholder}`}>
+        {revealed ? revealed.name : `Group ${circleId}`}
+      </span>
     </div>
   )
 }

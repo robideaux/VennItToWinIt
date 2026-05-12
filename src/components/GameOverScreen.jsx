@@ -1,6 +1,6 @@
 import { buildSolutionPlacements } from '../utils/puzzleUtils.js'
 import VennDiagram from './VennDiagram.jsx'
-import CircleLabels from './CircleLabels.jsx'
+import CircleLabel from './CircleLabels.jsx'
 import styles from './GameOverScreen.module.css'
 
 export default function GameOverScreen({ puzzle, onRetry, onPickNewPuzzle }) {
@@ -21,9 +21,10 @@ export default function GameOverScreen({ puzzle, onRetry, onPickNewPuzzle }) {
         </div>
       </header>
 
-      <CircleLabels revealedCircles={revealedCircles} position="top" />
-
       <div className={styles.vennWrap}>
+        <CircleLabel circleId="1" revealedCircles={revealedCircles} />
+        <CircleLabel circleId="2" revealedCircles={revealedCircles} />
+        <CircleLabel circleId="3" revealedCircles={revealedCircles} />
         <VennDiagram
           puzzle={puzzle}
           placements={solutionPlacements}
@@ -33,8 +34,6 @@ export default function GameOverScreen({ puzzle, onRetry, onPickNewPuzzle }) {
           onRegionClick={() => {}}
         />
       </div>
-
-      <CircleLabels revealedCircles={revealedCircles} position="bottom" />
     </div>
   )
 }

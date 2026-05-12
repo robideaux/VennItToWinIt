@@ -33,8 +33,7 @@
 }
 
 .vennWrap {
-  flex: 1;
-  min-height: 0;
+  composes: vennWrap from '../styles/shared.module.css';
 }
 
 .ctrlSide {
@@ -63,12 +62,6 @@
 
   .title {
     font-size: 0.8rem;
-  }
-
-  .vennWrap {
-    display: flex;
-    justify-content: center;
-    align-items: stretch;
   }
 
   .ctrlSide {

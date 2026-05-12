@@ -1,6 +1,8 @@
 .svg {
+  /* Portrait: flex child fills vennWrap column */
+  flex: 1;
+  min-height: 0;
   width: 100%;
-  height: 100%;
   display: block;
   cursor: pointer;
   touch-action: manipulation;
@@ -9,12 +11,14 @@
   overflow: visible;
 }
 
-/* Landscape: fill available height, let width follow aspect ratio */
+/* Landscape: fill available height, stretch width up to capped max.
+   The 1.3 multiplier is coupled to the 0.5474 constant in CircleLabels.module.css.
+   Formula: (320 / 380 * 1.3) / 2 = 0.5474. Update both together.
+   Portrait cap multiplier lives in shared.module.css. */
 @media (orientation: landscape) {
   .svg {
-    width: auto;
+    flex: none;
+    width: min(100%, calc(100dvh * (320 / 380) * 1.3));
     height: 100%;
-    aspect-ratio: 320 / 380;
-    max-width: 100%;
   }
 }
