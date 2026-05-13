@@ -1,19 +1,20 @@
 import { REGION_KEYS } from '../utils/puzzleUtils.js'
+import { CIRCLE_COLORS, COL_SOURCE, COL_SOURCE_BG, COL_TARGET, COL_TARGET_BG } from '../styles/colors.js'
 import styles from './VennDiagram.module.css'
 
 const VB_W = 320
 const VB_H = 380
 
 const CIRCLES = [
-  { id: '1', cx: 160, cy: 115, r: 97, color: '#ff6b6b', muted: '#c9a8a8' },
-  { id: '2', cx: 105, cy: 235, r: 97, color: '#51cf66', muted: '#96b89c' },
-  { id: '3', cx: 215, cy: 235, r: 97, color: '#339af0', muted: '#8aafc9' },
+  { id: '1', cx: 160, cy: 115, r: 97, ...CIRCLE_COLORS['1'] },
+  { id: '2', cx: 105, cy: 235, r: 97, ...CIRCLE_COLORS['2'] },
+  { id: '3', cx: 215, cy: 235, r: 97, ...CIRCLE_COLORS['3'] },
 ]
 
 const CENTROIDS = {
-  '1':   { cx: 160, cy: 55  },
-  '2':   { cx: 55,  cy: 255 },
-  '3':   { cx: 265, cy: 255 },
+  '1':   { cx: 160, cy: 70  },
+  '2':   { cx: 55,  cy: 250 },
+  '3':   { cx: 265, cy: 250 },
   '12':  { cx: 120, cy: 175 },
   '13':  { cx: 200, cy: 175 },
   '23':  { cx: 160, cy: 270 },
@@ -29,12 +30,6 @@ const CALLOUT_ANCHORS = {
   '13': { cx: 290, cy: 133 },
   '23': { cx: 160, cy: 352 },
 }
-
-// Highlight colors
-const COL_SOURCE    = '#fcc419'              // yellow  — the selected term
-const COL_SOURCE_BG = '#fff9db'              // solid pale yellow — covers leader line
-const COL_TARGET    = '#6c5ce7'              // purple  — available drop targets
-const COL_TARGET_BG = '#f3f0ff'              // solid pale lavender — covers leader line
 
 // Hit-test a label pill (70px wide, 24/36px tall) centered at (cx,cy), plus touch margin
 function hitsPill(x, y, cx, cy, label, margin = 5) {
@@ -121,7 +116,7 @@ export default function VennDiagram({
           <circle
             key={c.id}
             cx={c.cx} cy={c.cy} r={c.r}
-            fill={revealMap[c.id] ? c.color : '#adb5bd'}
+            fill={revealMap[c.id] ? c.bold : '#adb5bd'}
             fillOpacity={0.38}
             stroke="none"
             style={{ mixBlendMode: 'multiply' }}
@@ -135,7 +130,7 @@ export default function VennDiagram({
           key={`stroke-${c.id}`}
           cx={c.cx} cy={c.cy} r={c.r}
           fill="none"
-          stroke={revealMap[c.id] ? c.color : c.muted}
+          stroke={revealMap[c.id] ? c.bold : c.muted}
           strokeWidth={2}
         />
       ))}

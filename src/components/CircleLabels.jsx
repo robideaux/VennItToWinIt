@@ -1,15 +1,10 @@
 import styles from './CircleLabels.module.css'
-
-const CIRCLE_META = {
-  '1': { color: '#ff6b6b', muted: '#c9a8a8' },
-  '2': { color: '#51cf66', muted: '#96b89c' },
-  '3': { color: '#339af0', muted: '#8aafc9' },
-}
+import { CIRCLE_COLORS } from '../styles/colors.js'
 
 export default function CircleLabel({ circleId, revealedCircles }) {
   const revealed = revealedCircles.find(r => r.circleId === circleId)
-  const { color, muted } = CIRCLE_META[circleId]
-  const activeColor = revealed ? color : muted
+  const { bold, muted } = CIRCLE_COLORS[circleId]
+  const activeColor = revealed ? bold : muted
   const chipBg = revealed ? 'rgba(255,255,255,0.9)' : 'rgba(173,181,189,0.25)'
 
   return (
