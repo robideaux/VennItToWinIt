@@ -20,40 +20,13 @@
 }
 
 .circle2 {
-  bottom: 4px;
+  bottom: 5%;
   left: 4px;
 }
 
 .circle3 {
-  bottom: 4px;
+  bottom: 5%;
   right: 4px;
-}
-
-/* ── Landscape: chips hug SVG edges, accounting for horizontal dead space ──
-   0.5474 is derived from VennDiagram.module.css's landscape cap multiplier (1.3):
-   (320 / 380 * 1.3) / 2 = 0.5474  ← update both together.
-   Portrait cap multiplier lives in shared.module.css.
-   SVG width cap = 100dvh * (320/380) * 1.3 ≈ 100dvh * 1.0947
-   Half-width    = 100dvh * 0.5474
-   Dead space each side = max(0, 50% - min(50%, 100dvh * 0.5474))
-   SVG left edge (in vennWrap coords) = calc(50% - min(50%, 100dvh * 0.5474))
-*/
-@media (orientation: landscape) {
-  .circle1 {
-    top: 4px;
-    left: calc(50% - min(50%, 100dvh * 0.5474) + 4px);
-    transform: none; /* override portrait's translateX(-50%) */
-  }
-
-  .circle2 {
-    bottom: 4px;
-    left: calc(50% - min(50%, 100dvh * 0.5474) + 4px);
-  }
-
-  .circle3 {
-    bottom: 4px;
-    right: calc(50% - min(50%, 100dvh * 0.5474) + 4px);
-  }
 }
 
 /* ── Chip contents ── */

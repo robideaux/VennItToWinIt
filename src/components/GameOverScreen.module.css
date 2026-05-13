@@ -61,3 +61,10 @@
 .vennWrap {
   composes: vennWrap from '../styles/shared.module.css';
 }
+
+/* ── Landscape ── */
+@media (orientation: landscape) {
+  .screen {
+    flex-direction: row;
+  }
+}
