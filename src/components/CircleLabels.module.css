@@ -2,10 +2,10 @@
 .chip {
   position: absolute;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 5px;
   padding: 3px 8px;
-  background: rgba(255, 255, 255, 0.9);
+  max-width: 120px;
   border: 1.5px solid;
   border-radius: 12px;
   pointer-events: none;
@@ -15,17 +15,20 @@
 /* ── Portrait positioning ── */
 .circle1 {
   top: 4px;
+  right: 50%;
+  /*
   left: 50%;
   transform: translateX(-50%);
+  */
 }
 
 .circle2 {
-  bottom: 5%;
+  bottom: 10%;
   left: 4px;
 }
 
 .circle3 {
-  bottom: 5%;
+  bottom: 10%;
   right: 4px;
 }
 
@@ -35,21 +38,24 @@
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
+  align-self: center;
 }
 
 .label {
-  font-size: 0.8rem;
   color: #999;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.25;
   transition: color 0.3s, font-weight 0.3s;
 }
 
 .placeholder {
+  font-size: 0.85rem;
   font-style: italic;
   opacity: 0.65;
 }
 
 .revealed {
+  font-size: 1rem;
   font-weight: 700;
   color: #1a1a1a;
 }

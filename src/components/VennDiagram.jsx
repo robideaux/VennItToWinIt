@@ -5,9 +5,9 @@ const VB_W = 320
 const VB_H = 380
 
 const CIRCLES = [
-  { id: '1', cx: 160, cy: 115, r: 97, color: '#ff6b6b' },
-  { id: '2', cx: 105, cy: 235, r: 97, color: '#51cf66' },
-  { id: '3', cx: 215, cy: 235, r: 97, color: '#339af0' },
+  { id: '1', cx: 160, cy: 115, r: 97, color: '#ff6b6b', muted: '#c9a8a8' },
+  { id: '2', cx: 105, cy: 235, r: 97, color: '#51cf66', muted: '#96b89c' },
+  { id: '3', cx: 215, cy: 235, r: 97, color: '#339af0', muted: '#8aafc9' },
 ]
 
 const CENTROIDS = {
@@ -129,13 +129,13 @@ export default function VennDiagram({
         ))}
       </g>
 
-      {/* ── Always-colored circle outlines (outside blend group) ── */}
+      {/* ── Circle outlines — muted until revealed ── */}
       {CIRCLES.map(c => (
         <circle
           key={`stroke-${c.id}`}
           cx={c.cx} cy={c.cy} r={c.r}
           fill="none"
-          stroke={c.color}
+          stroke={revealMap[c.id] ? c.color : c.muted}
           strokeWidth={2}
         />
       ))}
@@ -145,9 +145,10 @@ export default function VennDiagram({
         const { cx, cy } = CENTROIDS[regionKey]
         const termId    = placements[regionKey]
         const term      = termId ? puzzle.terms.find(t => t.id === termId) : null
-        const isSource  = selectedTermId != null && regionKey === selectedRegionKey
-        const isTarget  = selectedTermId != null && !isSource && validTargets.includes(regionKey)
-        const isCallout = CALLOUT_REGIONS.has(regionKey)
+        const isSource   = selectedTermId != null && regionKey === selectedRegionKey
+        const isTarget   = selectedTermId != null && !isSource && validTargets.includes(regionKey)
+        const isInactive = selectedTermId != null && !isSource && !isTarget
+        const isCallout  = CALLOUT_REGIONS.has(regionKey)
 
         // Dot / line color for callout regions
         const accentColor = isSource ? COL_SOURCE : (isTarget && term) ? COL_TARGET : null
@@ -185,6 +186,7 @@ export default function VennDiagram({
                     label={term.label}
                     isSource={isSource}
                     isTarget={isTarget}
+                    isInactive={isInactive}
                   />
                 </>
               ) : (
@@ -192,7 +194,7 @@ export default function VennDiagram({
               )
             ) : (
               term
-                ? <TermLabel cx={cx} cy={cy} label={term.label} isSource={isSource} isTarget={isTarget} />
+                ? <TermLabel cx={cx} cy={cy} label={term.label} isSource={isSource} isTarget={isTarget} isInactive={isInactive} />
                 : <circle cx={cx} cy={cy} r={3} fill="#bbb" opacity={0.6} />
             )}
 
@@ -213,15 +215,15 @@ export default function VennDiagram({
   )
 }
 
-function TermLabel({ cx, cy, label, isSource, isTarget }) {
+function TermLabel({ cx, cy, label, isSource, isTarget, isInactive }) {
   const words   = label.split(' ')
   const twoLine = words.length > 1
   const bgW     = 70
   const bgH     = twoLine ? 36 : 24
 
-  const borderColor = isSource ? COL_SOURCE : isTarget ? COL_TARGET : '#ccc'
-  const fillColor   = isSource ? COL_SOURCE_BG : isTarget ? COL_TARGET_BG : 'rgba(255,255,255,0.92)'
-  const textColor   = isSource ? '#7d5a00' : isTarget ? COL_TARGET : '#1a1a1a'
+  const borderColor = isSource ? COL_SOURCE : isTarget ? COL_TARGET : isInactive ? '#bbb' : '#ccc'
+  const fillColor   = isSource ? COL_SOURCE_BG : isTarget ? COL_TARGET_BG : isInactive ? '#dadde0' : 'rgba(255,255,255,0.92)'
+  const textColor   = isSource ? '#7d5a00' : isTarget ? COL_TARGET : isInactive ? '#999' : '#1a1a1a'
   const strokeWidth = (isSource || isTarget) ? 2 : 1
 
   return (
