@@ -5,6 +5,8 @@ import WinScreen from './components/WinScreen.jsx'
 import GameOverScreen from './components/GameOverScreen.jsx'
 
 // screen: 'selector' | 'game' | 'win' | 'gameover'
+const debugMode = new URLSearchParams(window.location.search).has('debug')
+
 export default function App() {
   const [screen, setScreen] = useState('selector')
   const [activePuzzle, setActivePuzzle] = useState(null)
@@ -43,6 +45,7 @@ export default function App() {
           puzzle={activePuzzle}
           onWin={handleWin}
           onGameOver={handleGameOver}
+          debugMode={debugMode}
         />
       )}
       {screen === 'win' && (

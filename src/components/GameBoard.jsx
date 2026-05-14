@@ -6,7 +6,7 @@ import TermBank from './TermBank.jsx'
 import SubmitBar from './SubmitBar.jsx'
 import styles from './GameBoard.module.css'
 
-export default function GameBoard({ puzzle, onWin, onGameOver }) {
+export default function GameBoard({ puzzle, onWin, onGameOver, debugMode = false }) {
   const game = useGameState(puzzle)
 
   useEffect(() => {
@@ -48,6 +48,7 @@ export default function GameBoard({ puzzle, onWin, onGameOver }) {
             revealedCircles={game.revealedCircles}
             validTargets={game.selectedTermId ? game.validTargetsFor(game.selectedTermId) : []}
             onRegionClick={handleRegionClick}
+            debugMode={debugMode}
           />
         </div>
 

@@ -163,8 +163,8 @@ Reverses the Phase 5.5 decision (SubmitBar in header) in favor of a single unifi
 - [x] R.2 `GameBoard.jsx` — ctrlSide always rendered; renders `<TermBank>` when `unplacedTerms.length > 0`, else `<SubmitBar>`
 - [x] R.3 `SubmitBar.module.css` — add `@media (orientation: landscape)` block: `flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 16px; padding: 16px`; submit button width auto-sized; pips row stays horizontal and centered
 - [x] R.4 `GameBoard.module.css` — landscape `.ctrlSide` already has `display:flex; flex-direction:column`; no changes needed
-- [ ] R.5 Verify portrait: bank→submit swap is visually clean; diagram gets extra height on swap
-- [ ] R.6 Verify landscape: Submit + pips centered in 200px panel; header title-only; diagram taller
+- [x] R.5 Verify portrait: bank→submit swap is visually clean; diagram gets extra height on swap
+- [x] R.6 Verify landscape: Submit + pips centered in 200px panel; header title-only; diagram taller
 
 ---
 
@@ -200,7 +200,7 @@ Only Circle 1's `left` value differs between modes (`50%` portrait → `25%` lan
 - [x] C.3 `CircleLabels.jsx` — change rendering model: accept a `circleId` prop (1, 2, or 3) and render a single chip; remove position/orientation strip logic
 - [x] C.4 `CircleLabels.module.css` — replace strip layout with `position: absolute` chip styles; portrait and landscape coordinates per table above
 - [x] C.5 `GameBoard.jsx` — render three `<CircleLabel circleId={n}>` chips inside `.vennWrap`; same treatment applied to `WinScreen.jsx` and `GameOverScreen.jsx`
-- [ ] C.6 Verify chips don't intercept Venn hit-test in active diagram regions (chips have solid backgrounds and sit in front of SVG — clicks on chips should not propagate to SVG)
+- [x] C.6 Verify chips don't intercept Venn hit-test in active diagram regions (chips have solid backgrounds and sit in front of SVG — clicks on chips should not propagate to SVG)
 - [x] C.7 Remove the "Corner-Anchored" future idea note from the parking lot (now implemented)
 
 ---
@@ -230,11 +230,11 @@ Only Circle 1's `left` value differs between modes (`50%` portrait → `25%` lan
 **Net effect:** color = category group is established from turn 1. Submit reveals fill + real label text. The user learns the color code without needing to guess first.
 
 ### Tasks
-- [ ] V.1 `CircleLabels.jsx` — unrevealed chip renders "Group N" (italic, 65% opacity) instead of "?"; revealed chip renders real name (normal weight, full opacity)
-- [ ] V.2 `CircleLabels.module.css` — add colored border to chip using circle color; dot is always circle color (remove grey unrevealed state)
-- [ ] V.3 `VennDiagram.jsx` — add a stroke-only `<circle>` element above each fill circle, always rendered in the circle's color; unrevealed fill circles get no fill or near-transparent fill
-- [ ] V.4 Verify `mix-blend-mode: multiply` on fill circles is unaffected by the separate stroke layer
-- [ ] V.5 Verify chip border color and circle stroke color are consistent (same hex values for each circle)
+- [x] V.1 `CircleLabels.jsx` — unrevealed chip renders "Group N" (italic, 65% opacity) instead of "?"; revealed chip renders real name (normal weight, full opacity)
+- [x] V.2 `CircleLabels.module.css` — add colored border to chip using circle color; dot is always circle color (remove grey unrevealed state)
+- [x] V.3 `VennDiagram.jsx` — add a stroke-only `<circle>` element above each fill circle, always rendered in the circle's color; unrevealed fill circles get no fill or near-transparent fill
+- [x] V.4 Verify `mix-blend-mode: multiply` on fill circles is unaffected by the separate stroke layer
+- [x] V.5 Verify chip border color and circle stroke color are consistent (same hex values for each circle — centralized in `src/styles/colors.js`)
 
 ---
 
@@ -286,9 +286,9 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 
 ### Tasks
 - [x] S.1 Implement Option B first (simpler): fix `height:100%` resolution on SVG in flex context; add portrait `max-height` and landscape `max-width` caps to vennWrap; tune cap multipliers visually
-- [ ] S.2 Implement Option A as alternative: add SVG-sized wrapper div; move circle label chips inside it; verify wrapper tracks SVG size in both orientations
-- [ ] S.3 Compare both on iPhone SE and iPhone 14 Pro in portrait and landscape (DevTools emulation); decide which to ship
-- [ ] S.4 Confirm circle label chip positions (bottom corners, top positions) still land at diagram edges under chosen approach
+- [~] S.2 ~~Implement Option A~~ — skipped; Option B looks good, no need to compare
+- [~] S.3 ~~Compare both~~ — skipped; committing to Option B
+- [x] S.4 Confirm circle label chip positions (bottom corners, top positions) still land at diagram edges under chosen approach
 
 ---
 
@@ -308,7 +308,7 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 - [x] 7.1 Build `WinScreen.jsx` — "You got it!" + puzzle title + "Play Another" button
 - [x] 7.2 Build `GameOverScreen.jsx` — "Out of attempts" + solution reveal (3 category groups with their terms) + "Try Again" / "Choose Different Puzzle"
 - [x] 7.3 Wire both screens into `App.jsx` screen router (was already wired; added `puzzle` prop to WinScreen)
-- [ ] 7.4 Verify transitions: win → WinScreen, loss → GameOverScreen, retry → reset, new puzzle → selector
+- [x] 7.4 Verify transitions: win → WinScreen, loss → GameOverScreen, retry → reset, new puzzle → selector
 
 ---
 
@@ -316,9 +316,9 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 
 - [ ] 8.1 ~~Responsive tuning~~ — superseded by Layout Redesign sections above (TermBank/SubmitBar, Circle Labels, SVG Scaling)
 - [ ] 8.2 Accessibility audit — all tap targets ≥ 44px, readable contrast
-- [ ] 8.3 Add a second puzzle (`puzzle-002.json`) to test selector with real data
+- [x] 8.3 Add a second puzzle (`puzzle-002.json`) to test selector with real data
 - [ ] 8.4 Final mobile test in Chrome DevTools (iPhone SE + iPhone 14 Pro, portrait + landscape)
-- [ ] 8.5 Remove debug mode toggle (or gate it behind a URL param)
+- [x] 8.5 Gate debug mode behind `?debug` URL param — read in `App.jsx`, threaded down to `VennDiagram`
 
 ---
 
