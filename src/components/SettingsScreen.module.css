@@ -1,0 +1,141 @@
+.screen {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background: #ffffff;
+}
+
+.backBtn {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6c5ce7;
+  background: none;
+  border: none;
+  border-right: 1px solid #e0e0e0;
+  padding: 8px 16px 8px 4px;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.main {
+  flex: 1;
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 540px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.section {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sectionTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #6c5ce7;
+  margin-bottom: 2px;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: #999;
+  line-height: 1.4;
+}
+
+/* ── Segmented control (theme) ─────────────────────────────────────────────── */
+.segmented {
+  display: flex;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.seg {
+  flex: 1;
+  min-height: 44px;
+  background: none;
+  border: none;
+  border-radius: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #888;
+  transition: background 0.15s, color 0.15s;
+}
+
+.seg + .seg {
+  border-left: 2px solid #e0e0e0;
+}
+
+.segActive {
+  background: #6c5ce7;
+  color: #ffffff;
+}
+
+/* ── Toggle row (audio) ────────────────────────────────────────────────────── */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.rowText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toggle {
+  flex-shrink: 0;
+  width: 52px;
+  height: 30px;
+  border-radius: 15px;
+  background: #ddd;
+  border: none;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+}
+
+.toggleOn {
+  background: #6c5ce7;
+}
+
+.toggleThumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.toggleOn .toggleThumb {
+  transform: translateX(22px);
+}

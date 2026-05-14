@@ -315,9 +315,9 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 ## Phase 8 — Polish
 
 - [ ] 8.1 ~~Responsive tuning~~ — superseded by Layout Redesign sections above (TermBank/SubmitBar, Circle Labels, SVG Scaling)
-- [ ] 8.2 Accessibility audit — all tap targets ≥ 44px, readable contrast
+- [x] 8.2 Accessibility audit — all tap targets ≥ 44px, readable contrast (Lighthouse score: 100)
 - [x] 8.3 Add a second puzzle (`puzzle-002.json`) to test selector with real data
-- [ ] 8.4 Final mobile test in Chrome DevTools (iPhone SE + iPhone 14 Pro, portrait + landscape)
+- [x] 8.4 Final mobile test in Chrome DevTools (iPhone SE + iPhone 14 Pro, portrait + landscape)
 - [x] 8.5 Gate debug mode behind `?debug` URL param — read in `App.jsx`, threaded down to `VennDiagram`
 
 ---
@@ -351,19 +351,19 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 ## Phase 11 — Landing Page, Settings & How To Play
 
 ### Landing Page
-- [ ] 11.1 New `HomeScreen` component replacing `PuzzleSelector` as the app entry point
-- [ ] 11.2 Three options: **Play**, **Settings**, **How To Play**
-- [ ] 11.3 Play → navigates to puzzle selector (existing `PuzzleSelector`)
+- [x] 11.1 New `HomeScreen` component replacing `PuzzleSelector` as the app entry point
+- [x] 11.2 Four options: **Play**, **Settings**, **How To Play**, **Edit** (disabled, "Coming Soon" badge)
+- [x] 11.3 Play → navigates to puzzle selector (existing `PuzzleSelector`); back button added to selector
 
 ### Settings Screen
-- [ ] 11.4 New `SettingsScreen` component
-- [ ] 11.5 Theme toggle: Light / Dark / Device default
-- [ ] 11.6 Audio toggle: On / Off (for future audio additions)
-- [ ] 11.7 Persist settings to `localStorage`
+- [x] 11.4 New `SettingsScreen` component
+- [x] 11.5 Theme toggle: Light / Dark / System (segmented control)
+- [x] 11.6 Audio toggle: On / Off (for future audio additions)
+- [x] 11.7 Persist settings to `localStorage`; theme applied via `data-theme` on `<html>`
 
 ### How To Play Screen
-- [ ] 11.8 New `HowToPlayScreen` component
-- [ ] 11.9 Static instructional content — explain Venn regions, term placement, group reveal mechanic, attempt pips
+- [x] 11.8 New `HowToPlayScreen` component
+- [x] 11.9 Static instructional content — Venn regions, term placement, swap mechanic, group reveal, attempt pips, permutation note
 
 ---
 

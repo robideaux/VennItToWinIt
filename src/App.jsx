@@ -1,14 +1,17 @@
 import { useState } from 'react'
+import HomeScreen from './components/HomeScreen.jsx'
+import HowToPlayScreen from './components/HowToPlayScreen.jsx'
+import SettingsScreen from './components/SettingsScreen.jsx'
 import PuzzleSelector from './components/PuzzleSelector.jsx'
 import GameBoard from './components/GameBoard.jsx'
 import WinScreen from './components/WinScreen.jsx'
 import GameOverScreen from './components/GameOverScreen.jsx'
 
-// screen: 'selector' | 'game' | 'win' | 'gameover'
+// screen: 'home' | 'howto' | 'settings' | 'selector' | 'game' | 'win' | 'gameover'
 const debugMode = new URLSearchParams(window.location.search).has('debug')
 
 export default function App() {
-  const [screen, setScreen] = useState('selector')
+  const [screen, setScreen] = useState('home')
   const [activePuzzle, setActivePuzzle] = useState(null)
   const [finalGameState, setFinalGameState] = useState(null)
 
@@ -35,10 +38,30 @@ export default function App() {
     setScreen('selector')
   }
 
+  function handleBackToHome() {
+    setScreen('home')
+  }
+
   return (
     <>
+      {screen === 'home' && (
+        <HomeScreen
+          onPlay={() => setScreen('selector')}
+          onHowToPlay={() => setScreen('howto')}
+          onSettings={() => setScreen('settings')}
+        />
+      )}
+      {screen === 'howto' && (
+        <HowToPlayScreen onBack={handleBackToHome} />
+      )}
+      {screen === 'settings' && (
+        <SettingsScreen onBack={handleBackToHome} />
+      )}
       {screen === 'selector' && (
-        <PuzzleSelector onSelectPuzzle={handleSelectPuzzle} />
+        <PuzzleSelector
+          onSelectPuzzle={handleSelectPuzzle}
+          onBack={handleBackToHome}
+        />
       )}
       {screen === 'game' && (
         <GameBoard

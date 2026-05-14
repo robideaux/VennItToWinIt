@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import styles from './PuzzleSelector.module.css'
 
-export default function PuzzleSelector({ onSelectPuzzle }) {
+export default function PuzzleSelector({ onSelectPuzzle, onBack }) {
   const [manifest, setManifest] = useState(null)
   const [manifestError, setManifestError] = useState(null)
   const [loadingId, setLoadingId] = useState(null)
@@ -34,8 +34,12 @@ export default function PuzzleSelector({ onSelectPuzzle }) {
   return (
     <div className={styles.screen}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Venn It To Win It</h1>
-        <p className={styles.subtitle}>Choose a puzzle to play</p>
+        {onBack && (
+          <button className={styles.backBtn} onClick={onBack} aria-label="Back to home">
+            ‹ Back
+          </button>
+        )}
+        <h1 className={styles.title}>Choose a Puzzle</h1>
       </header>
 
       <main className={styles.main}>
