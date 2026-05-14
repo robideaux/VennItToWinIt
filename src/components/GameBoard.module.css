@@ -5,6 +5,14 @@
   height: 100dvh;
   overflow: hidden;
   background: var(--color-bg);
+  position: relative; /* pause overlay anchors to this */
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .vennSide {
@@ -27,12 +35,34 @@
 
 .title {
   flex: 1;
-  font-size: 0.9rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--color-text-2);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.menuBtn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  border-right: 1px solid var(--color-border);
+  font-size: 1.1rem;
+  color: var(--color-text-2);
+  padding: 4px 12px;
+  min-height: 36px;
+  min-width: 44px;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.menuBtn:hover {
+  background: var(--color-border);
+  color: var(--color-text);
 }
 
 .vennWrap {
@@ -48,32 +78,24 @@
 
 /* ── Landscape ── */
 @media (orientation: landscape) {
-  .screen {
+  .body {
     flex-direction: row;
-    max-width: none;
   }
 
   .vennSide {
     flex: 1;
     min-width: 0;
-    height: 100dvh;
     padding: 4px 4px 20px 4px;
   }
 
   .header {
     padding: 4px 10px;
-    border-bottom: 1px solid var(--color-border);
-    border-right: none;
   }
 
-  .title {
-    font-size: 0.8rem;
-  }
 
   .ctrlSide {
     width: 200px;
     min-width: unset;
-    height: 100dvh;
     overflow-y: auto;
     border-top: none;
     border-left: 1px solid var(--color-border);
@@ -82,4 +104,86 @@
     display: flex;
     flex-direction: column;
   }
+}
+
+/* ── Pause overlay ── */
+.pauseOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+.pauseCard {
+  background: var(--color-surface);
+  border-radius: 20px;
+  padding: 28px 24px 20px;
+  width: calc(100% - 64px);
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.pauseHeading {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.pauseSub {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: -4px;
+  margin-bottom: 4px;
+}
+
+.pauseBtn {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.pauseBtnPrimary {
+  background: var(--color-accent);
+  color: #ffffff;
+  border: none;
+}
+
+.pauseBtnPrimary:hover {
+  background: var(--color-accent-hover);
+}
+
+.pauseBtnSecondary {
+  background: none;
+  border: 2px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.pauseBtnSecondary:hover {
+  border-color: var(--color-accent);
+  background: var(--color-accent-tint);
+}
+
+.pauseBtnQuit {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  min-height: 40px;
+  margin-top: 4px;
+}
+
+.pauseBtnQuit:hover {
+  color: var(--color-text);
 }

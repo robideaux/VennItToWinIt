@@ -13,19 +13,26 @@ const debugMode = new URLSearchParams(window.location.search).has('debug')
 export default function App() {
   const [screen, setScreen] = useState('home')
   const [activePuzzle, setActivePuzzle] = useState(null)
+  const [gameKey, setGameKey] = useState(0)
   const [finalGameState, setFinalGameState] = useState(null)
+  // Overlay rendered on top of GameBoard without unmounting it (preserves game state)
+  const [gameOverlay, setGameOverlay] = useState(null) // null | 'settings' | 'howto'
 
   function handleSelectPuzzle(puzzle) {
+    setGameOverlay(null)
     setActivePuzzle(puzzle)
+    setGameKey(k => k + 1)
     setScreen('game')
   }
 
   function handleWin({ placements, revealedCircles }) {
+    setGameOverlay(null)
     setFinalGameState({ placements, revealedCircles })
     setScreen('win')
   }
 
   function handleGameOver() {
+    setGameOverlay(null)
     setScreen('gameover')
   }
 
@@ -39,6 +46,12 @@ export default function App() {
   }
 
   function handleBackToHome() {
+    setScreen('home')
+  }
+
+  function handleQuit() {
+    setGameOverlay(null)
+    setActivePuzzle(null)
     setScreen('home')
   }
 
@@ -64,12 +77,38 @@ export default function App() {
         />
       )}
       {screen === 'game' && (
-        <GameBoard
-          puzzle={activePuzzle}
-          onWin={handleWin}
-          onGameOver={handleGameOver}
-          debugMode={debugMode}
-        />
+        <>
+          <GameBoard
+            key={gameKey}
+            puzzle={activePuzzle}
+            onWin={handleWin}
+            onGameOver={handleGameOver}
+            debugMode={debugMode}
+            onOpenSettings={() => setGameOverlay('settings')}
+            onOpenHowTo={() => setGameOverlay('howto')}
+            onSelectGame={() => setGameOverlay('selector')}
+            onQuit={handleQuit}
+          />
+          {/* Settings/HowTo rendered fixed on top — GameBoard stays mounted, game state preserved */}
+          {gameOverlay === 'settings' && (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto' }}>
+              <SettingsScreen onBack={() => setGameOverlay(null)} />
+            </div>
+          )}
+          {gameOverlay === 'howto' && (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto' }}>
+              <HowToPlayScreen onBack={() => setGameOverlay(null)} />
+            </div>
+          )}
+          {gameOverlay === 'selector' && (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto' }}>
+              <PuzzleSelector
+                onSelectPuzzle={handleSelectPuzzle}
+                onBack={() => setGameOverlay(null)}
+              />
+            </div>
+          )}
+        </>
       )}
       {screen === 'win' && (
         <WinScreen
