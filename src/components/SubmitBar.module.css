@@ -16,19 +16,19 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #ddd;
+  background: var(--color-border);
   display: inline-block;
   flex-shrink: 0;
 }
 
 .active {
-  background: #6c5ce7;
+  background: var(--color-accent);
 }
 
 .submitBtn {
   min-height: 44px;
   padding: 0 16px;
-  background: #6c5ce7;
+  background: var(--color-accent);
   color: #fff;
   border: none;
   border-radius: 8px;

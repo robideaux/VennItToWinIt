@@ -1,4 +1,5 @@
 import styles from './HomeScreen.module.css'
+import { CIRCLE_COLORS } from '../styles/colors.js'
 
 export default function HomeScreen({ onPlay, onHowToPlay, onSettings }) {
   return (
@@ -9,9 +10,9 @@ export default function HomeScreen({ onPlay, onHowToPlay, onSettings }) {
           preserveAspectRatio="xMidYMid slice"
           className={styles.bgSvg}
         >
-          <circle cx="160" cy="115" r="97" fill="#ff6b6b" fillOpacity="0.55" style={{ mixBlendMode: 'multiply' }} />
-          <circle cx="105" cy="235" r="97" fill="#51cf66" fillOpacity="0.55" style={{ mixBlendMode: 'multiply' }} />
-          <circle cx="215" cy="235" r="97" fill="#339af0" fillOpacity="0.55" style={{ mixBlendMode: 'multiply' }} />
+          <circle className={styles.bgCircle} cx="160" cy="115" r="97" fill={CIRCLE_COLORS['1'].bold} fillOpacity="0.55" />
+          <circle className={styles.bgCircle} cx="105" cy="235" r="97" fill={CIRCLE_COLORS['2'].bold} fillOpacity="0.55" />
+          <circle className={styles.bgCircle} cx="215" cy="235" r="97" fill={CIRCLE_COLORS['3'].bold} fillOpacity="0.55" />
         </svg>
       </div>
 

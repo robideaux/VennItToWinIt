@@ -5,12 +5,11 @@ export default function CircleLabel({ circleId, revealedCircles }) {
   const revealed = revealedCircles.find(r => r.circleId === circleId)
   const { bold, muted } = CIRCLE_COLORS[circleId]
   const activeColor = revealed ? bold : muted
-  const chipBg = revealed ? 'rgba(255,255,255,0.9)' : 'rgba(173,181,189,0.25)'
 
   return (
     <div
-      className={`${styles.chip} ${styles[`circle${circleId}`]}`}
-      style={{ borderColor: activeColor, background: chipBg }}
+      className={`${styles.chip} ${styles[`circle${circleId}`]} ${revealed ? styles.chipRevealed : ''}`}
+      style={{ borderColor: activeColor, '--circle-color': bold }}
     >
       <span className={styles.dot} style={{ background: activeColor }} />
       <span className={`${styles.label} ${revealed ? styles.revealed : styles.placeholder}`}>

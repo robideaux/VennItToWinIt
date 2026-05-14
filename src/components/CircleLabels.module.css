@@ -10,16 +10,29 @@
   border-radius: 12px;
   pointer-events: none;
   z-index: 1;
+  background: var(--chip-bg-unrevealed);
+}
+
+/* Light mode: revealed chip is white */
+.chipRevealed {
+  background: var(--chip-bg-revealed);
+}
+
+/* Dark mode: revealed chip fills with circle color (--circle-color set inline on element) */
+:global([data-theme="dark"]) .chipRevealed {
+  background: var(--circle-color);
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"]):not([data-theme="dark"])) .chipRevealed {
+    background: var(--circle-color);
+  }
 }
 
 /* ── Portrait positioning ── */
 .circle1 {
   top: 4px;
   right: 50%;
-  /*
-  left: 50%;
-  transform: translateX(-50%);
-  */
 }
 
 .circle2 {
@@ -42,7 +55,7 @@
 }
 
 .label {
-  color: #999;
+  color: var(--color-text-muted);
   white-space: normal;
   line-height: 1.25;
   transition: color 0.3s, font-weight 0.3s;
@@ -57,6 +70,16 @@
 .revealed {
   font-size: 1rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text);
 }
 
+/* Dark mode: white text on colored chip background */
+:global([data-theme="dark"]) .chipRevealed .revealed {
+  color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"]):not([data-theme="dark"])) .chipRevealed .revealed {
+    color: #ffffff;
+  }
+}
