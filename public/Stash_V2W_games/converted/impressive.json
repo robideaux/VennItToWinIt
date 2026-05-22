@@ -1,0 +1,68 @@
+{
+  "id": "impressive",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Impressive Range",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Soul Singers",
+    "B": "Cartoon Characters",
+    "C": "Mountain Ranges"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Gladys",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Scooby",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Andes",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Marvin",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Rocky",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Green",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Smokey",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

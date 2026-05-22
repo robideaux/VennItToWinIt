@@ -1,0 +1,68 @@
+{
+  "id": "rawr",
+  "year": 2025,
+  "sequence": 0,
+  "title": "RAWR!",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "NFL Teams",
+    "B": "NHL Teams",
+    "C": "Predators"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Rams",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Wild",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Ladybugs",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Jets",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Sharks",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Falcons",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Panthers",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": "root",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Does Stephen Root?",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Names that are Complete Sentences",
+    "B": "Botanical Names",
+    "C": "MLB Players"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Tom Waits",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Fiona Apple",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Mickey Mantle",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Brandon Flowers",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Brett Gardner",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Mookie Betts",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Pete Rose",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

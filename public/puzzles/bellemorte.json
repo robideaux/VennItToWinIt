@@ -1,0 +1,68 @@
+{
+  "id": "bellemorte",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Belle Morte",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Lived in Italy",
+    "B": "Epithet for a Flirt",
+    "C": "Tragic Protagonists"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Portia",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Prince Charming",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Hamlet",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Casanova",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Don Juan",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Othello",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Romeo",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

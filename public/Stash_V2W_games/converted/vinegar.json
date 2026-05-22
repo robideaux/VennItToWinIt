@@ -1,0 +1,68 @@
+{
+  "id": "vinegar",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Vinegar Rock Candy",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Bands",
+    "B": "Bitter Things",
+    "C": "Food"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Queen",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Your Ex",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Corn",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Poison",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Dark Chocolate",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Cream",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Cranberries",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

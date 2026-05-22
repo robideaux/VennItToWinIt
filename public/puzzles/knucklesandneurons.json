@@ -1,0 +1,68 @@
+{
+  "id": "knucklesandneurons",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Knuckles and Neurons",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "___ Handed",
+    "B": "___ Minded",
+    "C": "Using a Social Media App"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Heavy",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Absent",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Comment",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Single",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Like",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Back",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Open",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

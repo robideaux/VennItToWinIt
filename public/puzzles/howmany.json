@@ -1,0 +1,68 @@
+{
+  "id": "howmany",
+  "year": 2025,
+  "sequence": 0,
+  "title": "How Manet Do You Know?",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Painters",
+    "B": "Inventors",
+    "C": "Architects"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Georgia O'Keeffe",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Elijah McCoy",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "I.M. Pei",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Samuel Morse",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Buckminster Fuller",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Le Corbusier",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Leonardo da Vinci",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

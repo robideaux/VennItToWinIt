@@ -1,0 +1,68 @@
+{
+  "id": "sittingaround",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Sitting Around",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Cold & Rainy; you're outside",
+    "B": "Cold & Rainy; you're inside",
+    "C": "Warm & Sunny; you're outside"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Gloves",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Cocoa",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Sunscreen",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Comfy Socks",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Umbrella",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Book",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Blanket",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

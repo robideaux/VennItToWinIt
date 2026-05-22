@@ -1,0 +1,68 @@
+{
+  "id": "demo",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Demo Game",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Things in Group 1",
+    "B": "Things in Group 2",
+    "C": "Things in Group 3"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "only in Group 1",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "only in Group 2",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "only in Group 3",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "in Groups 1 & 2",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "in Groups 2 & 3",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "in Groups 1 & 3",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "in Groups 1, 2, 3",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

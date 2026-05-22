@@ -1,0 +1,68 @@
+{
+  "id": "mooin",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Are You Mooin' At Me?",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Ungulates",
+    "B": "U.S. Cities",
+    "C": "Intimidate"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Sheep",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Phoenix",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Bully",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Elk",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Badger",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Cow",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Buffalo",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

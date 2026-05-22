@@ -1,0 +1,68 @@
+{
+  "id": "gotpunch",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Got Punch?",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Animals",
+    "B": "To Drink",
+    "C": "A Hard Hit"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Worm",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Swill",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Strap",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Swallow",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Belt",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Whale",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Slug",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

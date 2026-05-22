@@ -1,0 +1,68 @@
+{
+  "id": "mathvenn01",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Solve:G1=300; G2=200; G3=150; G1∩G2=75; G1∩G3=70; G2∩G3=50",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "G1=200+30+25+45",
+    "B": "G2=120+30+5+45",
+    "C": "G3=75+5+25+45"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "5",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "25",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "30",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "45",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "75",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "120",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "200",
+      "regions": [
+        "A"
+      ]
+    }
+  ]
+}

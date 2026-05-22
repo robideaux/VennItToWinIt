@@ -1,6 +1,263 @@
 {
   "puzzles": [
-    { "id": "puzzle-001", "title": "Fly, Swim, or Cold?", "file": "puzzle-001.json" },
-    { "id": "puzzle-002", "title": "Just Relax", "file": "puzzle-002.json" }
+    {
+      "id": "2026_001",
+      "year": 2026,
+      "sequence": 1,
+      "title": "Fly, Swim, or Cold?",
+      "file": "2026_001.json"
+    },
+    {
+      "id": "2026_002",
+      "year": 2026,
+      "sequence": 2,
+      "title": "Just Relax",
+      "file": "2026_002.json"
+    },
+    {
+      "id": "40yrs",
+      "year": 2025,
+      "sequence": 0,
+      "title": "I Hope this Doesn't Take 40 years",
+      "file": "40yrs.json"
+    },
+    {
+      "id": "bellemorte",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Belle Morte",
+      "file": "bellemorte.json"
+    },
+    {
+      "id": "dazzleme",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Dazzle Me",
+      "file": "dazzleme.json"
+    },
+    {
+      "id": "dear",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Oh Dear",
+      "file": "dear.json"
+    },
+    {
+      "id": "demo",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Demo Game",
+      "file": "demo.json"
+    },
+    {
+      "id": "disneyorno",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Disney or Didn't He?",
+      "file": "disneyorno.json"
+    },
+    {
+      "id": "foolmeonce",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Fool Me Once",
+      "file": "foolmeonce.json"
+    },
+    {
+      "id": "foulplay",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Foul Play",
+      "file": "foulplay.json"
+    },
+    {
+      "id": "gotpunch",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Got Punch?",
+      "file": "gotpunch.json"
+    },
+    {
+      "id": "helmetsrequired",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Helmets Required",
+      "file": "helmetsrequired.json"
+    },
+    {
+      "id": "hogging",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Hogging the Limelight",
+      "file": "hogging.json"
+    },
+    {
+      "id": "howmany",
+      "year": 2025,
+      "sequence": 0,
+      "title": "How Manet Do You Know?",
+      "file": "howmany.json"
+    },
+    {
+      "id": "impressive",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Impressive Range",
+      "file": "impressive.json"
+    },
+    {
+      "id": "imsirius",
+      "year": 2025,
+      "sequence": 0,
+      "title": "I'm Sirius",
+      "file": "imsirius.json"
+    },
+    {
+      "id": "knucklesandneurons",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Knuckles and Neurons",
+      "file": "knucklesandneurons.json"
+    },
+    {
+      "id": "mathvenn01",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Solve:G1=300; G2=200; G3=150; G1∩G2=75; G1∩G3=70; G2∩G3=50",
+      "file": "mathvenn01.json"
+    },
+    {
+      "id": "midbest",
+      "year": 2025,
+      "sequence": 0,
+      "title": "More like MidBest",
+      "file": "midbest.json"
+    },
+    {
+      "id": "mooin",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Are You Mooin' At Me?",
+      "file": "mooin.json"
+    },
+    {
+      "id": "naturalirrational",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Natrually Irrational",
+      "file": "naturalirrational.json"
+    },
+    {
+      "id": "ohjesus",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Oh, Jesus!",
+      "file": "ohjesus.json"
+    },
+    {
+      "id": "outandabout",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Out and About",
+      "file": "outandabout.json"
+    },
+    {
+      "id": "rawr",
+      "year": 2025,
+      "sequence": 0,
+      "title": "RAWR!",
+      "file": "rawr.json"
+    },
+    {
+      "id": "relaxgame",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Just Relax",
+      "file": "relaxgame.json"
+    },
+    {
+      "id": "root",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Does Stephen Root?",
+      "file": "root.json"
+    },
+    {
+      "id": "scores",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Scores and Scores",
+      "file": "scores.json"
+    },
+    {
+      "id": "sittingaround",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Sitting Around",
+      "file": "sittingaround.json"
+    },
+    {
+      "id": "sparechange",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Spare Change?",
+      "file": "sparechange.json"
+    },
+    {
+      "id": "suitup",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Suit Up",
+      "file": "suitup.json"
+    },
+    {
+      "id": "thebeatgoeson",
+      "year": 2025,
+      "sequence": 0,
+      "title": "The Beat Goes On and On",
+      "file": "thebeatgoeson.json"
+    },
+    {
+      "id": "thisjustin",
+      "year": 2025,
+      "sequence": 0,
+      "title": "This Just In",
+      "file": "thisjustin.json"
+    },
+    {
+      "id": "timetoshine",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Time to Shine",
+      "file": "timetoshine.json"
+    },
+    {
+      "id": "underpressure",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Under Pressure",
+      "file": "underpressure.json"
+    },
+    {
+      "id": "vinegar",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Vinegar Rock Candy",
+      "file": "vinegar.json"
+    },
+    {
+      "id": "wingandprayer",
+      "year": 2025,
+      "sequence": 0,
+      "title": "A Wing and a Prayer",
+      "file": "wingandprayer.json"
+    },
+    {
+      "id": "yesandorno",
+      "year": 2025,
+      "sequence": 0,
+      "title": "Yes and/or No",
+      "file": "yesandorno.json"
+    }
   ]
 }

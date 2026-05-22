@@ -1,0 +1,68 @@
+{
+  "id": "yesandorno",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Yes and/or No",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Willing to Participate",
+    "B": "Negative words with opposites in other group",
+    "C": "Positive words with opposites in other group"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Interested",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Low",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "High",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Down",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Cleave",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Up",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Go",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

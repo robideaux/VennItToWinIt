@@ -1,5 +1,7 @@
 {
-    "id": "puzzle-002",
+    "id": "2026_002",
+    "year": 2026,
+    "sequence": 2,
     "title": "Just Relax",
     "maxAttempts": 5,
     "categories": {

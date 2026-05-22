@@ -1,0 +1,68 @@
+{
+  "id": "40yrs",
+  "year": 2025,
+  "sequence": 0,
+  "title": "I Hope this Doesn't Take 40 years",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Biblical Figures",
+    "B": "Found In Desert",
+    "C": "Animals"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "David",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Fremen",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Cat",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Moses",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Scorpion",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Whale",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Locust",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

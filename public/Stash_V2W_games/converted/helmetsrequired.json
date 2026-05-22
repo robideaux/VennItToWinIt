@@ -1,0 +1,68 @@
+{
+  "id": "helmetsrequired",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Helmets Required",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Specific Sports Terms",
+    "B": "Military Terms",
+    "C": "Describing Something Excellent"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Pick and Roll",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Infantry",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Sensation",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Blitz",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Conquest",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Home Run",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Bomb",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

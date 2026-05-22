@@ -1,0 +1,68 @@
+{
+  "id": "outandabout",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Out and About",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Skiing",
+    "B": "At the Opera",
+    "C": "At the Ballgame"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Chap Stick",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Lip Stick",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Scorecard",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Special Eyeware",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Program",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Passing Hot Dogs",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Gloves",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

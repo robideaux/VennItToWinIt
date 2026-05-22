@@ -1,0 +1,68 @@
+{
+  "id": "dazzleme",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Dazzle Me",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Gemstone Cuts",
+    "B": "Nobility Titles",
+    "C": "French Words"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Trilliant",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Earl",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Bouquet",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Princess",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Baguette",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Chevalier",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Marquise",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

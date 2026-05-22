@@ -1,0 +1,68 @@
+{
+  "id": "hogging",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Hogging the Limelight",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Fictional Pigs",
+    "B": "Cartoons",
+    "C": "British"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Wilbur",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Snoopy",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "James Bond",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Porky",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Grommet",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Empress of Blandings",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Peppa",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

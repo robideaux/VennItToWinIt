@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { useProgress } from './hooks/useProgress.js'
+import { fetchUnlockedPuzzles } from './utils/puzzleSchedule.js'
 import HomeScreen from './components/HomeScreen.jsx'
 import HowToPlayScreen from './components/HowToPlayScreen.jsx'
 import SettingsScreen from './components/SettingsScreen.jsx'
@@ -17,6 +19,7 @@ export default function App() {
   const [finalGameState, setFinalGameState] = useState(null)
   // Overlay rendered on top of GameBoard without unmounting it (preserves game state)
   const [gameOverlay, setGameOverlay] = useState(null) // null | 'settings' | 'howto' | 'selector'
+  const { progress, recordResult } = useProgress()
 
   useEffect(() => {
     // Seed the initial history entry so back-navigation lands here instead of leaving the app
@@ -47,16 +50,40 @@ export default function App() {
     setScreen('game')
   }
 
-  function handleWin({ placements, revealedCircles }) {
+  async function handlePlayLatest() {
+    try {
+      const unlocked = await fetchUnlockedPuzzles()
+      if (!unlocked.length) return
+      const entry = unlocked[0]
+      const r = await fetch(`/puzzles/${entry.file}`)
+      if (!r.ok) throw new Error()
+      const puzzle = await r.json()
+      setActivePuzzle(puzzle)
+      setGameKey(k => k + 1)
+      history.pushState({ screen: 'game' }, '')
+      setScreen('game')
+    } catch {
+      // stay on home if fetch fails
+    }
+  }
+
+  function handleAllVenns() {
+    history.pushState({ screen: 'selector' }, '')
+    setScreen('selector')
+  }
+
+  function handleWin({ placements, revealedCircles, attemptsUsed }) {
     setGameOverlay(null)
     setFinalGameState({ placements, revealedCircles })
+    recordResult(activePuzzle.id, { won: true, attempts: attemptsUsed })
     // Replace the game entry — back from win goes to selector, not back into the finished game
     history.replaceState({ screen: 'win' }, '')
     setScreen('win')
   }
 
-  function handleGameOver() {
+  function handleGameOver({ attemptsUsed }) {
     setGameOverlay(null)
+    recordResult(activePuzzle.id, { won: false, attempts: attemptsUsed })
     history.replaceState({ screen: 'gameover' }, '')
     setScreen('gameover')
   }
@@ -97,9 +124,11 @@ export default function App() {
     <>
       {screen === 'home' && (
         <HomeScreen
-          onPlay={() => { history.pushState({ screen: 'selector' }, ''); setScreen('selector') }}
+          onPlayLatest={handlePlayLatest}
+          onAllVenns={handleAllVenns}
           onHowToPlay={() => { history.pushState({ screen: 'howto' }, ''); setScreen('howto') }}
           onSettings={() => { history.pushState({ screen: 'settings' }, ''); setScreen('settings') }}
+          progress={progress}
         />
       )}
       {screen === 'howto' && (
@@ -112,6 +141,7 @@ export default function App() {
         <PuzzleSelector
           onSelectPuzzle={handleSelectPuzzle}
           onBack={handleBackToHome}
+          progress={progress}
         />
       )}
       {screen === 'game' && (
@@ -143,6 +173,7 @@ export default function App() {
               <PuzzleSelector
                 onSelectPuzzle={handleSelectPuzzle}
                 onBack={closeOverlay}
+                progress={progress}
               />
             </div>
           )}

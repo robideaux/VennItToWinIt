@@ -367,6 +367,50 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 
 ---
 
+## Phase 13 — Weekly Puzzle System & Progress Tracking
+
+### Design decisions locked
+- Puzzle filenames: `2026_001.json`, `2026_002.json`, etc. (year + zero-padded sequence)
+- Puzzle JSON: adds `"year"` and `"sequence"` fields; `"id"` updated to match (e.g. `"2026_001"`)
+- `index.json` manifest entries carry `year` and `sequence` so gating/sorting requires no per-file loads
+- Gating: puzzle is unlocked when `sequence ≤ current ISO week` within the same year, or `year < current year`
+- Display date: derived in UI from `(year, sequence)` → ISO week Monday → `"March 16"` format; no dates in JSON
+- `"sequence"` is the release order number (1, 2, 3 …); maps 1:1 to ISO calendar week for now; can be revisited for monthly cadence
+- Progress: `localStorage` key `"vennit_progress"`, object keyed by puzzle ID; schema `{ won, attempts, completedAt }`
+- Home screen: "Play Latest Venn" (direct-to-game, no selector stop) + NEW badge when latest is unplayed; "All Venns..." opens selector
+- Selector: compact scrollable rows newest-first; sticky header with "X / Y played" counter; played rows muted + checkmark; score badge placeholder
+
+### Data Format Migration
+- [x] W.1 Rename existing files: `puzzle-001.json` → `2026_001.json`, `puzzle-002.json` → `2026_002.json`
+- [x] W.2 Add `"year": 2026, "sequence": N` to each puzzle JSON; update `"id"` to `"2026_001"` etc.
+- [x] W.3 Update `index.json`: new filenames, updated IDs, add `year` + `sequence` to each manifest entry
+
+### Utilities
+- [x] W.4 Create `src/utils/puzzleSchedule.js`:
+  - `getCurrentYearWeek()` → `{ year, isoWeek }` (ISO 8601 week of year)
+  - `isPuzzleUnlocked(year, sequence)` → boolean
+  - `sequenceToDate(year, sequence)` → Date (Monday of that ISO week)
+  - `formatDisplayDate(year, sequence)` → `"Mar 16"` string
+  - `fetchUnlockedPuzzles()` → filtered + sorted manifest entries
+
+### Progress Tracking
+- [x] W.5 Create `src/hooks/useProgress.js`: read/write `"vennit_progress"` in localStorage; exports `progress` object and `recordResult(puzzleId, { won, attempts })`
+- [x] W.6 `App.jsx` — call `recordResult` in `handleWin` and `handleGameOver` with the active puzzle's ID
+
+### App & Data Wiring
+- [x] W.7 Filtering/sorting handled in `fetchUnlockedPuzzles()` utility, used by HomeScreen and PuzzleSelector
+- [x] W.8 `App.jsx` — `handlePlayLatest(entry)` fetches puzzle file from entry, loads directly into game
+
+### Home Screen
+- [x] W.9 `HomeScreen.jsx` — "Play Latest Venn" + NEW badge when unplayed; "All Venns…" button added
+- [x] W.10 `HomeScreen.jsx` — on mount fetches unlocked manifest + checks progress for badge
+
+### Selector Screen ("All Venns...")
+- [x] W.11 Redesign `PuzzleSelector.jsx`: sticky header (back + "All Venns" + "X / Y played" counter); compact rows newest-first; row = `[display date] [title] [✓ muted if played]`; locked puzzles excluded
+- [x] W.12 `PuzzleSelector.module.css` — compact row layout; muted/played state; checkmark; status slot
+
+---
+
 ## Phase 12 — Puzzle Editor
 
 > **Big item — full discussion needed before planning tasks.**
@@ -405,6 +449,18 @@ https://vennittowinit.netlify.app/?puzzle=puzzle-001
 - Makes it easy to share a direct link to a specific puzzle
 
 No routing infrastructure changes needed — the existing state-based screen model handles this naturally.
+
+---
+
+### Older Puzzle Conversion
+
+A batch of puzzles exists in an older format outside the repo. Before adding them:
+- Review each puzzle for quality (remove unwanted ones)
+- Convert to the new format: `2026_NNN.json` filename, add `year` + `sequence` fields, update `id`
+- Assign final sequence numbers (all filenames and sequence numbers are subject to change as the library grows)
+- Add each to `index.json`
+
+Note: sequence numbers (and thus filenames) across the whole library will be renumbered when the full set is finalized.
 
 ---
 

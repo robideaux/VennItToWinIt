@@ -1,0 +1,68 @@
+{
+  "id": "ohjesus",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Oh, Jesus!",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Bank Robbers",
+    "B": "Preachers",
+    "C": "DJs"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Put it in the bag",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Amen",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Make some noise",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Give me your money",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Are you with me",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Everybody on the floor",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Put your hands up",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

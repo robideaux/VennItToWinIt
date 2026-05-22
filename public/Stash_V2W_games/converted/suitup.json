@@ -1,0 +1,68 @@
+{
+  "id": "suitup",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Suit Up",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Card Suits",
+    "B": "Success According to Hip-Hop",
+    "C": "#Engaged"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Spades",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Bitches",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Smiley face",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Clubs",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Champagne",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Hearts",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Diamonds",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": "imsirius",
+  "year": 2025,
+  "sequence": 0,
+  "title": "I'm Sirius",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "___ Boat",
+    "B": "Dog ___",
+    "C": "___ Up"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Love",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Days",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Order",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "House",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Speed",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Leg",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Show",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

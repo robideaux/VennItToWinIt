@@ -1,0 +1,68 @@
+{
+  "id": "thebeatgoeson",
+  "year": 2025,
+  "sequence": 0,
+  "title": "The Beat Goes On and On",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Authority Figures",
+    "B": "Seen in Medieval Europe",
+    "C": "Costumes at a Pride Parade"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "The Presidents of the United States of America",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "The Smiths",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Pixies",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "The Church",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Village People",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "The Police",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Queen",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

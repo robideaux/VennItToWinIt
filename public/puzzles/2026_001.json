@@ -1,5 +1,7 @@
 {
-  "id": "puzzle-001",
+  "id": "2026_001",
+  "year": 2026,
+  "sequence": 1,
   "title": "Fly, Swim, or Cold?",
   "maxAttempts": 5,
   "categories": {

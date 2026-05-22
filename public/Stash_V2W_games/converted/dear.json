@@ -1,0 +1,69 @@
+{
+  "notes": "Technically, its MI, not ME. :(",
+  "id": "dear",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Oh Dear",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Do Re Me Fa So La Ti Do",
+    "B": "Actual Words",
+    "C": "State Abbreviations"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "FA",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "IF",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "NE",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "DO",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "OR",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "LA",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "ME",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

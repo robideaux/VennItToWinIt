@@ -1,0 +1,69 @@
+{
+  "notes": "I didn't know Ace of Clubs. :(",
+  "id": "foolmeonce",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Fool Me Once",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Found in a Deck",
+    "B": "DC Comic Villians",
+    "C": "Prankster"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "One-eyed Jack",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Doomsday",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Teaser",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Ace of Clubs",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Comedian",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Card",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Joker",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

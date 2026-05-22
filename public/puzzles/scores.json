@@ -1,0 +1,68 @@
+{
+  "id": "scores",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Scores and Scores",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Basketball",
+    "B": "Football",
+    "C": "Hockey"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Sphere",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Prolate Spheroid",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Solid Cylinder",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "3 Points",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Offsides",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Goaltending",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Center",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": "sparechange",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Spare Change?",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Green Monster",
+    "B": "Transmogrifies",
+    "C": "Doctors"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Fenway Park",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Wolfman",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Oz",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Shrek",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Frankenstein",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Jekyll",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Banner",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

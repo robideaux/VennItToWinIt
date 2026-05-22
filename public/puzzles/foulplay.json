@@ -1,0 +1,68 @@
+{
+  "id": "foulplay",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Foul Play",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Birds",
+    "B": "Dirty Words",
+    "C": "Chain Stores"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Swallow",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Prick",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Piggly Wiggly",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Tits",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Dicks",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Red Robin",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Hooters",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

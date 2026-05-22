@@ -1,0 +1,68 @@
+{
+  "id": "thisjustin",
+  "year": 2026,
+  "sequence": 0,
+  "title": "This Just In",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Breaking ____",
+    "B": "Heteronyms",
+    "C": "Written Account"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Weather",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Read",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Annals",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Wind",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Digest",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "News",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Record",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

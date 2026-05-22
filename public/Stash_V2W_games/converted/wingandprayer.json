@@ -1,0 +1,68 @@
+{
+  "id": "wingandprayer",
+  "year": 2026,
+  "sequence": 0,
+  "title": "A Wing and a Prayer",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Spiritual Titles",
+    "B": "Colors",
+    "C": "Birds"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Guru",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Salmon",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Pigeon",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Sage",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Canary",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Bishop",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Cardinal",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

@@ -1,19 +1,16 @@
 import { useState, useEffect } from 'react'
 import styles from './PuzzleSelector.module.css'
+import { fetchUnlockedPuzzles, formatDisplayDate } from '../utils/puzzleSchedule.js'
 
-export default function PuzzleSelector({ onSelectPuzzle, onBack }) {
-  const [manifest, setManifest] = useState(null)
+export default function PuzzleSelector({ onSelectPuzzle, onBack, progress = {} }) {
+  const [puzzles, setPuzzles] = useState(null)
   const [manifestError, setManifestError] = useState(null)
   const [loadingId, setLoadingId] = useState(null)
   const [puzzleError, setPuzzleError] = useState(null)
 
   useEffect(() => {
-    fetch('/puzzles/index.json')
-      .then(r => {
-        if (!r.ok) throw new Error('Could not load puzzle list')
-        return r.json()
-      })
-      .then(setManifest)
+    fetchUnlockedPuzzles()
+      .then(setPuzzles)
       .catch(e => setManifestError(e.message))
   }, [])
 
@@ -31,6 +28,9 @@ export default function PuzzleSelector({ onSelectPuzzle, onBack }) {
     }
   }
 
+  const playedCount = puzzles ? puzzles.filter(e => progress[e.id]).length : 0
+  const totalCount  = puzzles ? puzzles.length : 0
+
   return (
     <div className={styles.screen}>
       <header className={styles.header}>
@@ -39,37 +39,40 @@ export default function PuzzleSelector({ onSelectPuzzle, onBack }) {
             ‹ Back
           </button>
         )}
-        <h1 className={styles.title}>Choose a Puzzle</h1>
+        <h1 className={styles.title}>All Venns</h1>
+        {puzzles && (
+          <span className={styles.counter}>{playedCount} / {totalCount} played</span>
+        )}
       </header>
 
       <main className={styles.main}>
-        {manifestError && (
-          <p className={styles.error}>{manifestError}</p>
-        )}
-        {!manifest && !manifestError && (
-          <p className={styles.loading}>Loading puzzles…</p>
-        )}
-        {manifest && (
-          <ul className={styles.puzzleList}>
-            {manifest.puzzles.map(entry => (
-              <li key={entry.id}>
-                <button
-                  className={styles.puzzleButton}
-                  onClick={() => handleSelect(entry)}
-                  disabled={loadingId !== null}
-                >
-                  <span className={styles.puzzleTitle}>{entry.title}</span>
-                  {loadingId === entry.id && (
-                    <span className={styles.loadingDot}>…</span>
-                  )}
-                </button>
-              </li>
-            ))}
+        {manifestError && <p className={styles.error}>{manifestError}</p>}
+        {!puzzles && !manifestError && <p className={styles.loading}>Loading…</p>}
+        {puzzles && (
+          <ul className={styles.list}>
+            {puzzles.map(entry => {
+              const played = Boolean(progress[entry.id])
+              return (
+                <li key={entry.id}>
+                  <button
+                    className={`${styles.row} ${played ? styles.played : ''}`}
+                    onClick={() => handleSelect(entry)}
+                    disabled={loadingId !== null}
+                  >
+                    <span className={styles.date}>
+                      {formatDisplayDate(entry.year, entry.sequence)}
+                    </span>
+                    <span className={styles.rowTitle}>{entry.title}</span>
+                    <span className={styles.status}>
+                      {loadingId === entry.id ? '…' : played ? '✓' : ''}
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
           </ul>
         )}
-        {puzzleError && (
-          <p className={styles.error}>{puzzleError}</p>
-        )}
+        {puzzleError && <p className={styles.error}>{puzzleError}</p>}
       </main>
     </div>
   )

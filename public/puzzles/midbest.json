@@ -1,0 +1,68 @@
+{
+  "id": "midbest",
+  "year": 2025,
+  "sequence": 0,
+  "title": "More like MidBest",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Big 10 College Towns",
+    "B": "Founding Figures",
+    "C": "US Presidents"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Ann Arbor",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Hamilton",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Cleveland",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Lafayette",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Jefferson",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Lincoln",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Madison",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

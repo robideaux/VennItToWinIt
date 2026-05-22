@@ -1,0 +1,68 @@
+{
+  "id": "timetoshine",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Time to Shine",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Seasons",
+    "B": "Sudden Movements",
+    "C": "Watches"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Tax",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Vault",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Crown",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Duck",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Buckle",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Sweeps",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Spring",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

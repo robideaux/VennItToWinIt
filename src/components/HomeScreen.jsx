@@ -1,7 +1,18 @@
+import { useState, useEffect } from 'react'
 import styles from './HomeScreen.module.css'
 import { CIRCLE_COLORS } from '../styles/colors.js'
+import { fetchUnlockedPuzzles } from '../utils/puzzleSchedule.js'
 
-export default function HomeScreen({ onPlay, onHowToPlay, onSettings }) {
+export default function HomeScreen({ onPlayLatest, onAllVenns, onHowToPlay, onSettings, progress }) {
+  const [latestEntry, setLatestEntry] = useState(null)
+
+  useEffect(() => {
+    fetchUnlockedPuzzles()
+      .then(puzzles => setLatestEntry(puzzles[0] ?? null))
+      .catch(() => {})
+  }, [])
+
+  const isLatestNew = latestEntry != null && !progress[latestEntry.id]
   return (
     <div className={styles.screen}>
       <div className={styles.bg} aria-hidden="true">
@@ -23,8 +34,16 @@ export default function HomeScreen({ onPlay, onHowToPlay, onSettings }) {
         </header>
 
         <nav className={styles.nav}>
-          <button className={`${styles.btn} ${styles.primary}`} onClick={onPlay}>
-            Play
+          <button
+            className={`${styles.btn} ${styles.primary} ${isLatestNew ? styles.withBadge : ''}`}
+            onClick={() => onPlayLatest(latestEntry)}
+            disabled={latestEntry == null}
+          >
+            Play Latest Venn
+            {isLatestNew && <span className={styles.newBadge}>NEW</span>}
+          </button>
+          <button className={styles.btn} onClick={onAllVenns}>
+            All Venns…
           </button>
           <button className={styles.btn} onClick={onHowToPlay}>
             How To Play

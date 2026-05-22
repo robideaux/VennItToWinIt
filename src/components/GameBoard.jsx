@@ -21,8 +21,8 @@ export default function GameBoard({
   const [paused, setPaused] = useState(false)
 
   useEffect(() => {
-    if (game.phase === 'won')  onWin({ placements: game.placements, revealedCircles: game.revealedCircles })
-    if (game.phase === 'lost') onGameOver()
+    if (game.phase === 'won')  onWin({ placements: game.placements, revealedCircles: game.revealedCircles, attemptsUsed: puzzle.maxAttempts - game.attemptsLeft })
+    if (game.phase === 'lost') onGameOver({ attemptsUsed: puzzle.maxAttempts })
   }, [game.phase]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

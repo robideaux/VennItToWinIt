@@ -1,0 +1,69 @@
+{
+  "notes": "Should Insults be 'substandard' maybe?",
+  "id": "disneyorno",
+  "year": 2026,
+  "sequence": 0,
+  "title": "Disney or Didn't He?",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Disney Characters",
+    "B": "Insults",
+    "C": "Exhausted"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Eeyore",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Shoddy",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Bleary",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Mickey Mouse",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Tired",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Sleepy",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Dopey",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

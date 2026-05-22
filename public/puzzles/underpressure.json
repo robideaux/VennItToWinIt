@@ -1,0 +1,68 @@
+{
+  "id": "underpressure",
+  "year": 2025,
+  "sequence": 0,
+  "title": "Under Pressure",
+  "maxAttempts": 5,
+  "categories": {
+    "A": "Group of Buildings",
+    "B": "Complicated",
+    "C": "Mental Hurdles"
+  },
+  "terms": [
+    {
+      "id": "t1",
+      "label": "Campus",
+      "regions": [
+        "A"
+      ]
+    },
+    {
+      "id": "t2",
+      "label": "Tricky",
+      "regions": [
+        "B"
+      ]
+    },
+    {
+      "id": "t3",
+      "label": "Psychosis",
+      "regions": [
+        "C"
+      ]
+    },
+    {
+      "id": "t4",
+      "label": "Cluster",
+      "regions": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "id": "t5",
+      "label": "Ordeal",
+      "regions": [
+        "B",
+        "C"
+      ]
+    },
+    {
+      "id": "t6",
+      "label": "Block",
+      "regions": [
+        "A",
+        "C"
+      ]
+    },
+    {
+      "id": "t7",
+      "label": "Complex",
+      "regions": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}
