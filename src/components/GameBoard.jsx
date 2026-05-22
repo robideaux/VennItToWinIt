@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useGameState } from '../hooks/useGameState.js'
+import { useShuffleAnimation } from '../hooks/useShuffleAnimation.js'
 import VennDiagram from './VennDiagram.jsx'
 import CircleLabel from './CircleLabels.jsx'
-import TermBank from './TermBank.jsx'
 import SubmitBar from './SubmitBar.jsx'
 import styles from './GameBoard.module.css'
 
@@ -17,6 +17,7 @@ export default function GameBoard({
   onQuit,
 }) {
   const game = useGameState(puzzle)
+  const shuffle = useShuffleAnimation()
   const [paused, setPaused] = useState(false)
 
   useEffect(() => {
@@ -24,7 +25,15 @@ export default function GameBoard({
     if (game.phase === 'lost') onGameOver()
   }, [game.phase]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    shuffle.start()
+  }, [game.gameKey]) // eslint-disable-line react-hooks/exhaustive-deps
+
   function handleRegionClick(regionKey) {
+    if (shuffle.step !== null) {
+      shuffle.skip()
+      return
+    }
     if (regionKey === null) {
       if (game.selectedTermId) game.selectTerm(game.selectedTermId)
       return
@@ -57,7 +66,17 @@ export default function GameBoard({
       </header>
 
       <div className={styles.body}>
-        {/* Left/top: diagram */}
+        {/* Top/left: submit bar always visible */}
+        <div className={styles.ctrlSide}>
+          <SubmitBar
+            attemptsLeft={game.attemptsLeft}
+            maxAttempts={puzzle.maxAttempts}
+            canSubmit={game.allRegionsFilled}
+            onSubmit={game.submitGuess}
+          />
+        </div>
+
+        {/* Bottom/right: diagram */}
         <div className={styles.vennSide}>
           <div className={styles.vennWrap}>
             <CircleLabel circleId="1" revealedCircles={game.revealedCircles} />
@@ -70,27 +89,10 @@ export default function GameBoard({
               revealedCircles={game.revealedCircles}
               validTargets={game.selectedTermId ? game.validTargetsFor(game.selectedTermId) : []}
               onRegionClick={handleRegionClick}
+              shuffleStep={shuffle.step}
               debugMode={debugMode}
             />
           </div>
-        </div>
-
-        {/* Right/bottom: term bank until all placed, then submit bar */}
-        <div className={styles.ctrlSide}>
-          {game.unplacedTerms.length > 0 ? (
-            <TermBank
-              terms={game.unplacedTerms}
-              selectedTermId={game.selectedTermId}
-              onSelectTerm={game.selectTerm}
-            />
-          ) : (
-            <SubmitBar
-              attemptsLeft={game.attemptsLeft}
-              maxAttempts={puzzle.maxAttempts}
-              canSubmit={game.allRegionsFilled}
-              onSubmit={game.submitGuess}
-            />
-          )}
         </div>
       </div>
 

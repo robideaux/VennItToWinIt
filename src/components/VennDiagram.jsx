@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { REGION_KEYS } from '../utils/puzzleUtils.js'
 import { CIRCLE_COLORS, COL_SOURCE, COL_SOURCE_BG, COL_TARGET, COL_TARGET_BG } from '../styles/colors.js'
 import styles from './VennDiagram.module.css'
@@ -26,8 +27,8 @@ const CALLOUT_REGIONS = new Set(['12', '13', '23'])
 
 // Dead-space anchor point for each callout label pill
 const CALLOUT_ANCHORS = {
-  '12': { cx: 30,  cy: 133 },
-  '13': { cx: 290, cy: 133 },
+  '12': { cx: 38,  cy: 133 },
+  '13': { cx: 282, cy: 133 },
   '23': { cx: 160, cy: 352 },
 }
 
@@ -45,6 +46,7 @@ export default function VennDiagram({
   revealedCircles,
   validTargets = [],
   onRegionClick,
+  shuffleStep = null,
   debugMode = false,
 }) {
   const revealMap = Object.fromEntries(revealedCircles.map(r => [r.circleId, r]))
@@ -206,7 +208,86 @@ export default function VennDiagram({
           </g>
         )
       })}
+      {/* ── Shuffle animation overlay ── */}
+      {shuffleStep && (() => {
+        const fromTerm = puzzle.terms.find(t => t.id === placements[shuffleStep.fromKey])
+        const toTerm   = puzzle.terms.find(t => t.id === placements[shuffleStep.toKey])
+        return (
+          <ShuffleOverlay
+            step={shuffleStep}
+            fromLabel={fromTerm?.label ?? ''}
+            toLabel={toTerm?.label ?? ''}
+          />
+        )
+      })()}
     </svg>
+  )
+}
+
+function visualCenter(key) {
+  return CALLOUT_REGIONS.has(key) ? CALLOUT_ANCHORS[key] : CENTROIDS[key]
+}
+
+function ShuffleOverlay({ step, fromLabel, toLabel }) {
+  const { fromKey, toKey } = step
+  const from = visualCenter(fromKey)
+  const to   = visualCenter(toKey)
+  const [pos, setPos] = useState({ cx: from.cx, cy: from.cy, animated: false })
+
+  useEffect(() => {
+    setPos({ cx: from.cx, cy: from.cy, animated: false })
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setPos({ cx: to.cx, cy: to.cy, animated: true })
+      })
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [fromKey, toKey])  // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <g style={{ pointerEvents: 'none' }}>
+      <ShuffleChip cx={to.cx}   cy={to.cy}   label={toLabel}   fill={COL_TARGET_BG} stroke={COL_TARGET} textColor={COL_TARGET} />
+      <ShuffleChip cx={pos.cx}  cy={pos.cy}  label={fromLabel} fill={COL_SOURCE_BG} stroke={COL_SOURCE} textColor="#7d5a00" animated={pos.animated} />
+    </g>
+  )
+}
+
+function ShuffleChip({ cx, cy, label, fill, stroke, textColor, animated = false }) {
+  const bgW     = 70
+  const words   = label.split(' ')
+  const twoLine = words.length > 1
+  const bgH     = twoLine ? 36 : 24
+  const trans   = animated ? 'x 0.20s ease-out, y 0.20s ease-out' : 'none'
+
+  return (
+    <g>
+      <rect
+        x={cx - bgW / 2} y={cy - bgH / 2}
+        width={bgW} height={bgH} rx={bgH / 2}
+        fill={fill} stroke={stroke} strokeWidth={2}
+        style={{ transition: trans }}
+      />
+      {twoLine ? (
+        <>
+          <text x={cx} y={cy - 6} textAnchor="middle" fontSize={10.5}
+            fontFamily="system-ui, sans-serif" fontWeight={600} fill={textColor}
+            style={{ transition: trans }}>
+            {words[0]}
+          </text>
+          <text x={cx} y={cy + 8} textAnchor="middle" fontSize={10.5}
+            fontFamily="system-ui, sans-serif" fontWeight={600} fill={textColor}
+            style={{ transition: trans }}>
+            {words.slice(1).join(' ')}
+          </text>
+        </>
+      ) : (
+        <text x={cx} y={cy + 4} textAnchor="middle" fontSize={11}
+          fontFamily="system-ui, sans-serif" fontWeight={600} fill={textColor}
+          style={{ transition: trans }}>
+          {label}
+        </text>
+      )}
+    </g>
   )
 }
 

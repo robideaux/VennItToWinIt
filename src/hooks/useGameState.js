@@ -1,14 +1,34 @@
 import { useState } from 'react'
 import { REGION_KEYS, getCorrectCircles, getValidTargets } from '../utils/puzzleUtils.js'
 
+function shuffle(arr) {
+  const a = [...arr]
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+function randomizePlacements(puzzle) {
+  const termIds = puzzle.terms.map(t => t.id)
+  let placements
+  do {
+    const shuffled = shuffle(termIds)
+    placements = Object.fromEntries(REGION_KEYS.map((k, i) => [k, shuffled[i]]))
+  } while (getCorrectCircles(puzzle, placements).length > 0)
+  return placements
+}
+
 function initialState(puzzle) {
   return {
-    placements: Object.fromEntries(REGION_KEYS.map(k => [k, null])),
+    placements: randomizePlacements(puzzle),
     selectedTermId: null,
     attemptsLeft: puzzle.maxAttempts,
     revealedCircles: [],  // [{ circleId, category, name }]
     lastSubmitResult: null,
     phase: 'playing',     // 'playing' | 'won' | 'lost'
+    gameKey: 0,
   }
 }
 
@@ -94,7 +114,7 @@ export function useGameState(puzzle) {
   }
 
   function resetGame() {
-    setState(initialState(puzzle))
+    setState(s => ({ ...initialState(puzzle), gameKey: s.gameKey + 1 }))
   }
 
   return {
@@ -105,6 +125,7 @@ export function useGameState(puzzle) {
     revealedCircles: state.revealedCircles,
     lastSubmitResult: state.lastSubmitResult,
     phase: state.phase,
+    gameKey: state.gameKey,
     // Derived
     unplacedTerms,
     allRegionsFilled,
