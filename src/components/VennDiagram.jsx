@@ -32,10 +32,10 @@ const CALLOUT_ANCHORS = {
   '23': { cx: 160, cy: 352 },
 }
 
-// Hit-test a label pill (70px wide, 24/36px tall) centered at (cx,cy), plus touch margin
+// Hit-test a label pill (74px wide, 26/38px tall) centered at (cx,cy), plus touch margin
 function hitsPill(x, y, cx, cy, label, margin = 5) {
-  const halfW = 35 + margin
-  const halfH = (label.split(' ').length > 1 ? 18 : 12) + margin
+  const halfW = 37 + margin
+  const halfH = (label.split(' ').length > 1 ? 19 : 13) + margin
   return Math.abs(x - cx) <= halfW && Math.abs(y - cy) <= halfH
 }
 
@@ -253,10 +253,10 @@ function ShuffleOverlay({ step, fromLabel, toLabel }) {
 }
 
 function ShuffleChip({ cx, cy, label, fill, stroke, textColor, animated = false }) {
-  const bgW     = 70
+  const bgW     = 74
   const words   = label.split(' ')
   const twoLine = words.length > 1
-  const bgH     = twoLine ? 36 : 24
+  const bgH     = twoLine ? 38 : 26
   const trans   = animated ? 'x 0.20s ease-out, y 0.20s ease-out' : 'none'
 
   return (
@@ -269,19 +269,19 @@ function ShuffleChip({ cx, cy, label, fill, stroke, textColor, animated = false 
       />
       {twoLine ? (
         <>
-          <text x={cx} y={cy - 6} textAnchor="middle" fontSize={10.5}
+          <text x={cx} y={cy - 6} textAnchor="middle" fontSize={11.5}
             fontFamily="system-ui, sans-serif" fontWeight={600} fill={textColor}
             style={{ transition: trans }}>
             {words[0]}
           </text>
-          <text x={cx} y={cy + 8} textAnchor="middle" fontSize={10.5}
+          <text x={cx} y={cy + 8} textAnchor="middle" fontSize={11.5}
             fontFamily="system-ui, sans-serif" fontWeight={600} fill={textColor}
             style={{ transition: trans }}>
             {words.slice(1).join(' ')}
           </text>
         </>
       ) : (
-        <text x={cx} y={cy + 4} textAnchor="middle" fontSize={11}
+        <text x={cx} y={cy + 4} textAnchor="middle" fontSize={12}
           fontFamily="system-ui, sans-serif" fontWeight={600} fill={textColor}
           style={{ transition: trans }}>
           {label}
@@ -294,8 +294,8 @@ function ShuffleChip({ cx, cy, label, fill, stroke, textColor, animated = false 
 function TermLabel({ cx, cy, label, isSource, isTarget, isInactive }) {
   const words   = label.split(' ')
   const twoLine = words.length > 1
-  const bgW     = 70
-  const bgH     = twoLine ? 36 : 24
+  const bgW     = 74
+  const bgH     = twoLine ? 38 : 26
 
   const borderColor = isSource ? COL_SOURCE : isTarget ? COL_TARGET : isInactive ? '#bbb' : '#ccc'
   const fillColor   = isSource ? COL_SOURCE_BG : isTarget ? COL_TARGET_BG : isInactive ? '#dadde0' : 'rgba(255,255,255,0.92)'
@@ -315,13 +315,13 @@ function TermLabel({ cx, cy, label, isSource, isTarget, isInactive }) {
       {twoLine ? (
         <>
           <text x={cx} y={cy - 6}
-            textAnchor="middle" fontSize={10.5}
+            textAnchor="middle" fontSize={11.5}
             fontFamily="system-ui, sans-serif" fontWeight={600}
             fill={textColor}>
             {words[0]}
           </text>
           <text x={cx} y={cy + 8}
-            textAnchor="middle" fontSize={10.5}
+            textAnchor="middle" fontSize={11.5}
             fontFamily="system-ui, sans-serif" fontWeight={600}
             fill={textColor}>
             {words.slice(1).join(' ')}
@@ -329,7 +329,7 @@ function TermLabel({ cx, cy, label, isSource, isTarget, isInactive }) {
         </>
       ) : (
         <text x={cx} y={cy + 4}
-          textAnchor="middle" fontSize={11}
+          textAnchor="middle" fontSize={12}
           fontFamily="system-ui, sans-serif" fontWeight={600}
           fill={textColor}>
           {label}

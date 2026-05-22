@@ -47,14 +47,13 @@
   opacity: 0.88;
 }
 
-/* ── Landscape: stacked vertically in the right panel ── */
+/* ── Landscape: stacked vertically in the left panel, top-justified ── */
 @media (orientation: landscape) {
   .bar {
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    flex: 1;
-    gap: 16px;
-    padding: 16px;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 14px 10px;
   }
 }

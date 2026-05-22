@@ -62,13 +62,13 @@
 }
 
 .placeholder {
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   font-style: italic;
   opacity: 0.65;
 }
 
 .revealed {
-  font-size: 1rem;
+  font-size: 1.08rem;
   font-weight: 700;
   color: var(--color-text);
 }
