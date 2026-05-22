@@ -37,6 +37,12 @@
   /* ── Decorative Venn overlay (home screen bg circles) ────────────────────── */
   --blend-mode-overlay: multiply;
 
+  /* ── Layout ─────────────────────────────────────────────────────────────── */
+  --nav-slot:        80px;  /* fixed width of the left nav slot (back button / menu button) */
+  --header-height:   52px;  /* height of every screen's top header bar */
+  --header-pad-x:    20px;  /* horizontal padding inside the header */
+  --header-gap:      12px;  /* gap between the nav slot and the title text */
+
   /* ── Circle label chips ───────────────────────────────────────────────────── */
   --chip-bg-unrevealed: rgba(173, 181, 189, 0.25);
   --chip-bg-revealed:   rgba(255, 255, 255, 0.90);

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import HomeScreen from './components/HomeScreen.jsx'
 import HowToPlayScreen from './components/HowToPlayScreen.jsx'
 import SettingsScreen from './components/SettingsScreen.jsx'
@@ -16,52 +16,90 @@ export default function App() {
   const [gameKey, setGameKey] = useState(0)
   const [finalGameState, setFinalGameState] = useState(null)
   // Overlay rendered on top of GameBoard without unmounting it (preserves game state)
-  const [gameOverlay, setGameOverlay] = useState(null) // null | 'settings' | 'howto'
+  const [gameOverlay, setGameOverlay] = useState(null) // null | 'settings' | 'howto' | 'selector'
+
+  useEffect(() => {
+    // Seed the initial history entry so back-navigation lands here instead of leaving the app
+    history.replaceState({ screen: 'home' }, '')
+
+    function onPopState(e) {
+      const state = e.state
+      if (!state?.screen) return
+      setGameOverlay(state.overlay ?? null)
+      setScreen(state.screen)
+    }
+
+    window.addEventListener('popstate', onPopState)
+    return () => window.removeEventListener('popstate', onPopState)
+  }, [])
 
   function handleSelectPuzzle(puzzle) {
-    setGameOverlay(null)
     setActivePuzzle(puzzle)
     setGameKey(k => k + 1)
+    // If selecting from the mid-game selector overlay, replace that entry so back
+    // doesn't reopen the overlay on the new game
+    if (gameOverlay) {
+      history.replaceState({ screen: 'game' }, '')
+    } else {
+      history.pushState({ screen: 'game' }, '')
+    }
+    setGameOverlay(null)
     setScreen('game')
   }
 
   function handleWin({ placements, revealedCircles }) {
     setGameOverlay(null)
     setFinalGameState({ placements, revealedCircles })
+    // Replace the game entry — back from win goes to selector, not back into the finished game
+    history.replaceState({ screen: 'win' }, '')
     setScreen('win')
   }
 
   function handleGameOver() {
     setGameOverlay(null)
+    history.replaceState({ screen: 'gameover' }, '')
     setScreen('gameover')
   }
 
   function handleRetry() {
+    history.replaceState({ screen: 'game' }, '')
     setScreen('game')
   }
 
   function handleBackToSelector() {
     setActivePuzzle(null)
+    history.pushState({ screen: 'selector' }, '')
     setScreen('selector')
   }
 
   function handleBackToHome() {
-    setScreen('home')
+    // Let the browser pop the history entry; popstate listener handles setScreen
+    history.back()
   }
 
   function handleQuit() {
     setGameOverlay(null)
     setActivePuzzle(null)
+    history.pushState({ screen: 'home' }, '')
     setScreen('home')
+  }
+
+  function openOverlay(overlay) {
+    history.pushState({ screen: 'game', overlay }, '')
+    setGameOverlay(overlay)
+  }
+
+  function closeOverlay() {
+    history.back()
   }
 
   return (
     <>
       {screen === 'home' && (
         <HomeScreen
-          onPlay={() => setScreen('selector')}
-          onHowToPlay={() => setScreen('howto')}
-          onSettings={() => setScreen('settings')}
+          onPlay={() => { history.pushState({ screen: 'selector' }, ''); setScreen('selector') }}
+          onHowToPlay={() => { history.pushState({ screen: 'howto' }, ''); setScreen('howto') }}
+          onSettings={() => { history.pushState({ screen: 'settings' }, ''); setScreen('settings') }}
         />
       )}
       {screen === 'howto' && (
@@ -84,27 +122,27 @@ export default function App() {
             onWin={handleWin}
             onGameOver={handleGameOver}
             debugMode={debugMode}
-            onOpenSettings={() => setGameOverlay('settings')}
-            onOpenHowTo={() => setGameOverlay('howto')}
-            onSelectGame={() => setGameOverlay('selector')}
+            onOpenSettings={() => openOverlay('settings')}
+            onOpenHowTo={() => openOverlay('howto')}
+            onSelectGame={() => openOverlay('selector')}
             onQuit={handleQuit}
           />
           {/* Settings/HowTo rendered fixed on top — GameBoard stays mounted, game state preserved */}
           {gameOverlay === 'settings' && (
             <div style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto' }}>
-              <SettingsScreen onBack={() => setGameOverlay(null)} />
+              <SettingsScreen onBack={closeOverlay} />
             </div>
           )}
           {gameOverlay === 'howto' && (
             <div style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto' }}>
-              <HowToPlayScreen onBack={() => setGameOverlay(null)} />
+              <HowToPlayScreen onBack={closeOverlay} />
             </div>
           )}
           {gameOverlay === 'selector' && (
             <div style={{ position: 'fixed', inset: 0, zIndex: 100, overflowY: 'auto' }}>
               <PuzzleSelector
                 onSelectPuzzle={handleSelectPuzzle}
-                onBack={() => setGameOverlay(null)}
+                onBack={closeOverlay}
               />
             </div>
           )}
