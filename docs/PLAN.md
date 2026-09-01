@@ -140,6 +140,8 @@ Category label lives inside the exclusive sub-region of its circle (regions `1`,
 
 ## Layout Redesign — TermBank / SubmitBar Co-location
 
+**Superseded (2026-09-01):** Phase 14 (Per-Circle Submit) removes the global SubmitBar entirely — ctrlSide will only ever show the TermBank. Section kept for history.
+
 **Decision:** Move SubmitBar out of `.header` and into `.ctrlSide`, co-located with the TermBank.
 Reverses the Phase 5.5 decision (SubmitBar in header) in favor of a single unified slot at the bottom (portrait) or right panel (landscape).
 
@@ -303,8 +305,8 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 
 ## Phase 6 — Submit Logic
 
-- [x] 6.1 Build `SubmitBar.jsx` — Submit button (disabled until all 7 regions filled) + pip display for attempts remaining
-- [x] 6.2 Wire Submit button to `submitGuess()` in game state
+- [~] 6.1 ~~Build `SubmitBar.jsx` — single Submit button + pip display~~ — superseded by Phase 14 (per-circle submit)
+- [~] 6.2 ~~Wire Submit button to `submitGuess()` in game state~~ — superseded by Phase 14 (`submitCircle(circleId)`)
 - [x] 6.3 Reveal correct circle labels after submit (update VennDiagram to show real name when in `revealedCircles`)
 - [~] 6.4 ~~Per-region correct/incorrect feedback~~ — skipped for v1; circle-reveal already gives meaningful feedback
 - [x] 6.5 Verify win condition triggers correctly (all 3 circles revealed)
@@ -433,6 +435,30 @@ High-level scope: allow a user to create and play their own custom puzzles witho
 
 ---
 
+## Phase 14 — Per-Circle Submit
+
+**Decision (2026-09-01):** Replace the single global Submit button with a per-circle submit built into each circle's label chip. Motivation: with one global Submit checking the whole board, a player can fill all 7 regions while only ever consciously reasoning about one circle at a time, then win the entire puzzle off a single accidental submit — never deliberately committing to the other two groups. Builds directly on existing group-locking (`getValidTargets`, see "Partial Credit / Group Locking" above).
+
+**Key decisions locked:**
+- Attempts stay a single shared pool per puzzle (`maxAttempts` from JSON, unchanged) — each per-circle submit decrements it by 1, same cost as today's global submit. No puzzle JSON/schema changes.
+- A circle's submit chip is enabled only when that circle's own 4 regions are filled — a per-circle version of today's `allRegionsFilled`, independent of the other two circles.
+- Once a circle is revealed correct, its chip switches to its existing revealed-state display (real category name) and stops being a submit target — no separate "locked" visual needed.
+- Attempts pips move from the ctrlSide SubmitBar into the header (right side).
+- ctrlSide keeps only the TermBank; it renders nothing (and disappears) once the bank is empty, per the original Phase 5.1 design — no more bank/submit swap.
+- Supersedes Phase 6.1/6.2 and the "TermBank / SubmitBar Co-location" layout section above.
+
+### Tasks
+- [ ] 14.1 `CircleLabels.jsx` — chip becomes a button when its circle is unrevealed; `onClick` fires a per-circle submit
+- [ ] 14.2 `useGameState.js` — replace `submitGuess()` with `submitCircle(circleId)`: checks only that circle, decrements shared `attemptsLeft`, reveals+locks on success
+- [ ] 14.3 Per-circle enabled state: that circle's 4 regions filled, independent of the other two circles (not the old `allRegionsFilled`)
+- [ ] 14.4 Win condition unchanged (`revealedCircles.length === 3`); loss condition unchanged (`attemptsLeft <= 0`)
+- [ ] 14.5 Remove `SubmitBar.jsx` / `SubmitBar.module.css`; remove the ctrlSide bank↔submit swap logic in `GameBoard.jsx`
+- [ ] 14.6 Add attempts pips to the header (right side), portrait + landscape
+- [ ] 14.7 Verify the circle-1 chip's tap target doesn't collide with diagram hit-test geometry (check during the in-progress landscape chip positioning work)
+- [ ] 14.8 Verify repeated wrong submits on the same circle behave sanely (no double-decrement, no partial lock on failure)
+
+---
+
 ## Notes
 
 - After Phase 1 and each subsequent phase, discuss before moving on
@@ -481,12 +507,15 @@ No routing infrastructure changes needed — the existing state-based screen mod
 - Useful for tutorials, demos, or younger players
 
 ### Partial Credit / Group Locking
-- When a player submits and one full group is correctly identified (the right 4 terms all within the same circle, even if sub-regions are wrong), reward that:
+
+**Status: already implemented** (doc was stale — this shipped alongside the lenient circle-reveal logic). See `getValidTargets` in `src/utils/puzzleUtils.js`. This is the foundation Phase 14 (Per-Circle Submit) builds on.
+
+- When a player submits and one full group is correctly identified (the right 4 terms all within the same circle, even if sub-regions are wrong), that circle is revealed and locked:
   - Reveal that circle's category label
   - Lock those 4 terms to that circle — they can still move between the circle's 4 sub-regions, but cannot leave it
-- **Interaction rules (per user spec):**
+- **Interaction rules (implemented as specified):**
   - Clicking a term inside a locked circle → only that circle's 4 sub-regions are valid drop targets
   - Clicking a term outside any locked circle → valid drop targets exclude all sub-regions of locked circles
   - Swap mechanic: a locked term displaced by a swap must land within its own locked circle; if no valid sub-region is available, the swap is blocked
-- **Visual communication TBD:** how to show a circle is locked (border? badge? greyed swap targets?)
+- **Visual communication:** resolved via the existing revealed-chip styling (real category name, full opacity) — no separate locked indicator needed
 - Fresh-evaluation submit (Option B) is already in place — locking makes reveals sticky again, but intentionally via lock rather than by accident

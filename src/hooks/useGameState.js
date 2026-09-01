@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { REGION_KEYS, getCorrectCircles, getValidTargets } from '../utils/puzzleUtils.js'
+import { REGION_KEYS, CIRCLE_REGIONS, getCorrectCircles, getValidTargets } from '../utils/puzzleUtils.js'
 
 function shuffle(arr) {
   const a = [...arr]
@@ -44,7 +44,8 @@ export function useGameState(puzzle) {
     const id = state.placements[regionKey]
     return id ? puzzle.terms.find(t => t.id === id) ?? null : null
   }
-  const allRegionsFilled = REGION_KEYS.every(k => state.placements[k] !== null)
+  const isCircleFilled = (circleId) =>
+    CIRCLE_REGIONS[circleId].every(k => state.placements[k] !== null)
 
   const validTargetsFor = (termId) => {
     const term = puzzle.terms.find(t => t.id === termId)
@@ -85,21 +86,19 @@ export function useGameState(puzzle) {
     })
   }
 
-  function submitGuess() {
+  function submitCircle(circleId) {
     setState(s => {
       if (s.phase !== 'playing') return s
+      if (s.revealedCircles.some(c => c.circleId === circleId)) return s // already locked
+      if (!CIRCLE_REGIONS[circleId].every(k => s.placements[k] !== null)) return s // not filled yet
 
-      const newlyRevealed = getCorrectCircles(puzzle, s.placements)
-      const existingIds = new Set(s.revealedCircles.map(c => c.circleId))
-      const merged = [
-        ...s.revealedCircles,
-        ...newlyRevealed.filter(c => !existingIds.has(c.circleId)),
-      ]
+      const result = getCorrectCircles(puzzle, s.placements).find(c => c.circleId === circleId)
+      const merged = result ? [...s.revealedCircles, result] : s.revealedCircles
 
       const newAttemptsLeft = s.attemptsLeft - 1
 
       const newPhase =
-        merged.length === 3  ? 'won'
+        merged.length === 3   ? 'won'
         : newAttemptsLeft <= 0 ? 'lost'
         : 'playing'
 
@@ -108,7 +107,7 @@ export function useGameState(puzzle) {
         revealedCircles: merged,
         attemptsLeft: newAttemptsLeft,
         phase: newPhase,
-        lastSubmitResult: { correct: merged },
+        lastSubmitResult: { circleId, correct: !!result },
       }
     })
   }
@@ -128,14 +127,14 @@ export function useGameState(puzzle) {
     gameKey: state.gameKey,
     // Derived
     unplacedTerms,
-    allRegionsFilled,
+    isCircleFilled,
     isTermPlaced,
     termInRegion,
     validTargetsFor,
     // Actions
     selectTerm,
     placeTerm,
-    submitGuess,
+    submitCircle,
     resetGame,
   }
 }

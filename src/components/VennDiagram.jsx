@@ -132,7 +132,7 @@ export default function VennDiagram({
           key={`stroke-${c.id}`}
           cx={c.cx} cy={c.cy} r={c.r}
           fill="none"
-          stroke={revealMap[c.id] ? c.bold : c.muted}
+          stroke={c.bold}
           strokeWidth={2}
         />
       ))}

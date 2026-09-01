@@ -3,7 +3,6 @@ import { useGameState } from '../hooks/useGameState.js'
 import { useShuffleAnimation } from '../hooks/useShuffleAnimation.js'
 import VennDiagram from './VennDiagram.jsx'
 import CircleLabel from './CircleLabels.jsx'
-import SubmitBar from './SubmitBar.jsx'
 import styles from './GameBoard.module.css'
 
 export default function GameBoard({
@@ -63,25 +62,40 @@ export default function GameBoard({
           ☰
         </button>
         <h1 className={styles.title}>{puzzle.title}</h1>
+        <div
+          className={styles.pips}
+          aria-label={`${game.attemptsLeft} of ${puzzle.maxAttempts} attempts remaining`}
+        >
+          {Array.from({ length: puzzle.maxAttempts }, (_, i) => (
+            <span
+              key={i}
+              className={`${styles.pip} ${i < game.attemptsLeft ? styles.pipActive : ''}`}
+            />
+          ))}
+        </div>
       </header>
 
       <div className={styles.body}>
-        {/* Top/left: submit bar always visible */}
-        <div className={styles.ctrlSide}>
-          <SubmitBar
-            attemptsLeft={game.attemptsLeft}
-            maxAttempts={puzzle.maxAttempts}
-            canSubmit={game.allRegionsFilled}
-            onSubmit={game.submitGuess}
-          />
-        </div>
-
-        {/* Bottom/right: diagram */}
         <div className={styles.vennSide}>
           <div className={styles.vennWrap}>
-            <CircleLabel circleId="1" revealedCircles={game.revealedCircles} />
-            <CircleLabel circleId="2" revealedCircles={game.revealedCircles} />
-            <CircleLabel circleId="3" revealedCircles={game.revealedCircles} />
+            <CircleLabel
+              circleId="1"
+              revealedCircles={game.revealedCircles}
+              onSubmit={game.submitCircle}
+              canSubmit={game.isCircleFilled('1')}
+            />
+            <CircleLabel
+              circleId="2"
+              revealedCircles={game.revealedCircles}
+              onSubmit={game.submitCircle}
+              canSubmit={game.isCircleFilled('2')}
+            />
+            <CircleLabel
+              circleId="3"
+              revealedCircles={game.revealedCircles}
+              onSubmit={game.submitCircle}
+              canSubmit={game.isCircleFilled('3')}
+            />
             <VennDiagram
               puzzle={puzzle}
               placements={game.placements}
