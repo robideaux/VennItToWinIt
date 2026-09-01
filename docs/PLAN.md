@@ -290,6 +290,15 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 - [~] S.3 ~~Compare both~~ — skipped; committing to Option B
 - [x] S.4 Confirm circle label chip positions (bottom corners, top positions) still land at diagram edges under chosen approach
 
+**In progress (2026-09-01, uncommitted):** further visual tuning of the layout landed in S.1–S.4, testing look & feel before committing. Currently touching:
+- `VennDiagram.jsx` — '23' region centroid/callout anchor nudged up (270→250, 352→340)
+- `VennDiagram.module.css` — SVG `height: 100%` re-enabled
+- `shared.module.css` — vennWrap cap multiplier raised 150→160 (vw portrait / vh landscape)
+- `GameBoard.module.css` — landscape `.ctrlSide` fixed 160px width disabled, reverting to content-sized (per L.5)
+- `CircleLabels.module.css` — new landscape-specific chip positioning for circles 1/2/3
+- [ ] Finish visual pass, then commit
+- [ ] Clean up stray "Portrait positioning" comment left on the landscape block in `CircleLabels.module.css`
+
 ---
 
 ## Phase 6 — Submit Logic
@@ -337,14 +346,14 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 
 ---
 
-## Phase 10 — Theme (Light / Dark Mode)
+## Phase 10 — Theme (Light / Dark Mode) — COMPLETE (2026-05-14)
 
-- [ ] 10.1 Audit all hardcoded color values across CSS modules and global.css
-- [ ] 10.2 Replace with CSS custom properties (`--color-bg`, `--color-surface`, `--color-text`, etc.)
-- [ ] 10.3 Define light theme (default) and dark theme values
-- [ ] 10.4 Follow device preference via `@media (prefers-color-scheme: dark)` — no manual toggle needed for v1
-- [ ] 10.5 Verify Venn diagram circle colors and callout labels remain readable in both themes
-- [ ] 10.6 Settings screen (Phase 11) can expose a manual override toggle if desired
+- [x] 10.1 Audit all hardcoded color values across CSS modules and global.css
+- [x] 10.2 Replace with CSS custom properties (`--color-bg`, `--color-surface`, `--color-text`, etc.)
+- [x] 10.3 Define light theme (default) and dark theme values
+- [x] 10.4 Follow device preference via `@media (prefers-color-scheme: dark)` — no manual toggle needed for v1
+- [x] 10.5 Verify Venn diagram circle colors and callout labels remain readable in both themes
+- [x] 10.6 Settings screen (Phase 11) exposes a manual Light/System/Dark override toggle
 
 ---
 
@@ -454,13 +463,14 @@ No routing infrastructure changes needed — the existing state-based screen mod
 
 ### Older Puzzle Conversion
 
-A batch of puzzles exists in an older format outside the repo. Before adding them:
-- Review each puzzle for quality (remove unwanted ones)
-- Convert to the new format: `2026_NNN.json` filename, add `year` + `sequence` fields, update `id`
-- Assign final sequence numbers (all filenames and sequence numbers are subject to change as the library grows)
-- Add each to `index.json`
+**Status (2026-09-01):** 34 puzzles from the older batch were imported and added to `index.json` (commit `8a452a9`, 2026-05-22) under their original filenames, each with placeholder `"year": 2025, "sequence": 0`. Since the unlock rule treats `year < current year` as always-unlocked, all 34 are currently live/playable.
 
-Note: sequence numbers (and thus filenames) across the whole library will be renumbered when the full set is finalized.
+**This is intentional for now** — decision confirmed 2026-09-01: leave them active. They're not production-ready but are useful test content while layout/UX work continues. Still outstanding before these are real content:
+- [ ] Review each puzzle for quality (remove unwanted ones)
+- [ ] Rename to final format: `2026_NNN.json`, real `year` + `sequence`, matching `id`
+- [ ] Resolve duplicate title: `2026_002` ("Just Relax") and `relaxgame.json` (also "Just Relax") — likely the same puzzle twice
+- [ ] Typo: `naturalirrational.json` title reads "Natrually Irrational"
+- [ ] Assign final sequence numbers (subject to change until the library is finalized)
 
 ---
 

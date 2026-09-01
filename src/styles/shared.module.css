@@ -16,14 +16,14 @@
 
 @media (orientation: portrait) {
   .vennWrap {
-    max-height: 150vw;
+    max-height: 160vw;
     margin: 0 auto;
   }
 }
 
 @media (orientation: landscape) {
   .vennWrap {
-    max-width: 150vh;
+    max-width: 160vh;
     margin: 0 auto;
   }
 }

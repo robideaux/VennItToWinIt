@@ -18,7 +18,7 @@ const CENTROIDS = {
   '3':   { cx: 265, cy: 250 },
   '12':  { cx: 120, cy: 175 },
   '13':  { cx: 200, cy: 175 },
-  '23':  { cx: 160, cy: 270 },
+  '23':  { cx: 160, cy: 250 },
   '123': { cx: 160, cy: 195 },
 }
 
@@ -29,7 +29,7 @@ const CALLOUT_REGIONS = new Set(['12', '13', '23'])
 const CALLOUT_ANCHORS = {
   '12': { cx: 38,  cy: 133 },
   '13': { cx: 282, cy: 133 },
-  '23': { cx: 160, cy: 352 },
+  '23': { cx: 160, cy: 340 },
 }
 
 // Hit-test a label pill (74px wide, 26/38px tall) centered at (cx,cy), plus touch margin

@@ -83,3 +83,24 @@
     color: #ffffff;
   }
 }
+
+
+/* ── Landscape ── */
+@media (orientation: landscape) {
+  /* ── Portrait positioning ── */
+  .circle1 {
+    top: 5px;
+    right: 65%;
+  }
+
+  .circle2 {
+    bottom: 10%;
+    left: 1px;
+  }
+
+  .circle3 {
+    bottom: 10%;
+    right: 2px;
+  }
+}
+

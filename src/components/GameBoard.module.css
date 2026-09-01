@@ -86,7 +86,7 @@
   .vennSide {
     flex: 1;
     min-width: 0;
-    padding: 4px 4px 20px 4px;
+    padding: 4px 4px 4px 4px;
   }
 
   .header {
@@ -95,8 +95,10 @@
 
 
   .ctrlSide {
+    /*
     width: 160px;
     min-width: unset;
+    */
     overflow-y: auto;
     border-bottom: none;
     border-right: 1px solid var(--color-border);
