@@ -59,13 +59,13 @@
   background: var(--color-accent-tint-hover);
 }
 
-.vennWrap {
-  composes: vennWrap from '../styles/shared.module.css';
+.body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-/* ── Landscape ── */
-@media (orientation: landscape) {
-  .screen {
-    flex-direction: row;
-  }
+.vennWrap {
+  composes: vennWrap from '../styles/shared.module.css';
 }

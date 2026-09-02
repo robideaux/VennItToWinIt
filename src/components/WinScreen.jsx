@@ -10,18 +10,20 @@ export default function WinScreen({ puzzle, placements, revealedCircles, onPlayA
         <button className={styles.btn} onClick={onPlayAgain}>Play Another</button>
       </header>
 
-      <div className={styles.vennWrap}>
-        <CircleLabel circleId="1" revealedCircles={revealedCircles} />
-        <CircleLabel circleId="2" revealedCircles={revealedCircles} />
-        <CircleLabel circleId="3" revealedCircles={revealedCircles} />
-        <VennDiagram
-          puzzle={puzzle}
-          placements={placements}
-          selectedTermId={null}
-          revealedCircles={revealedCircles}
-          validTargets={[]}
-          onRegionClick={() => {}}
-        />
+      <div className={styles.body}>
+        <div className={styles.vennWrap}>
+          <CircleLabel circleId="1" revealedCircles={revealedCircles} />
+          <CircleLabel circleId="2" revealedCircles={revealedCircles} />
+          <CircleLabel circleId="3" revealedCircles={revealedCircles} />
+          <VennDiagram
+            puzzle={puzzle}
+            placements={placements}
+            selectedTermId={null}
+            revealedCircles={revealedCircles}
+            validTargets={[]}
+            onRegionClick={() => {}}
+          />
+        </div>
       </div>
     </div>
   )

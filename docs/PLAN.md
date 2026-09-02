@@ -435,7 +435,7 @@ High-level scope: allow a user to create and play their own custom puzzles witho
 
 ---
 
-## Phase 14 — Per-Circle Submit
+## Phase 14 — Per-Circle Submit — COMPLETE (2026-09-02)
 
 **Decision (2026-09-01):** Replace the single global Submit button with a per-circle submit built into each circle's label chip. Motivation: with one global Submit checking the whole board, a player can fill all 7 regions while only ever consciously reasoning about one circle at a time, then win the entire puzzle off a single accidental submit — never deliberately committing to the other two groups. Builds directly on existing group-locking (`getValidTargets`, see "Partial Credit / Group Locking" above).
 
@@ -444,18 +444,36 @@ High-level scope: allow a user to create and play their own custom puzzles witho
 - A circle's submit chip is enabled only when that circle's own 4 regions are filled — a per-circle version of today's `allRegionsFilled`, independent of the other two circles.
 - Once a circle is revealed correct, its chip switches to its existing revealed-state display (real category name) and stops being a submit target — no separate "locked" visual needed.
 - Attempts pips move from the ctrlSide SubmitBar into the header (right side).
-- ctrlSide keeps only the TermBank; it renders nothing (and disappears) once the bank is empty, per the original Phase 5.1 design — no more bank/submit swap.
 - Supersedes Phase 6.1/6.2 and the "TermBank / SubmitBar Co-location" layout section above.
 
+**Correction found during implementation:** the "TermBank / SubmitBar Co-location" decision this phase supersedes assumed ctrlSide still held a TermBank — it doesn't (removed in commit `ba20432`, "Got rid of term bank, shuffled start" — the board starts fully shuffled/placed, no bank). So `ctrlSide` was removed entirely rather than "kept for TermBank only."
+
 ### Tasks
-- [ ] 14.1 `CircleLabels.jsx` — chip becomes a button when its circle is unrevealed; `onClick` fires a per-circle submit
-- [ ] 14.2 `useGameState.js` — replace `submitGuess()` with `submitCircle(circleId)`: checks only that circle, decrements shared `attemptsLeft`, reveals+locks on success
-- [ ] 14.3 Per-circle enabled state: that circle's 4 regions filled, independent of the other two circles (not the old `allRegionsFilled`)
-- [ ] 14.4 Win condition unchanged (`revealedCircles.length === 3`); loss condition unchanged (`attemptsLeft <= 0`)
-- [ ] 14.5 Remove `SubmitBar.jsx` / `SubmitBar.module.css`; remove the ctrlSide bank↔submit swap logic in `GameBoard.jsx`
-- [ ] 14.6 Add attempts pips to the header (right side), portrait + landscape
-- [ ] 14.7 Verify the circle-1 chip's tap target doesn't collide with diagram hit-test geometry (check during the in-progress landscape chip positioning work)
-- [ ] 14.8 Verify repeated wrong submits on the same circle behave sanely (no double-decrement, no partial lock on failure)
+- [x] 14.1 `CircleLabels.jsx` — chip becomes a button when its circle is unrevealed; `onClick` fires a per-circle submit
+- [x] 14.2 `useGameState.js` — replace `submitGuess()` with `submitCircle(circleId)`: checks only that circle, decrements shared `attemptsLeft`, reveals+locks on success
+- [x] 14.3 Per-circle enabled state: that circle's 4 regions filled, independent of the other two circles (not the old `allRegionsFilled`) — note: since the board starts fully shuffled with no empty bank, this gate is effectively always true in practice; harmless, just rarely visibly "disabled"
+- [x] 14.4 Win condition unchanged (`revealedCircles.length === 3`); loss condition unchanged (`attemptsLeft <= 0`) — verified via a standalone script exercising the real reducer code against an actual puzzle
+- [x] 14.5 Removed `SubmitBar.jsx` / `SubmitBar.module.css` and the `ctrlSide` panel entirely from `GameBoard.jsx`
+- [x] 14.6 Added attempts pips to the header (right side), portrait + landscape
+- [x] 14.7 Circle-1 chip tap target confirmed fine in the browser (user-verified)
+- [x] 14.8 Repeated/duplicate submits on the same circle guarded in `submitCircle` (no double-decrement); verified via standalone reducer test
+
+**Follow-on polish (2026-09-02):** button copy simplified to "SUBMIT" / "Group" (no circle number shown to the player), dot removed from chips, circle/button outlines switched to always use the bold circle color (outline vs. filled is now the only "solved" signal — the muted color variants in `colors.js` are unused now but left in place, not fully committed to this choice).
+
+---
+
+## Phase 15 — Game Over Reveal Fidelity — COMPLETE (2026-09-02)
+
+**Problem:** On a loss, the reveal screen recomputed an arbitrary canonical solution (`buildSolutionPlacements`, category order → circle 1/2/3) with no knowledge of what the player had actually solved. A circle the player had already locked correct (e.g. "Beatles Albums" in the red circle) could show up reassigned to a different circle in the reveal — jarring, and inconsistent with the game's own group-locking rule.
+
+**Fix:**
+- `buildSolutionPlacements` → `buildRevealState(puzzle, lockedCircles)`: any circle the player already had locked keeps its category pinned to that same physical circle; remaining categories fill the remaining circles; the whole board is computed as one consistent solution from that mapping (not a byte-exact freeze of the player's sub-region layout — sub-position within a locked circle was never meaningful, since the player could already freely rearrange it during play). Verified exhaustively (all 9 single-circle-lock combinations, plus 0- and 2-locked cases) against real puzzle data.
+- `GameBoard.jsx` → `App.jsx` → `GameOverScreen.jsx`: threaded the player's actual final `placements` and `revealedCircles` through to the reveal screen (previously `GameOverScreen` only received `puzzle`).
+- Added a reveal animation: `computeSwapSequence(from, to)` in `puzzleUtils.js` decomposes the transform from the player's actual final (unsolved) board into the revealed solution as a sequence of true-swaps; `useRevealAnimation` hook plays them one at a time reusing `VennDiagram`'s existing `ShuffleOverlay` (the same visual as the game-start shuffle). Verified with 200 randomized start/target pairs — always reconstructs the exact target, no no-op swaps.
+
+**Incidental bugfixes found along the way:**
+- `WinScreen`/`GameOverScreen` were flipping their whole `.screen` (header + diagram) to `flex-direction: row` in landscape, turning the header into a left-side panel — inconsistent with GameBoard/HowToPlay/Settings, which always keep the header as a top bar. Removed; both screens now match.
+- That fix then exposed vennWrap rendering at the full `.screen` height regardless of the header above it — fixed by adding an intermediate `.body` flex wrapper (`flex:1; min-height:0`) between `.screen` and `.vennWrap`, matching GameBoard's nesting depth.
 
 ---
 

@@ -81,17 +81,55 @@ export function getValidTargets(term, lockedCircles) {
   })
 }
 
-// Build the canonical correct placements using category order as circle assignment.
-// Category order index 0 → circle '1', index 1 → circle '2', index 2 → circle '3'.
-export function buildSolutionPlacements(puzzle) {
-  const catKeys = Object.keys(puzzle.categories)
-  const catToCircle = Object.fromEntries(catKeys.map((k, i) => [k, String(i + 1)]))
+// Build the Game Over reveal state: circles the player already had locked correct
+// keep their category pinned to that same physical circle (a locked circle's terms
+// can only ever be rearranged among its own 4 regions anyway — the exact sub-region
+// each sits in was never meaningful), and the remaining categories are assigned to
+// whichever circles aren't locked (category order index → circle order index when
+// nothing is locked yet). The whole board is then computed as one consistent solution.
+export function buildRevealState(puzzle, lockedCircles) {
+  const catToCircle = {}
+  const lockedCircleIds = new Set()
+
+  for (const { circleId, category } of lockedCircles) {
+    catToCircle[category] = circleId
+    lockedCircleIds.add(circleId)
+  }
+
+  const remainingCircleIds = ['1', '2', '3'].filter(id => !lockedCircleIds.has(id))
+  const remainingCategories = Object.keys(puzzle.categories).filter(k => !(k in catToCircle))
+  remainingCategories.forEach((catKey, i) => {
+    catToCircle[catKey] = remainingCircleIds[i]
+  })
+
   const placements = {}
   for (const term of puzzle.terms) {
     const regionKey = term.regions.map(c => catToCircle[c]).sort().join('')
     placements[regionKey] = term.id
   }
-  return placements
+
+  const revealedCircles = ['1', '2', '3'].map(circleId => {
+    const category = Object.keys(catToCircle).find(k => catToCircle[k] === circleId)
+    return { circleId, category, name: puzzle.categories[category] }
+  })
+
+  return { placements, revealedCircles }
+}
+
+// Sequence of pairwise region swaps that transforms one full placements object into
+// another (both must hold the same set of term ids across all REGION_KEYS). Used to
+// animate the Game Over reveal the same way the game-start shuffle animates swaps.
+export function computeSwapSequence(fromPlacements, toPlacements) {
+  const current = { ...fromPlacements }
+  const swaps = []
+  for (const key of REGION_KEYS) {
+    while (current[key] !== toPlacements[key]) {
+      const otherKey = REGION_KEYS.find(k => current[k] === toPlacements[key])
+      ;[current[key], current[otherKey]] = [current[otherKey], current[key]]
+      swaps.push({ fromKey: key, toKey: otherKey })
+    }
+  }
+  return swaps
 }
 
 // STRICT win check — all 7 specific regions are exactly correct under any permutation.

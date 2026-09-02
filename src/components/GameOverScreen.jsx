@@ -1,15 +1,16 @@
-import { buildSolutionPlacements } from '../utils/puzzleUtils.js'
+import { useMemo } from 'react'
+import { buildRevealState } from '../utils/puzzleUtils.js'
+import { useRevealAnimation } from '../hooks/useRevealAnimation.js'
 import VennDiagram from './VennDiagram.jsx'
 import CircleLabel from './CircleLabels.jsx'
 import styles from './GameOverScreen.module.css'
 
-export default function GameOverScreen({ puzzle, onRetry, onPickNewPuzzle }) {
-  const solutionPlacements = buildSolutionPlacements(puzzle)
-  const revealedCircles = Object.keys(puzzle.categories).map((catKey, i) => ({
-    circleId: String(i + 1),
-    category: catKey,
-    name: puzzle.categories[catKey],
-  }))
+export default function GameOverScreen({ puzzle, placements, lockedCircles, onRetry, onPickNewPuzzle }) {
+  const { placements: revealPlacements, revealedCircles } = useMemo(
+    () => buildRevealState(puzzle, lockedCircles ?? []),
+    [puzzle, lockedCircles]
+  )
+  const { board, step } = useRevealAnimation(placements ?? revealPlacements, revealPlacements)
 
   return (
     <div className={styles.screen}>
@@ -21,18 +22,21 @@ export default function GameOverScreen({ puzzle, onRetry, onPickNewPuzzle }) {
         </div>
       </header>
 
-      <div className={styles.vennWrap}>
-        <CircleLabel circleId="1" revealedCircles={revealedCircles} />
-        <CircleLabel circleId="2" revealedCircles={revealedCircles} />
-        <CircleLabel circleId="3" revealedCircles={revealedCircles} />
-        <VennDiagram
-          puzzle={puzzle}
-          placements={solutionPlacements}
-          selectedTermId={null}
-          revealedCircles={revealedCircles}
-          validTargets={[]}
-          onRegionClick={() => {}}
-        />
+      <div className={styles.body}>
+        <div className={styles.vennWrap}>
+          <CircleLabel circleId="1" revealedCircles={revealedCircles} />
+          <CircleLabel circleId="2" revealedCircles={revealedCircles} />
+          <CircleLabel circleId="3" revealedCircles={revealedCircles} />
+          <VennDiagram
+            puzzle={puzzle}
+            placements={board}
+            selectedTermId={null}
+            revealedCircles={revealedCircles}
+            validTargets={[]}
+            onRegionClick={() => {}}
+            shuffleStep={step}
+          />
+        </div>
       </div>
     </div>
   )

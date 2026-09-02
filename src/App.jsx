@@ -81,8 +81,9 @@ export default function App() {
     setScreen('win')
   }
 
-  function handleGameOver({ attemptsUsed }) {
+  function handleGameOver({ placements, revealedCircles, attemptsUsed }) {
     setGameOverlay(null)
+    setFinalGameState({ placements, revealedCircles })
     recordResult(activePuzzle.id, { won: false, attempts: attemptsUsed })
     history.replaceState({ screen: 'gameover' }, '')
     setScreen('gameover')
@@ -190,6 +191,8 @@ export default function App() {
       {screen === 'gameover' && (
         <GameOverScreen
           puzzle={activePuzzle}
+          placements={finalGameState?.placements}
+          lockedCircles={finalGameState?.revealedCircles}
           onRetry={handleRetry}
           onPickNewPuzzle={handleBackToSelector}
         />
