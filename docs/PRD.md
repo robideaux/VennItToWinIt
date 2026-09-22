@@ -34,22 +34,22 @@ It draws inspiration from NYT Connections (hidden category groupings) and adds a
 
 ## User Flow
 
-1. Player opens the app
-2. Player selects a puzzle from a list (populated from `.json` puzzle definition files)
+1. Player opens the app to the **home screen** — Play Latest Venn, All Venns…, Settings, How To Play
+2. Player either jumps straight into the latest unlocked puzzle or picks one from the selector
 3. Game board loads:
-   - 7 terms shown in a **term bank** area
-   - Venn diagram displayed with 7 empty, labeled regions
-   - 3 circle category labels are hidden (shown as `?`)
-4. Player **taps a term** to select it (highlighted), then **taps a region** to place it there
-5. Player can continue moving terms freely — tapping an occupied region swaps or displaces the term
-6. When satisfied, player taps **"Submit"**
-7. App checks each region:
-   - Fully correct circles have their **category label revealed**
-   - Incorrect placements are indicated (visual feedback TBD — e.g. shake, color)
-8. Player has a **limited number of attempts** (e.g. 5 — to be finalized) before game over
+   - All 7 terms are **already placed**, shuffled into the 7 regions — there is no term bank
+   - Each circle carries a colored label chip reading "Group 1 / 2 / 3", which doubles as that circle's **SUBMIT** button
+   - The 3 real category names are hidden
+4. Player **taps a placed term** to select it, then **taps another region** to move it
+5. Every move is a **true swap** — the displaced term takes the selected term's old region. The board stays full at all times.
+6. When confident about one circle's group, the player taps that circle's **SUBMIT** chip
+7. App checks **only that circle**, leniently — right 4 terms inside it, in any arrangement:
+   - Correct → the category name is revealed and those 4 terms are **locked** into that circle
+   - Incorrect → nothing moves; the attempt is spent
+8. Attempts are a **shared pool** (`maxAttempts`, currently 5) shown as pips in the header. Every per-circle submit costs one.
 9. Game ends in:
-   - **Win**: all 7 terms correctly placed (all 3 labels revealed)
-   - **Loss**: attempts exhausted before solving
+   - **Win**: all 3 circles revealed
+   - **Loss**: attempts exhausted first → the board animates from where the player left it into the full solution
 
 ---
 
@@ -61,7 +61,9 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
 
 ```json
 {
-  "id": "puzzle-001",
+  "id": "2026_001",
+  "year": 2026,
+  "sequence": 1,
   "title": "Puzzle Title (shown in selector)",
   "maxAttempts": 5,
   "categories": {
@@ -81,8 +83,9 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
 }
 ```
 
-- `regions` is an array of 1, 2, or 3 category keys indicating which circles the term belongs to
+- `regions` is an array of 1, 2, or 3 category keys indicating which **categories** the term belongs to — not which physical circle it sits in. The puzzle defines grouping relationships only; any assignment of the 3 categories onto the 3 circles is a valid solution.
 - The combination of `regions` values uniquely maps each term to one of the 7 Venn regions
+- `year` + `sequence` drive release gating and the displayed date; `id` matches the filename
 - Puzzle files should live in `/public/puzzles/` and be referenced by a manifest file (`/public/puzzles/index.json`)
 
 ### Puzzle Manifest Schema
@@ -90,24 +93,29 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
 ```json
 {
   "puzzles": [
-    { "id": "puzzle-001", "title": "My First Puzzle", "file": "puzzle-001.json" },
-    { "id": "puzzle-002", "title": "Animals & Habitats", "file": "puzzle-002.json" }
+    { "id": "2026_001", "year": 2026, "sequence": 1, "title": "My First Puzzle",     "file": "2026_001.json" },
+    { "id": "2026_002", "year": 2026, "sequence": 2, "title": "Animals & Habitats", "file": "2026_002.json" }
   ]
 }
 ```
+
+`year` and `sequence` are duplicated into the manifest so the app can gate and sort the whole library without loading every puzzle file. A puzzle is unlocked when its `sequence` is at or before the current ISO week of the same year, or when its `year` is in the past.
 
 ---
 
 ## Game Rules
 
 - There are always exactly **7 terms** and **7 Venn regions** — one term per region
-- Terms can be freely repositioned before submitting
-- Each **Submit** costs one attempt
-- After each submit:
-  - Any circle where **all terms in that circle's regions** are correct → reveal that circle's label
-  - A circle's label stays hidden if any of its regions are incorrect
-  - Visual feedback distinguishes correct vs. incorrect placements
-- When all attempts are used without a full solve → **Game Over** screen (reveal solution)
+- The board starts fully populated with a shuffled arrangement, guaranteed not to have any circle already correct
+- Terms are repositioned by **true swap**; the board is never partially empty
+- **Each circle is submitted separately**, via its own label chip. Every submit costs one attempt from a single shared pool.
+- A circle is judged **leniently**: it's correct when the right 4 terms are somewhere inside it, regardless of which sub-region each occupies
+- On a correct circle:
+  - Its category label is revealed
+  - Its 4 terms are **locked** to that circle — still rearrangeable among its own 4 sub-regions, but they can never leave, and no outside term can enter
+- Re-submitting an already-revealed circle is a no-op and costs nothing
+- Any assignment of the 3 categories onto the 3 physical circles is a valid win — the circles are interchangeable
+- When all attempts are used without a full solve → **Game Over** screen (animated solution reveal)
 - When all 3 labels are revealed → **Win** screen
 
 ---
@@ -116,28 +124,39 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
 
 | Screen | Description |
 |---|---|
-| **Puzzle Selector** | List of available puzzles; tap to load |
-| **Game Board** | Main gameplay screen — term bank + Venn diagram |
-| **Win Screen** | Celebration state, shows completed board |
-| **Game Over Screen** | Shows correct solution, option to retry or pick new puzzle |
+| **Home** | Landing page — Play Latest Venn (with NEW badge when unplayed), All Venns…, Settings, How To Play |
+| **Puzzle Selector** | "All Venns…" — compact scrollable list, newest first, with an `X / Y played` counter; played rows muted and checked |
+| **Settings** | Theme (Light / System / Dark) and audio toggles, persisted to `localStorage` |
+| **How To Play** | Static rules explainer |
+| **Game Board** | Main gameplay screen — Venn diagram with per-circle submit chips and attempt pips in the header |
+| **Win Screen** | Celebration state, shows the completed board |
+| **Game Over Screen** | Animates the player's final board into the correct solution, keeping any circle they already solved pinned in place; retry or pick a new puzzle |
 
 ---
 
 ## Non-Functional Requirements
 
-- No login, no server, no data persistence required (v1)
+- No login and no server. Persistence is client-side only: puzzle results (`vennit_progress`) and settings live in `localStorage`.
 - All puzzle data loaded via `fetch()` from `/public/puzzles/`
 - Should work offline once loaded (PWA optional, not required for v1)
-- Accessible tap targets (min 44px)
+- Accessible tap targets (min 44px) — audited, Lighthouse accessibility 100
+- Light and dark themes, following device preference with a manual override in Settings
 - Animations should be subtle and not disruptive on low-end devices
 
 ---
 
 ## Out of Scope (v1)
 
-- User accounts or score tracking
+- User accounts or server-side score tracking
 - Timer
-- Daily puzzle / date-based puzzle locking
 - Hints system
-- Sound effects
+- Sound effects (a settings toggle exists, reserved for future audio)
 - Multiplayer
+- Resuming an in-progress board — only finished results are persisted
+
+### Shipped since the original v1 scope
+
+Two items originally listed as out of scope have since been built:
+
+- **Date-based puzzle locking** — shipped in Phase 13 as a weekly system (`year` + `sequence`, ISO-week gating)
+- **Progress tracking** — per-puzzle win/attempt results persisted to `localStorage`, surfaced as the selector's played counter and the home screen's NEW badge

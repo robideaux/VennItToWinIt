@@ -1,9 +1,28 @@
 # Venn It To Win It — Build Plan
 
+## Current Status
+
+**Last updated:** 2026-09-15 · **At commit:** `7d0a2f6` · **Working tree:** clean
+
+**Shipped:** Phases 1–8, 10, 11, 13, 14, 15. The game is fully playable end to end — shuffled-start board (no term bank), true-swap placement, permutation-aware answer checking, per-circle submit chips drawing on a shared 5-attempt pool, group locking, weekly puzzle gating with `localStorage` progress, Home / Settings / How To Play screens, light-dark theming, and an animated game-over reveal that keeps already-solved circles pinned in place.
+
+**Open work:**
+
+| Item | Status |
+|---|---|
+| **Phase 9 — Feedback & Animation** | Not started. No `navigator.vibrate` and no `@keyframes` anywhere in `src/`. The existing `useShuffleAnimation` / `useRevealAnimation` hooks drive discrete swap steps — they are not the tap / submit / error feedback this phase describes. |
+| **Phase 12 — Puzzle Editor** | Blocked on a scoping discussion. See the phase section for the open questions. |
+| **Legacy puzzle cleanup** | 34 older-format puzzles are live in `index.json` with placeholder `year: 2025, sequence: 0`. Intentionally active as test content; a review sweep with the other devs will decide which to keep, then assign final `2026_NNN` filenames and real sequence numbers. See "Older Puzzle Conversion" in the parking lot. |
+| **`docs/DEPLOYMENT.md`** | Knowingly stale — still documents `puzzle-XXX.json` naming and omits the required `year` / `sequence` manifest fields. Deliberately deferred until the puzzle sweep settles the naming scheme, so it only gets rewritten once. |
+
+Everything else lives in the phase sections below, with the parking lot at the end of the file.
+
+---
+
 Decisions locked in before build started:
 - App name: **Venn It To Win It**
 - Max attempts: **5**
-- Term bank: **remove terms when placed** (not grayed out)
+- ~~Term bank: **remove terms when placed** (not grayed out)~~ — **superseded 2026-05-22 (`ba20432`)**: the term bank was removed entirely; the board starts fully shuffled and placed
 - Swap behavior: **true swap** — selected term goes to target region; displaced term goes to where selected term came from (bank or other region)
 - Incorrect feedback: **simple win/loss text** for v1
 - CSS: **CSS Modules**
@@ -47,7 +66,7 @@ Decisions locked in before build started:
   - `submitGuess()` — check all 6 permutations, reveal circles, decrement attempts, update phase
   - `resetGame()` — restart with same puzzle
   - Derived: `unplacedTerms`, `isTermPlaced(termId)`, `termInRegion(regionKey)`, `allRegionsFilled`
-- [ ] 3.3 Logic verified end-to-end during Phase 4 Venn diagram build
+- [x] 3.3 Logic verified end-to-end during Phase 4 Venn diagram build
 
 ---
 
@@ -63,7 +82,9 @@ Decisions locked in before build started:
 
 ---
 
-## Phase 5 — Term Bank
+## Phase 5 — Term Bank — SUPERSEDED (2026-05-22, `ba20432`)
+
+> **The term bank no longer exists.** Commit `ba20432` ("Got rid of term bank, shuffled start") removed it outright — the board now starts fully shuffled with all 7 terms already placed, so there are never any unplaced terms. `TermBank.jsx` and `TermTile.jsx` were deleted; `SubmitBar.jsx` followed in Phase 14. Items below stay checked as build history.
 
 - [x] 5.1 Build `TermBank.jsx` — unplaced terms only; returns null when empty (bank disappears)
 - [x] 5.2 Build `TermTile.jsx` — pill chip; default / selected states; compact sizing
@@ -292,14 +313,14 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 - [~] S.3 ~~Compare both~~ — skipped; committing to Option B
 - [x] S.4 Confirm circle label chip positions (bottom corners, top positions) still land at diagram edges under chosen approach
 
-**In progress (2026-09-01, uncommitted):** further visual tuning of the layout landed in S.1–S.4, testing look & feel before committing. Currently touching:
+**Committed 2026-09-01 in `470f989`** ("Enhance layout and styling for landscape orientation"). The visual tuning that followed S.1–S.4 touched:
 - `VennDiagram.jsx` — '23' region centroid/callout anchor nudged up (270→250, 352→340)
 - `VennDiagram.module.css` — SVG `height: 100%` re-enabled
 - `shared.module.css` — vennWrap cap multiplier raised 150→160 (vw portrait / vh landscape)
-- `GameBoard.module.css` — landscape `.ctrlSide` fixed 160px width disabled, reverting to content-sized (per L.5)
+- `GameBoard.module.css` — landscape `.ctrlSide` fixed 160px width disabled, reverting to content-sized (per L.5) — moot as of Phase 14, which removed `ctrlSide` entirely
 - `CircleLabels.module.css` — new landscape-specific chip positioning for circles 1/2/3
-- [ ] Finish visual pass, then commit
-- [ ] Clean up stray "Portrait positioning" comment left on the landscape block in `CircleLabels.module.css`
+- [x] Finish visual pass, then commit
+- [x] Clean up stray "Portrait positioning" comment left on the landscape block in `CircleLabels.module.css` — verified correct: the comment sits on the portrait block, with a separate `/* ── Landscape ── */` block below it
 
 ---
 
@@ -325,7 +346,7 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 
 ## Phase 8 — Polish
 
-- [ ] 8.1 ~~Responsive tuning~~ — superseded by Layout Redesign sections above (TermBank/SubmitBar, Circle Labels, SVG Scaling)
+- [~] 8.1 ~~Responsive tuning~~ — superseded by Layout Redesign sections above (TermBank/SubmitBar, Circle Labels, SVG Scaling)
 - [x] 8.2 Accessibility audit — all tap targets ≥ 44px, readable contrast (Lighthouse score: 100)
 - [x] 8.3 Add a second puzzle (`puzzle-002.json`) to test selector with real data
 - [x] 8.4 Final mobile test in Chrome DevTools (iPhone SE + iPhone 14 Pro, portrait + landscape)
@@ -509,8 +530,10 @@ No routing infrastructure changes needed — the existing state-based screen mod
 
 **Status (2026-09-01):** 34 puzzles from the older batch were imported and added to `index.json` (commit `8a452a9`, 2026-05-22) under their original filenames, each with placeholder `"year": 2025, "sequence": 0`. Since the unlock rule treats `year < current year` as always-unlocked, all 34 are currently live/playable.
 
-**This is intentional for now** — decision confirmed 2026-09-01: leave them active. They're not production-ready but are useful test content while layout/UX work continues. Still outstanding before these are real content:
-- [ ] Review each puzzle for quality (remove unwanted ones)
+**This is intentional for now** — decision confirmed 2026-09-01, reaffirmed 2026-09-15: leave them active. Every legacy puzzle was deliberately given a `year`/`sequence` that passes the unlock gate so it loads during testing. They're not production-ready but are useful test content while layout/UX work continues.
+
+**Planned resolution:** a puzzle-review sweep with the other devs will decide which puzzles to keep. Final filenames, ids and sequence numbers come out of that sweep — and `docs/DEPLOYMENT.md` gets its naming/manifest rewrite at the same time, so it's only rewritten once. Still outstanding:
+- [ ] Review each puzzle for quality (remove unwanted ones) — **dev sweep**
 - [ ] Rename to final format: `2026_NNN.json`, real `year` + `sequence`, matching `id`
 - [ ] Resolve duplicate title: `2026_002` ("Just Relax") and `relaxgame.json` (also "Just Relax") — likely the same puzzle twice
 - [ ] Typo: `naturalirrational.json` title reads "Natrually Irrational"
