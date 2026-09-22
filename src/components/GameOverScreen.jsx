@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { buildRevealState } from '../utils/puzzleUtils.js'
 import { useRevealAnimation } from '../hooks/useRevealAnimation.js'
 import VennDiagram from './VennDiagram.jsx'
+import PlayOverlay from './PlayOverlay.jsx'
 import CircleLabel from './CircleLabels.jsx'
 import styles from './GameOverScreen.module.css'
 
@@ -27,15 +28,9 @@ export default function GameOverScreen({ puzzle, placements, lockedCircles, onRe
           <CircleLabel circleId="1" revealedCircles={revealedCircles} />
           <CircleLabel circleId="2" revealedCircles={revealedCircles} />
           <CircleLabel circleId="3" revealedCircles={revealedCircles} />
-          <VennDiagram
-            puzzle={puzzle}
-            placements={board}
-            selectedTermId={null}
-            revealedCircles={revealedCircles}
-            validTargets={[]}
-            onRegionClick={() => {}}
-            shuffleStep={step}
-          />
+          <VennDiagram revealedCircles={revealedCircles}>
+            <PlayOverlay puzzle={puzzle} placements={board} shuffleStep={step} />
+          </VennDiagram>
         </div>
       </div>
     </div>

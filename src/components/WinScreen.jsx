@@ -1,4 +1,5 @@
 import VennDiagram from './VennDiagram.jsx'
+import PlayOverlay from './PlayOverlay.jsx'
 import CircleLabel from './CircleLabels.jsx'
 import styles from './WinScreen.module.css'
 
@@ -15,14 +16,9 @@ export default function WinScreen({ puzzle, placements, revealedCircles, onPlayA
           <CircleLabel circleId="1" revealedCircles={revealedCircles} />
           <CircleLabel circleId="2" revealedCircles={revealedCircles} />
           <CircleLabel circleId="3" revealedCircles={revealedCircles} />
-          <VennDiagram
-            puzzle={puzzle}
-            placements={placements}
-            selectedTermId={null}
-            revealedCircles={revealedCircles}
-            validTargets={[]}
-            onRegionClick={() => {}}
-          />
+          <VennDiagram revealedCircles={revealedCircles}>
+            <PlayOverlay puzzle={puzzle} placements={placements} />
+          </VennDiagram>
         </div>
       </div>
     </div>

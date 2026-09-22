@@ -1,0 +1,71 @@
+/* ── Term pill ───────────────────────────────────────────────────────────────
+   All dimensions are viewBox units × --u, where --u is one viewBox unit as a CSS
+   length (see UNIT_CSS in vennGeometry.js). --u takes the smaller of the container's
+   two axes, so the pill stays sensible in portrait (width-constrained) and landscape
+   (height-constrained) alike, and never inherits the diagram's non-uniform stretch.
+
+   --pill-w / --pill-h / --pill-font are set from JS (PILL_W, BASE_FONT in fitText.js)
+   so pill width can't drift away from TARGET_CHARS.
+   ────────────────────────────────────────────────────────────────────────── */
+.pill {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+
+  width: calc(var(--pill-w) * var(--u));
+  min-height: calc(var(--pill-h) * var(--u));
+  /* Horizontal padding comes from --pill-pad, the same value PILL_W was derived with,
+     so the pill always has room for TARGET_CHARS of text plus its own padding. */
+  padding: calc(2 * var(--u)) calc(var(--pill-pad) * var(--u));
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border-style: solid;
+  border-radius: 999px;
+
+  font-family: system-ui, sans-serif;
+  font-weight: 600;
+  font-size: calc(var(--pill-font) * var(--u) * var(--fit-scale, 1));
+  line-height: 1.18;
+  text-align: center;
+
+  /* Deliberately NOT nowrap. fitText already chose the line breaks, so this normally does
+     nothing — but its width figures are estimates, and if one comes in low the text wraps
+     and the pill grows instead of spilling across the diagram. Overflow is the one failure
+     mode with no acceptable appearance; an extra line is survivable. */
+  overflow-wrap: break-word;
+
+  /* Gaps between pills must fall through to the SVG's geometric hit-test */
+  pointer-events: none;
+}
+
+.line {
+  display: block;
+}
+
+/* Pills are <button> on the game board (they take clicks) and <div> on the win/lost
+   screens. Do NOT reset typography here: `font: inherit` is a shorthand, so it also sets
+   font-size, overriding .pill's calculated size — which made board pills ignore --fit-scale
+   and render at the inherited page size while result-screen pills scaled correctly.
+   .pill already sets font-family, font-weight, font-size and line-height explicitly, so
+   the UA button styling is fully covered without touching `font` at all. */
+.interactive {
+  pointer-events: auto;
+  cursor: pointer;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.interactive:active {
+  filter: brightness(0.97);
+}
+
+/* Shuffle / reveal chips animate between region centres. Transitioning left/top
+   rather than transform keeps the percentage coordinate system intact; it matches
+   what the old SVG chip did (animating x/y) and 7 pills at 200ms is not a cost. */
+.animated {
+  transition: left 0.20s ease-out, top 0.20s ease-out;
+}

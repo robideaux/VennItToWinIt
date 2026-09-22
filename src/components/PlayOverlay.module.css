@@ -1,0 +1,48 @@
+/* ── Diagram overlay ─────────────────────────────────────────────────────────
+   Covers .vennWrap exactly, which is also the box the diagram SVG fills — so the
+   percentage coordinates the pills use line up with the SVG's viewBox mapping.
+
+   pointer-events:none here, auto on individual pills and slots: clicks in the gaps
+   between pills fall through to the shell SVG's geometric hit-test underneath.
+   ────────────────────────────────────────────────────────────────────────── */
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Leader lines, anchor dots, empty-region dots and placement hint rings.
+   Stays SVG: these are geometric and should stretch with the diagram. */
+.lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Invisible tap target where a callout label will appear once placed. Sized to the
+   pill so the target matches what the player sees land there. */
+.emptySlot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: calc(var(--pill-w) * var(--u));
+  height: calc(26 * var(--u));
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shuffle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}

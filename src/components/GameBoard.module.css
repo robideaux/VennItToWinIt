@@ -9,18 +9,7 @@
 }
 
 .body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-}
-
-.vennSide {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  padding: 4px 8px 4px 8px;
+  composes: diagramBody from '../styles/shared.module.css';
 }
 
 .header {
@@ -91,16 +80,6 @@
 
 /* ── Landscape ── */
 @media (orientation: landscape) {
-  .body {
-    flex-direction: row;
-  }
-
-  .vennSide {
-    flex: 1;
-    min-width: 0;
-    padding: 4px 4px 4px 4px;
-  }
-
   .header {
     min-height: 44px;
   }

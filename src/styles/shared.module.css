@@ -1,9 +1,38 @@
+/* ── Shared diagram body ─────────────────────────────────────────────────────
+   The flex row between a screen's header and its .vennWrap. Used by GameBoard,
+   WinScreen and GameOverScreen — all three must nest the diagram identically,
+   because .vennWrap is a size query container and term pills size themselves off
+   it. Any difference in this box renders pills at different sizes from screen to
+   screen, which is exactly the bug that showed up when the board still had its own
+   deeper .vennSide wrapper. Change the padding here and all three follow.
+   ────────────────────────────────────────────────────────────────────────── */
+.diagramBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  padding: 2px 4px;
+}
+
 /* ── Shared vennWrap layout ──────────────────────────────────────────────────
    Used by GameBoard, WinScreen, and GameOverScreen.
    Portrait: max-height caps vertical stretch relative to screen width.
    Landscape: max-width caps horizontal stretch relative to screen height.
    SVG fills vennWrap 100% in both dimensions; chips are position:absolute
    inside vennWrap and track its edges automatically.
+
+   container-type: size makes vennWrap a query container so term pills can size
+   themselves against BOTH axes (see UNIT_CSS in vennGeometry.js). Pills take the
+   smaller of the two, which is what keeps them sensible in either orientation:
+   portrait is width-constrained, landscape is height-constrained. Sizing off width
+   alone made landscape pills roughly 3x too large.
+
+   Sizing against the container rather than the SVG also means pills no longer inherit
+   the diagram's non-uniform stretch — the SVG <text> they replaced did, which is why
+   long terms used to look distorted.
+
+   Note: `size` (not `inline-size`) means vennWrap's own size must not depend on its
+   contents. It doesn't — height comes from `flex: 1` inside a definite-height parent.
    ────────────────────────────────────────────────────────────────────────── */
 .vennWrap {
   flex: 1;
@@ -13,6 +42,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  container-type: size;
 }
 
 @media (orientation: portrait) {

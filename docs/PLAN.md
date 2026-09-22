@@ -2,7 +2,7 @@
 
 ## Current Status
 
-**Last updated:** 2026-09-15 · **At commit:** `7d0a2f6` · **Working tree:** clean
+**Last updated:** 2026-09-22 · **At commit:** `7d0a2f6` · **Working tree:** Phase 16 Stage 1 in progress
 
 **Shipped:** Phases 1–8, 10, 11, 13, 14, 15. The game is fully playable end to end — shuffled-start board (no term bank), true-swap placement, permutation-aware answer checking, per-circle submit chips drawing on a shared 5-attempt pool, group locking, weekly puzzle gating with `localStorage` progress, Home / Settings / How To Play screens, light-dark theming, and an animated game-over reveal that keeps already-solved circles pinned in place.
 
@@ -11,7 +11,9 @@
 | Item | Status |
 |---|---|
 | **Phase 9 — Feedback & Animation** | Not started. No `navigator.vibrate` and no `@keyframes` anywhere in `src/`. The existing `useShuffleAnimation` / `useRevealAnimation` hooks drive discrete swap steps — they are not the tap / submit / error feedback this phase describes. |
-| **Phase 12 — Puzzle Editor** | Blocked on a scoping discussion. See the phase section for the open questions. |
+| **Phase 12 — Puzzle Editor** | **Scoped 2026-09-22.** Split into Phase 16 (overlay refactor — enabling work) and Phase 17 (custom puzzles + editor). All open questions answered; decisions locked in those sections. |
+| **Phase 16 — Overlay Refactor** | In progress. Stage 1 (geometry extraction) done and verified byte-identical against `7d0a2f6`. Stage 2 (HTML overlays + text fitting) next — it is the visual review gate. |
+| **Phase 17 — Custom Puzzles & Editor** | Planned, not started. Depends on Phase 16. |
 | **Legacy puzzle cleanup** | 34 older-format puzzles are live in `index.json` with placeholder `year: 2025, sequence: 0`. Intentionally active as test content; a review sweep with the other devs will decide which to keep, then assign final `2026_NNN` filenames and real sequence numbers. See "Older Puzzle Conversion" in the parking lot. |
 | **`docs/DEPLOYMENT.md`** | Knowingly stale — still documents `puzzle-XXX.json` naming and omits the required `year` / `sequence` manifest fields. Deliberately deferred until the puzzle sweep settles the naming scheme, so it only gets rewritten once. |
 
@@ -443,16 +445,20 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 
 ---
 
-## Phase 12 — Puzzle Editor
+## Phase 12 — Puzzle Editor — SCOPED (2026-09-22)
 
-> **Big item — full discussion needed before planning tasks.**
+> **Scoping discussion complete.** Split into Phase 16 (overlay refactor — the enabling work)
+> and Phase 17 (custom puzzles + editor). See those sections below.
 
-High-level scope: allow a user to create and play their own custom puzzles without touching code or JSON. Key questions to resolve before tasking:
-- Where does the editor live? In-app screen, or separate tool/URL?
-- Where are custom puzzles stored? `localStorage`, exported JSON file, shareable URL?
-- Is there a "test play" mode within the editor?
-- Validation — how do we ensure the 7 terms + 3-category structure is correct before saving?
-- Sharing — can a custom puzzle be shared via link (ties into the query parameter parking lot idea)?
+Original open questions, now answered:
+- *Where does the editor live?* In-app screen, reached from the Home screen's **Edit** button.
+- *Where are custom puzzles stored?* `localStorage` under `vennit_custom`; shareable via a
+  `?p=<base64>` URL that carries the whole puzzle (no backend).
+- *Is there a "test play" mode?* Yes — a Preview toggle that swaps `EditOverlay` → `PlayOverlay`
+  in place. Actually playing it for score is done from the selector like any other puzzle.
+- *Validation?* 7 terms + 3 categories enforced by the fixed-slot editor layout (one input per
+  region), so the structure can't be malformed by construction.
+- *Sharing?* Yes — supersedes the "Puzzle Pre-Selection via Query Parameter" parking-lot item.
 
 ---
 
@@ -498,6 +504,112 @@ High-level scope: allow a user to create and play their own custom puzzles witho
 
 ---
 
+## Phase 16 — Overlay Refactor & Text Fitting
+
+**Why:** Phase 17's editor needs the Venn diagram rendered with editable text boxes instead of read-only term pills. Forking `VennDiagram.jsx` into play and edit copies would mean two sources drifting apart — and the thing that actually drifts here is the *geometry*, which gets tuned constantly (radii 85→97, viewBox 320→380, '23' anchor 352→340). So the diagram splits into a geometry-only SVG shell plus swappable HTML overlays.
+
+**The split also fixes a live bug.** `TermLabel` has no overflow handling at all: fixed 74×26/38px pill, fixed 11.5–12px font, and line-breaking that splits on the **first space only**. Measured across all 259 term labels in the library: median 6 chars, p90 14, max 46. The max is `thebeatgoeson.json` — "The Presidents of the United States of America" — which currently renders as "The" / "Presidents of the United States of America" spilling across the diagram. `ohjesus.json` has four more in the 17–22 range. Whatever fitting rule we adopt **must be shared between edit and play**, or the author's preview lies about how the puzzle will render.
+
+**Key findings:**
+- `preserveAspectRatio="none"` means the viewBox maps linearly with independent x/y scales and no centering offset — so a viewBox point is exactly `left: cx/320*100%; top: cy/380*100%`. No JS measurement needed for overlay positioning.
+- The pattern is already proven here: `CircleLabel` chips are already absolutely-positioned HTML inside `.vennWrap` in front of the SVG (task C.6 confirmed they don't intercept the hit-test).
+- **HTML pills won't distort — SVG ones do.** With the 160vw/160vh caps, the diagram stretches ~35% vertically at the portrait cap (circles are ellipses by design) and SVG `<text>` stretches with it. HTML pills won't. Real visual change, likely an improvement, needs eyes on it. Sizing pills in `cqw` via `container-type: inline-size` reproduces today's horizontal sizing exactly while dropping the vertical squash.
+- **The hit-test mostly dissolves.** Layers 1–3 of `handleClick` (inline pills, callout anchors/pills, empty callout zones) become ordinary `onClick` on HTML elements; only the geometric fallback stays on the SVG, and `hitsPill` can be deleted. Overlay container needs `pointer-events: none` with `auto` on individual pills so gaps still fall through.
+- `ShuffleOverlay`'s rAF double-frame trick becomes a CSS `transform` transition. `useShuffleAnimation` / `useRevealAnimation` keep their timing logic unchanged.
+
+### Stage 1 — Geometry extraction (pure move, zero behavior change)
+- [x] 16.1 New `src/utils/vennGeometry.js` — `VB_W`, `VB_H`, `CIRCLES`, `CENTROIDS`, `CALLOUT_REGIONS`, `CALLOUT_ANCHORS`, `visualCenter(key)`, plus `pctX(cx)` / `pctY(cy)` helpers for overlay positioning
+- [x] 16.2 `VennDiagram.jsx` imports from it; nothing else changes. Verify: build passes, game pixel-identical
+
+### Stage 2 — HTML overlays + fitting
+- [x] 16.3 `src/utils/fitText.js` — `fitText(label) -> { lines, scale }`. Balanced wrap (binary-search the smallest max-line-length that fits in `MAX_LINES`) + character-count shrink `clamp(MIN_SCALE, TARGET_CHARS / longestLine, 1)`. No DOM measurement, deterministic, pure function
+- [x] 16.4 **Tuned: `TARGET_CHARS=13, MIN_SCALE=0.62, MAX_LINES=2`.** At the original `TARGET_CHARS=11` the implied cap was `(11 / 0.62) × 2 = 35` chars — short of the 40 locked in Phase 17, which would have broken the "input limit equals render capability" principle. Widened the pill instead (11→13, so `PILL_W` 74→87 units): cap is now **41**, covering the locked 40, and it improves every label rather than just accommodating the worst one. Verified there is room — the `'2'` and `'3'` pills sit 210 viewBox units apart and are 87 wide.
+
+  Verified against all 259 real labels:
+
+  | Result | At `TARGET_CHARS=11` | At `13` (shipped) |
+  |---|---|---|
+  | Full size, no shrink | 256 | **258** |
+  | Mild shrink (0.9–1.0) | 2 | 0 |
+  | Pinned at the 0.62 floor | 1 | 1 (`thebeatgoeson.json`, 46 chars) |
+
+  **The balanced wrap does the real work** — shrinking is near-irrelevant in practice. Only the one 46-char outlier shrinks at all, and it's the sole label over the 41-char cap, so it needs shortening in the puzzle sweep.
+- [x] 16.5 `VennDiagram.jsx` → geometry only. Renders as a **fragment** (SVG + `children`), so the overlay is a sibling inside `.vennWrap` — that's what aligns the overlay's percentage coordinates with the SVG viewBox. Hit-test is now the geometric layer alone; `TermLabel`, `ShuffleChip`, `ShuffleOverlay` and `hitsPill` deleted
+- [x] 16.6 `TermPill.jsx` + `.module.css` — shared HTML pill consuming `fitText`, with the source/target/inactive palette carried over verbatim from `TermLabel` so the conversion changes layout only, never color. Sized in `cqw` off `.vennWrap`'s new `container-type: inline-size`. `--pill-w` / `--pill-font` are set from JS (`PILL_W`, `BASE_FONT`) rather than hardcoded in CSS, so pill width can't drift from `TARGET_CHARS`
+- [x] 16.7 `PlayOverlay.jsx` + `.module.css` — pills, leader lines, anchor/empty dots, hint rings, shuffle chips. Lines and dots stay SVG (geometric, must stretch); pills are HTML (must not). `pointer-events: none` on the overlay with `auto` on pills, so gaps fall through to the shell's hit-test
+- [x] 16.8 `GameBoard` / `WinScreen` / `GameOverScreen` → `<VennDiagram …><PlayOverlay …/></VennDiagram>`. Win/GameOver now omit `onRegionClick` entirely, so their pills render as inert `<div>`s rather than buttons
+
+  **Hit-test simplification verified safe:** all 7 centroids resolve geometrically to their own region, so the old pill-rectangle layers 1–2 were redundant. All 3 callout anchors sit outside every circle (returning `null`), which is why empty callout regions still need explicit tap slots — that's the old layer 3, preserved as `.emptySlot` with a 44px minimum.
+- [ ] 16.5 `VennDiagram.jsx` → geometry only: keeps fill/stroke circles, callout leader lines, debug markers, and a slimmed `handleClick` with just the geometric fallback; accepts `children`. Deletes `TermLabel`, `ShuffleChip`, `ShuffleOverlay`, `hitsPill`
+- [ ] 16.6 `TermPill.jsx` — shared HTML pill consuming `fitText`, carrying the source/target/inactive styling from today's `TermLabel`. Used by game, editor preview, shuffle and reveal
+- [ ] 16.7 `PlayOverlay.jsx` — positions a `TermPill` per region, renders callout anchor dots and empty-region dots, owns per-pill `onClick`, renders the shuffle/reveal chip
+- [ ] 16.8 `GameBoard` / `WinScreen` / `GameOverScreen` → `<VennDiagram …><PlayOverlay …/></VennDiagram>`
+- [x] 16.9a Logic verified via Node scripts — geometry extraction byte-identical to `7d0a2f6`; `fitText` invariants hold across all 259 labels (never >2 lines, never below floor, never loses text); hit-test and pill-collision geometry as above
+- [x] 16.10 **Two bugs found in the first visual review (2026-09-22):**
+  - *Landscape pills ~3× too large.* Pills were sized in `cqw` (container width) alone, but landscape is height-constrained and very wide — `27.2cqw` of a ~978px wrap gave 266px pills and 37px text. Fixed with `UNIT_CSS = min(0.3125cqw, 0.263cqh)`: positions may map to each axis independently, but a *size* must pick one scale, and the smaller axis is the right one. Portrait numbers are unchanged (width was already binding there); landscape drops to 72–95px pills and 10–13px text. Needed `container-type: inline-size` → `size` on `.vennWrap`.
+  - *Crowded text in both orientations.* `wrapBalanced` minimised the longest line **unconditionally**, so every multi-word label was split even when it fit — "Let It Be" (9 chars) became "Let" / "It Be". Now returns a single line when `text.length <= targetChars`. Across the corpus this moved **231 of 259 labels to one line**; only 28 genuinely need two. Didn't show in the first review because every term in that puzzle was 14+ characters.
+  - *Board pills rendered at a different size from result-screen pills.* Pills are `<button>` on the game board (they take clicks) and `<div>` on the win/lost screens. The `.interactive` rule carried `font: inherit` to neutralise UA button styling — but `font` is a **shorthand**, so it also set `font-size`, overriding `.pill`'s calculated value at equal specificity and later source order. Board pills therefore rendered at the inherited page size and ignored `--fit-scale` entirely, which is why the 46-char label wrapped to six lines while playing but rendered correctly small on the reveal. Removed: `.pill` already sets `font-family`, `font-weight`, `font-size`, `line-height`, `align-items` and `text-align` explicitly, so UA button styling is fully covered without touching `font`. (The remaining `font: inherit` in `CircleLabels.module.css` is safe — those chips size text via child spans with explicit rem values, so there is no calculated value to clobber.)
+
+    **Fixed by removing `.vennSide` (below), which made the nesting identical across all three screens.**
+- [x] 16.11 **Removed the vestigial `.vennSide` wrapper.** It was one half of a two-panel split whose other half, `.ctrlSide` (TermBank in portrait / SubmitBar in landscape), was deleted in Phase 14.5 — leaving a wrapper whose name described a layout that no longer existed. It had become a duplicate of `.body` (`display:flex; flex-direction:column; flex:1; min-height:0`) differing only by padding, and it carried a second fossil: `.body { flex-direction: row }` in landscape, meaningful only while two children needed laying out side by side, plus a `min-width: 0` guard that existed to stop the diagram squeezing the control panel.
+
+  Collapsed into `.body` with the padding halved to `2px 4px`, and the same padding added to `WinScreen`/`GameOverScreen` so all three screens now nest identically as `.body > .vennWrap`. That also closes the ~4% pill-size difference between the board and the result screens — which had always existed but was invisible while the SVG simply stretched to fill whatever box it was handed.
+- [x] 16.12 **`MAX_LINES` 2 → 3.** At two lines the 46-character term was pinned to the `MIN_SCALE` floor and near-illegible, especially in landscape, despite obvious free space around the pill. Three lines let it render at **scale 0.89 instead of 0.63 — 40% larger text**.
+
+  The care needed is that `MAX_LINES` is an upper bound, not a target: `wrapBalanced` minimises the widest line, so given three lines it will use three, and short labels would have split into needlessly narrow columns. `fitText` now tries line counts in increasing order and stops at the first needing no shrinking, so extra lines are spent only on labels that would otherwise be shrunk. Selection compares the raw ratio rather than the clamped scale, since two counts that both bottom out at the floor would otherwise tie and the fewer-lines one would win despite fitting less text.
+
+  Verified across the corpus: 241 one-line, 17 two-line, **1 three-line — exactly the one label that shrinks**. No short label gained a line, nothing overflows, and a full-height three-line pill (~47 units) still clears its nearest neighbour ('1' to '123', 125 units apart).
+
+  Side effect: `MAX_LABEL_CHARS` rises to 63, comfortably above the locked 40-character editor cap. The "input limit equals render capability" principle still holds — the renderer now simply exceeds the product cap rather than matching it.
+  - *Text overflowing the pill (root cause).* Fitting was driven by **character count**, which is simply the wrong measure: `i` is ~0.30em and `M` ~0.88em, so a count is off by up to 3× for real strings. "The Presidents of the" computed to 113% of the pill's inner width and spilled across the circles; several 12-character labels sat 1–3px over their edges. Replaced with estimated text **width**: a per-character em table (`textWidthEm`), wrapping that balances by width rather than by character count, and `scale = LINE_EM / widestLineEm`. Still a pure function — estimates, not DOM measurement — so it stays testable outside a browser and identical on every render.
+
+    Verified across all 259 labels: **zero overflow**, 241 single-line, 18 two-line, 1 shrunk. "The Presidents…" now lands at scale 0.63 and exactly 100% of the line. Width-based balancing also picks visibly better splits — "Everybody" / "on the floor" (72% of line) instead of "Everybody on" / "the floor" (91%), because the second line is full of narrow characters that a character count can't see.
+
+    Belt and braces: `white-space: nowrap` was removed from the pill. `fitText` already chooses the breaks so it normally does nothing, but if a width estimate comes in low the text now wraps and the pill grows rather than spilling. Overflow is the one failure mode with no acceptable appearance; an extra line is survivable.
+  - *Snug text in single-line pills.* `PILL_W` was derived as `TARGET_CHARS × CHAR_W`, calibrated against the old SVG pill where text ran edge to edge with no padding. The HTML pill has padding, so ~9 units of that width went to padding and only ~11.6 characters' worth of room was left for 13 — visible first on the longest single-line label on a board. Padding is now part of the derivation (`TARGET_CHARS × CHAR_W + 2 × PILL_PAD`, rounded **up**), giving `PILL_W = 97`. `--pill-pad` is fed to the CSS from the same constant so the two can't disagree. Slack on a 10-character label roughly doubles, 5.5u → 10u per side.
+  - *Portrait pills hanging off the screen edge.* Self-inflicted by the 74→87 unit widening: the `'12'`/`'13'` callout anchors sit at x=38/282 of 320, so an 87-wide pill spanned −5.5→81.5. Added `clampX(x, width)` in `vennGeometry.js`, applied in JS rather than CSS — a `clamp()` built from `var()` computes to a pending-substitution value, which doesn't interpolate, and the shuffle chips would snap instead of slide.
+- [ ] 16.9b **Visual review outstanding** — portrait + landscape, small + large phone. Specifically worth checking: pills should no longer look vertically stretched (they've stopped inheriting the diagram's ~35% vertical stretch); pill width went 74→87 units; tapping the gaps between pills should still place terms; the start-of-game shuffle and the game-over reveal should animate as before
+
+---
+
+## Phase 17 — Custom Puzzles & Editor
+
+**Decisions locked (2026-09-22):**
+
+| Decision | Choice |
+|---|---|
+| Term length | Hard stop at 40 chars (`maxLength`); counter fades in over last 8; never truncate |
+| Identity | Stable `custom_<ts>_<rand>` id; unique-title check among local puzzles |
+| Rename | True rename — same id, score history follows. No save-as-copy |
+| Sections | All Venns / My Venns / Shared With Me, each with own `n / m` count |
+| Received puzzles | Play and delete only, never edit |
+| Editor preview | Preview toggle swaps `EditOverlay` → `PlayOverlay` in place |
+| Attempts range | 3–10, default 5 (3 is a hard floor: each submit reveals at most one circle, so fewer is unwinnable) |
+
+Rationale on identity: a stable id doesn't *cause* duplicate titles — the absence of a uniqueness check does. Keying on a generated id *and* refusing a colliding title gets both properties, and makes rename a real rename instead of a rename→save→delete-original dance that loses score history.
+
+### Stage 3 — Storage (no editor UI yet; seed localStorage by hand)
+- [ ] 17.1 `src/utils/customPuzzles.js` over key `vennit_custom` — `listCustom(source?)`, `saveCustom`, `deleteCustom`, `titleExists(title, exceptId)`, `importShared`. Record adds `id`, `source: 'local' | 'shared'`, `createdAt`
+- [ ] 17.2 `custom_` id prefix namespaces away from `2026_001` in `vennit_progress` — `recordResult` needs no change
+- [ ] 17.3 Title uniqueness enforced within `source: 'local'` only — a received puzzle may share a title with one of yours since they live in different sections
+- [ ] 17.4 `PuzzleSelector` → three sections with independent counts; custom sections ungated (never touch `isPuzzleUnlocked`), no date column, empty sections hidden
+- [ ] 17.5 `deleteCustom` also clears that id from `vennit_progress` so orphans don't accumulate
+- [ ] 17.6 Verify via Node script — save/rename/delete/collision round-trips
+
+### Stage 4 — Editor
+- [ ] 17.7 `EditOverlay.jsx` — `<input>` per region with faint placeholders ("Term 1"…), category inputs at the `CircleLabel` chip positions, styled to match `TermPill` so layout previews truthfully. `maxLength={40}` with counter fading in over the last 8 chars
+- [ ] 17.8 `EditorScreen.jsx` — diagram + title input + attempts pip selector (3–10, click N fills 1..N) + Preview toggle + Save/Cancel
+- [ ] 17.9 `MyVennsScreen.jsx` — from the Home screen's currently-disabled **Edit** button. Local puzzles get Edit + Delete; received get Delete only
+- [ ] 17.10 `App.jsx` — new `'editor'` / `'myvenns'` screens in the existing state router + `history.pushState` pattern
+- [ ] 17.11 No game-logic change needed for `maxAttempts` — `useGameState` already reads `puzzle.maxAttempts` and `GameBoard` already renders that many pips
+
+### Stage 5 — Share links
+- [ ] 17.12 `?p=<base64>` carries a whole custom puzzle; `?puzzle=<id>` keeps working for library puzzles. ~250–400 bytes → ~340–540 base64 chars, well inside the ~2000-char safe URL limit
+- [ ] 17.13 On load: decode, validate 7-term / 3-category shape, save as `source: 'shared'`, go straight to the game — no preview stop, no save prompt
+- [ ] 17.14 Dedupe on a content hash of `categories + terms` so reopening the same link twice doesn't create a second copy
+
+---
+
 ## Notes
 
 - After Phase 1 and each subsequent phase, discuss before moving on
@@ -510,6 +622,8 @@ High-level scope: allow a user to create and play their own custom puzzles witho
 ## Future Ideas (Parking Lot)
 
 ### Puzzle Pre-Selection via Query Parameter
+
+**Superseded (2026-09-22):** folded into Phase 17 Stage 5, which keeps `?puzzle=<id>` for library puzzles and adds `?p=<base64>` carrying a whole custom puzzle. Section kept for history.
 
 Allow a specific puzzle to be loaded directly via a URL query parameter, skipping the selector screen:
 

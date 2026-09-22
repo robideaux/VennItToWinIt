@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useGameState } from '../hooks/useGameState.js'
 import { useShuffleAnimation } from '../hooks/useShuffleAnimation.js'
 import VennDiagram from './VennDiagram.jsx'
+import PlayOverlay from './PlayOverlay.jsx'
 import CircleLabel from './CircleLabels.jsx'
 import styles from './GameBoard.module.css'
 
@@ -76,37 +77,39 @@ export default function GameBoard({
       </header>
 
       <div className={styles.body}>
-        <div className={styles.vennSide}>
-          <div className={styles.vennWrap}>
-            <CircleLabel
-              circleId="1"
-              revealedCircles={game.revealedCircles}
-              onSubmit={game.submitCircle}
-              canSubmit={game.isCircleFilled('1')}
-            />
-            <CircleLabel
-              circleId="2"
-              revealedCircles={game.revealedCircles}
-              onSubmit={game.submitCircle}
-              canSubmit={game.isCircleFilled('2')}
-            />
-            <CircleLabel
-              circleId="3"
-              revealedCircles={game.revealedCircles}
-              onSubmit={game.submitCircle}
-              canSubmit={game.isCircleFilled('3')}
-            />
-            <VennDiagram
+        <div className={styles.vennWrap}>
+          <CircleLabel
+            circleId="1"
+            revealedCircles={game.revealedCircles}
+            onSubmit={game.submitCircle}
+            canSubmit={game.isCircleFilled('1')}
+          />
+          <CircleLabel
+            circleId="2"
+            revealedCircles={game.revealedCircles}
+            onSubmit={game.submitCircle}
+            canSubmit={game.isCircleFilled('2')}
+          />
+          <CircleLabel
+            circleId="3"
+            revealedCircles={game.revealedCircles}
+            onSubmit={game.submitCircle}
+            canSubmit={game.isCircleFilled('3')}
+          />
+          <VennDiagram
+            revealedCircles={game.revealedCircles}
+            onRegionClick={handleRegionClick}
+            debugMode={debugMode}
+          >
+            <PlayOverlay
               puzzle={puzzle}
               placements={game.placements}
               selectedTermId={game.selectedTermId}
-              revealedCircles={game.revealedCircles}
               validTargets={game.selectedTermId ? game.validTargetsFor(game.selectedTermId) : []}
               onRegionClick={handleRegionClick}
               shuffleStep={shuffle.step}
-              debugMode={debugMode}
             />
-          </div>
+          </VennDiagram>
         </div>
       </div>
 
