@@ -1,0 +1,17 @@
+# Normalise line endings so they don't depend on each clone's core.autocrlf setting.
+# The repo already stores everything as LF; this makes that explicit and keeps the
+# working tree LF too, so editing from a non-Windows machine can't produce a diff
+# where every line of a file appears changed.
+* text=auto eol=lf
+
+# Safety net for assets added later — never line-ending-convert binary content.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.mp3  binary
+*.mp4  binary
