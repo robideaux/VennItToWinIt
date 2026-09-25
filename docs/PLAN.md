@@ -589,12 +589,54 @@ Original open questions, now answered:
 Rationale on identity: a stable id doesn't *cause* duplicate titles — the absence of a uniqueness check does. Keying on a generated id *and* refusing a colliding title gets both properties, and makes rename a real rename instead of a rename→save→delete-original dance that loses score history.
 
 ### Stage 3 — Storage (no editor UI yet; seed localStorage by hand)
-- [ ] 17.1 `src/utils/customPuzzles.js` over key `vennit_custom` — `listCustom(source?)`, `saveCustom`, `deleteCustom`, `titleExists(title, exceptId)`, `importShared`. Record adds `id`, `source: 'local' | 'shared'`, `createdAt`
-- [ ] 17.2 `custom_` id prefix namespaces away from `2026_001` in `vennit_progress` — `recordResult` needs no change
-- [ ] 17.3 Title uniqueness enforced within `source: 'local'` only — a received puzzle may share a title with one of yours since they live in different sections
-- [ ] 17.4 `PuzzleSelector` → three sections with independent counts; custom sections ungated (never touch `isPuzzleUnlocked`), no date column, empty sections hidden
-- [ ] 17.5 `deleteCustom` also clears that id from `vennit_progress` so orphans don't accumulate
-- [ ] 17.6 Verify via Node script — save/rename/delete/collision round-trips
+
+**Design decided 2026-09-22.**
+
+*Records are flat.* A custom puzzle **is** a puzzle object with two extra fields (`source`, `createdAt`); it is not wrapped. This matters because `handleSelectPuzzle(puzzle)` already takes a full puzzle object rather than a manifest entry, and `recordResult` keys off `puzzle.id` — so a custom puzzle flows through App, `useGameState`, the pips and progress with **no changes at all**, and a share link is just the same object minus the two metadata fields.
+
+*Validation has three states, not two.* An "invalid" record is usually not corrupt — it is a **draft** someone is midway through writing, and discarding it would be the worst possible behaviour:
+
+| status | meaning | consequence |
+|---|---|---|
+| `complete` | 7 regions filled, 3 categories, title set | playable |
+| `incomplete` | right shape, content missing or empty | editable and saveable, **not** playable |
+| `invalid` | structurally broken — not an object, duplicate/unknown region keys, terms not an array | cannot be loaded |
+
+Only `invalid` is real corruption, and the editor cannot produce it: one input per region means duplicate or unknown keys are impossible by construction. It arises only from hand-edited storage or a bad link. Consequences that follow:
+- **Editor Save always succeeds** (Stage 4). Completeness gates *playability*, not saving — no "fill every field before you can save" wall, which is exactly what loses people's work.
+- **Import requires `complete`** (Stage 5). Received puzzles are play/delete only, so an incomplete one could never be finished; a link that decodes to anything else shows "not a valid puzzle link" and imports nothing.
+- The storage parser must treat missing fields as *expected*, dropping only records it genuinely cannot read.
+
+*Custom puzzles are unrecoverable data; progress is not.* A corrupted `vennit_progress` costs some checkmarks. A corrupted `vennit_custom` destroys puzzles someone wrote, with no backup anywhere — so this store gets a `{ version: 1, puzzles: [...] }` wrapper it can migrate through, and a per-record defensive parse so one bad entry can never take the rest with it.
+
+### Tasks
+- [x] 17.1 `src/utils/customPuzzles.js` (pure) over key `vennit_custom` — `listCustom(source?)`, `saveCustom`, `deleteCustom`, `titleExists(title, exceptId)`, `importShared`, `readStore`/`writeStore` with versioned wrapper and per-record recovery
+- [x] 17.2 `src/utils/validatePuzzle.js` — `complete | incomplete | invalid` plus the specific issues found. Pulled forward from Stage 5 because the editor, the selector and share-import all need the same rules, and it is pure logic verifiable here
+- [x] 17.3 `src/hooks/useCustomPuzzles.js` — thin React wrapper holding the list in state, mirroring how `useProgress` wraps its own store. Needed because the list changes at runtime and three places read it; without state, saving would not re-render the selector
+- [x] 17.4 `custom_<ts>_<rand>` id prefix namespaces away from `2026_001` in `vennit_progress` — `recordResult` needs no change
+- [x] 17.5 Title uniqueness enforced within `source: 'local'` only — a received puzzle may share a title with one of yours since they live in different sections
+- [x] 17.6 `PuzzleSelector` → three sections (All Venns / My Venns / Shared With Me) with independent `n / m` counts; custom sections ungated (never touch `isPuzzleUnlocked`), empty sections hidden, sorted newest-first by `createdAt`. Custom rows carry their created/received date, so all three sections share the library's row layout
+- [x] 17.6b **Sections collapse.** The library runs to dozens of rows, which buries the custom sections under a long scroll. Headers are buttons that toggle their list, and the choice persists in `vennit_selector_collapsed` — a collapse that reset every visit would be worse than none. Headers are also `position: sticky` beneath the page header, so the section you want stays reachable mid-scroll. A collapsed header keeps showing its count (or "n drafts" where nothing is playable yet), since a closed section still has to tell you what is inside
+- [~] 17.7 Drafts appear in **both** lists — editable in My Venns, and as a disabled "Incomplete" row in the play selector that opens the editor when tapped. A puzzle must never silently vanish from the list you last saw it in. **Selector half done:** drafts render with an "incomplete" tag and are not launchable; the tap-to-edit target and the My Venns screen arrive with the editor in Stage 4, so a draft row is simply disabled until then
+- [x] 17.8 `useProgress` — add `clearResult(id)`, and fix the existing bug where `localStorage.setItem` runs *inside* the `setState` updater: unguarded (throws in Safari private browsing / on quota, mid win-screen transition) and double-invoked under React StrictMode
+- [~] 17.9 Deleting a custom puzzle clears both stores — `deleteCustom(id)` plus `clearResult(id)`, so every write to `vennit_progress` stays inside its hook and no orphan progress accumulates. **`clearResult` built and threaded into App; the delete UI that calls it is Stage 4**
+- [x] 17.10 Verify via Node scripts — save/rename/delete/collision round-trips, validation across all three states, and defensive parse against corrupt/partial stores
+
+**Two title/content collision cases worked through (2026-09-25):**
+- *Two different puzzles, both titled "Demo", from two people.* Both must import — you have to be able to play what someone sent you, and you don't control what they called it. Resolved by suffixing on import: the second arrival becomes `Demo 02`, the third `Demo 03`. Only reachable from two *different* senders, since local title uniqueness already stops one person creating two same-named puzzles. Scoped to received puzzles only — a local and a received puzzle sharing a title are already unambiguous in separate sections. The suffix is stored rather than applied at render, so a title cannot shift when a neighbour is deleted, and freed numbers are reused so the list never grows gaps.
+
+  Crucially the suffix lives in a separate `localTitle` field — **`title` always stays exactly as the author wrote it.** Your numbering is how *you* tell two arrivals apart, not a property of the puzzle, so re-sharing one you filed as "Demo 03" passes on "Demo". Putting the suffix in `title` and stashing the original elsewhere would have worked too, but fails unsafely: every future share path would have to remember to swap it back, and forgetting once leaks your local renaming into someone else's copy. This way a missed `displayTitle` call is merely cosmetic.
+
+  The split also protects a second thing: a puzzle's title often carries a deliberate **hint** about the hidden categories, the way a Strands clue does. So it must reach the player exactly as authored — `displayTitle` belongs in lists only. That already holds: the only three title surfaces are the GameBoard header, the GameBoard pause overlay (both reading `puzzle.title`) and the selector's custom rows (the one `displayTitle` call). Win and Game Over render no title at all. `toShareable()` strips all local bookkeeping (`id`, `source`, `createdAt`, `localTitle`) plus `year`/`sequence`, which schedule the curated library and mean nothing on a custom puzzle — leaving a ~475-byte payload, ~634 base64 chars, comfortably inside the ~2000-char URL limit. Unlike `saveCustom`, which *rejects* a duplicate title, import disambiguates silently: you are naming your own puzzle and deserve to be told, but you have no say in what someone else called theirs. Custom rows also carry their created/received date, matching the library's row layout.
+- *Opening your own share link to test it.* Previously produced a second record — the same puzzle in both My Venns and Shared With Me, with progress split across two ids. `importShared` now deduplicates against **any** record rather than only shared ones, and returns the copy you already hold. Identical content is never a coincidence: two people independently authoring the same 7 terms across the same 3 categories effectively never happens, so a content match means you already have this puzzle, usually your own coming home. Keeping both would gain nothing, since your local copy is editable and strictly better. (This reverses a narrower scoping made earlier the same day, which was reasoning about titles — where collisions are legitimate — and wrongly applied that to content, where they are not.)
+
+**Navigation crash fixed (2026-09-25, pre-existing):** finishing a game, tapping **New Puzzle**, then **Back** on the selector blanked the app. `handleBackToSelector` called `setActivePuzzle(null)` before navigating, but the win/gameover history entry was still on the stack and those screens rebuild their entire reveal from that puzzle — so Back rendered `GameOverScreen` with `puzzle={null}` and `buildRevealState` threw on `Cannot read properties of null (reading 'categories')`. Not caused by Stage 3; just first noticed here. Fixed by keeping `activePuzzle` (the next puzzle chosen replaces it anyway) and additionally guarding both results screens, so any future path that loses the puzzle degrades to a "that game is no longer available" fallback rather than a white page.
+
+**Found during implementation:** two real bugs the verification caught, both invisible to a build.
+- `validatePuzzle` compared `getCorrectRegionKey` output (**category** keys `A`/`AB`/`ABC`) against `REGION_KEYS` (**physical circle** keys `1`/`12`/`123`) — the exact distinction `puzzleUtils.js` warns about in its opening comment. They never matched, so every puzzle reported "7 regions still empty" and nothing could ever be `complete`. Added a separate `CATEGORY_REGION_KEYS`.
+- `importShared` deduplicated against **all** records, so a link whose content matched a puzzle you had written would silently hand back *your* copy instead of importing theirs. Scoped to `source: 'shared'` only: dedupe exists so the same link opened twice doesn't make two copies, not so your own work suppresses someone else's. Yours and theirs are different things and coexist, exactly as identical titles do.
+
+Also restructured during implementation: `id` was initially required by `validatePuzzle`, which made a brand-new puzzle unsaveable (the store mints the id, but validation ran first). Identity is a storage concern, not puzzle content — share links legitimately arrive without one — so the check moved to `readStore`/`saveCustom`.
 
 ### Stage 4 — Editor
 - [ ] 17.7 `EditOverlay.jsx` — `<input>` per region with faint placeholders ("Term 1"…), category inputs at the `CircleLabel` chip positions, styled to match `TermPill` so layout previews truthfully. `maxLength={40}` with counter fading in over the last 8 chars
@@ -620,6 +662,40 @@ Rationale on identity: a stable id doesn't *cause* duplicate titles — the abse
 ---
 
 ## Future Ideas (Parking Lot)
+
+### Cross-Tab Storage Sync — deferred (investigated 2026-09-25)
+
+Neither `useProgress` nor `useCustomPuzzles` re-reads `localStorage` after mount, so two tabs
+of the app drift apart. Investigated while checking what happens if you delete a puzzle in one
+tab and press Back in another. **Decision: not fixing now** — it needs two tabs open at once,
+and what is actually at risk today is progress, which is disposable.
+
+What was confirmed by simulating two tabs against one store:
+
+- **Back still works.** `activePuzzle` is React state in memory and is never re-read, so
+  deleting the puzzle elsewhere does not affect it — the reveal renders normally and the
+  "no longer available" fallback does not appear. That is correct: the game you played is
+  still a valid thing to look at.
+- **Lists go stale.** The other tab's selector keeps listing a puzzle that is gone.
+- **Progress gets clobbered — the actual defect.** `useProgress` serialises its whole
+  in-memory object on every write, so the next result written from a stale tab reinstates
+  entries another tab deleted. Confirmed: after a delete, a later unrelated game restored the
+  deleted puzzle's progress key.
+- **The custom puzzle store is safe**, because every mutation there is read-modify-write
+  (`readStore` then `writeStore`) and so cannot overwrite what it never read.
+
+**The distinction that matters** (and that the first framing of this got wrong): a puzzle
+reappearing because the user pressed **Save** is not a bug — they explicitly asked to persist
+it, and honouring that is right even if another tab deleted it meanwhile. A progress entry
+reappearing because the user merely *navigated* is a bug: nothing they did expressed intent
+to restore it. Only the incidental write is worth fixing.
+
+**When to revisit:** before or during Stage 4, if editing makes stale lists visible enough to
+matter. The fix is the `storage` event, which fires only in *other* tabs — a few lines in each
+hook to refresh state when another tab writes. Read-modify-write on progress would reduce the
+damage but cannot fix deletes alone: merging still reinstates a key the stale tab has not been
+told is gone.
+
 
 ### Puzzle Pre-Selection via Query Parameter
 

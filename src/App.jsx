@@ -9,6 +9,20 @@ import GameBoard from './components/GameBoard.jsx'
 import WinScreen from './components/WinScreen.jsx'
 import GameOverScreen from './components/GameOverScreen.jsx'
 
+// Rendered if a results screen is ever reached without its puzzle — a dead history entry,
+// say. Shows a way out rather than a blank page.
+function HomeFallback({ onHome }) {
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      gap: 16, minHeight: '100dvh', padding: 24, textAlign: 'center',
+    }}>
+      <p>That game is no longer available.</p>
+      <button onClick={onHome}>Go Home</button>
+    </div>
+  )
+}
+
 // screen: 'home' | 'howto' | 'settings' | 'selector' | 'game' | 'win' | 'gameover'
 const debugMode = new URLSearchParams(window.location.search).has('debug')
 
@@ -19,7 +33,7 @@ export default function App() {
   const [finalGameState, setFinalGameState] = useState(null)
   // Overlay rendered on top of GameBoard without unmounting it (preserves game state)
   const [gameOverlay, setGameOverlay] = useState(null) // null | 'settings' | 'howto' | 'selector'
-  const { progress, recordResult } = useProgress()
+  const { progress, recordResult, clearResult } = useProgress()
 
   useEffect(() => {
     // Seed the initial history entry so back-navigation lands here instead of leaving the app
@@ -95,7 +109,10 @@ export default function App() {
   }
 
   function handleBackToSelector() {
-    setActivePuzzle(null)
+    // Deliberately keeps activePuzzle. The win/gameover entry is still on the history
+    // stack and those screens rebuild their whole reveal from this puzzle — clearing it
+    // here meant pressing Back rendered GameOverScreen with puzzle={null}, which threw
+    // inside buildRevealState and blanked the app. The next puzzle chosen replaces it.
     history.pushState({ screen: 'selector' }, '')
     setScreen('selector')
   }
@@ -180,7 +197,12 @@ export default function App() {
           )}
         </>
       )}
-      {screen === 'win' && (
+      {/* Results screens are driven entirely by activePuzzle. Guarding here means any
+          future navigation path that loses it degrades to Home instead of a white page. */}
+      {screen === 'win' && !activePuzzle && <HomeFallback onHome={handleQuit} />}
+      {screen === 'gameover' && !activePuzzle && <HomeFallback onHome={handleQuit} />}
+
+      {screen === 'win' && activePuzzle && (
         <WinScreen
           puzzle={activePuzzle}
           placements={finalGameState?.placements}
@@ -188,7 +210,7 @@ export default function App() {
           onPlayAgain={handleBackToSelector}
         />
       )}
-      {screen === 'gameover' && (
+      {screen === 'gameover' && activePuzzle && (
         <GameOverScreen
           puzzle={activePuzzle}
           placements={finalGameState?.placements}

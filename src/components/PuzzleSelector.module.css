@@ -54,6 +54,61 @@
   list-style: none;
 }
 
+/* Explicit, so a future `display` rule on .list can't quietly defeat the hidden
+   attribute and leave collapsed sections visible. */
+.list[hidden] {
+  display: none;
+}
+
+/* ── Section head ─────────────────────────────────────────────────────────── */
+
+.sectionHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  /* Same tone as the page header: both are chrome. Rows sit recessed beneath, so a
+     section reads as a labelled container rather than a divider floating in the list. */
+  background: var(--color-surface);
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  /* Sticky so the section you want stays reachable while scrolling a long list.
+     Sits below the page header, which is sticky at 0 with z-index 10. */
+  position: sticky;
+  top: var(--header-height);
+  z-index: 5;
+}
+
+.sectionHead:hover {
+  background: var(--color-accent-tint);
+}
+
+.chevron {
+  font-size: 0.8rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  transition: transform 0.18s ease;
+  flex-shrink: 0;
+}
+
+.chevronCollapsed {
+  transform: rotate(-90deg);
+}
+
+.sectionTitle {
+  flex: 1;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
 /* ── Compact row ──────────────────────────────────────────────────────────── */
 
 .row {
@@ -65,7 +120,7 @@
   padding: 0 20px;
   border: none;
   border-bottom: 1px solid var(--color-border);
-  background: var(--color-surface);
+  background: var(--color-bg);
   text-align: left;
   color: var(--color-text);
   transition: background 0.12s ease;
@@ -85,6 +140,25 @@
 
 .played {
   opacity: 0.5;
+}
+
+/* A draft stays in the list so it can never look like it vanished, but reads as
+   unfinished rather than playable. Tapping it opens the editor. */
+.incomplete .rowTitle {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.draftTag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 2px 7px;
+  white-space: nowrap;
 }
 
 .date {
@@ -107,6 +181,10 @@
   min-width: 18px;
   text-align: right;
   flex-shrink: 0;
+}
+
+.status:empty {
+  min-width: 18px;
 }
 
 /* ── States ───────────────────────────────────────────────────────────────── */

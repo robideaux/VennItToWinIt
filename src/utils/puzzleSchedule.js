@@ -39,6 +39,14 @@ export function formatDisplayDate(year, sequence) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
+// "Mar 16" from a stored ISO timestamp — the custom-puzzle equivalent of
+// formatDisplayDate, which derives its date from (year, sequence) instead.
+export function formatStoredDate(iso) {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
+
 // Fetches manifest, filters to unlocked puzzles, returns newest-first
 export async function fetchUnlockedPuzzles() {
   const r = await fetch('/puzzles/index.json')
