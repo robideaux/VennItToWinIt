@@ -1,0 +1,189 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--header-gap);
+  padding: 0 var(--header-pad-x);
+  min-height: var(--header-height);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.cancelBtn,
+.saveBtn {
+  flex-shrink: 0;
+  min-height: 44px;
+  padding: 0 8px;
+  border: none;
+  background: none;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cancelBtn { color: var(--color-text-muted); }
+.saveBtn   { color: var(--color-accent); }
+
+.titleInput {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.titleInput::placeholder {
+  font-weight: 500;
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.titleInput:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-tint);
+}
+
+.hint,
+.error {
+  flex-shrink: 0;
+  margin: 8px 16px 0;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.hint  { color: var(--color-text-muted); font-style: italic; }
+.error {
+  color: var(--color-error);
+  background: var(--color-error-bg);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.body {
+  composes: diagramBody from '../styles/shared.module.css';
+}
+
+.vennWrap {
+  composes: vennWrap from '../styles/shared.module.css';
+}
+
+/* ── Footer controls ──────────────────────────────────────────────────────── */
+
+.footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.attempts {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.attemptsLabel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+/* Numbered pips: tapping N fills 1..N, so the range is obvious and 109 attempts
+   is not expressible. 3 is a hard floor — each submit reveals at most one circle,
+   so fewer than three is literally unwinnable. */
+.pips {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+}
+
+.pip {
+  flex: 1;
+  min-width: 0;
+  min-height: 32px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.pipOn {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.testBtn {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  background: none;
+  color: var(--color-accent);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.testBtn:disabled {
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+  cursor: default;
+  opacity: 0.6;
+}
+
+.ready,
+.unfinished {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.ready      { color: var(--color-accent); }
+.unfinished { color: var(--color-text-muted); }
+
+/* Landscape: the diagram is height-starved, so the footer goes to one row */
+@media (orientation: landscape) {
+  .footer {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .attempts { flex: 1; }
+  .statusRow { flex: 0 0 auto; }
+  .hint { display: none; }
+}

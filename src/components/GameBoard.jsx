@@ -15,6 +15,9 @@ export default function GameBoard({
   onOpenHowTo,
   onSelectGame,
   onQuit,
+  // Test play from the editor: the same real board, but the pause menu drops the
+  // navigation that would take an author out of their own puzzle mid-check.
+  testMode = false,
 }) {
   const game = useGameState(puzzle)
   const shuffle = useShuffleAnimation()
@@ -117,15 +120,23 @@ export default function GameBoard({
       {paused && (
         <div className={styles.pauseOverlay} onClick={() => setPaused(false)}>
           <div className={styles.pauseCard} onClick={e => e.stopPropagation()}>
-            <p className={styles.pauseHeading}>Paused</p>
-            <p className={styles.pauseSub}>{puzzle.title}</p>
+            <p className={styles.pauseHeading}>{testMode ? 'Test paused' : 'Paused'}</p>
+            <p className={styles.pauseSub}>{puzzle.title || 'Untitled'}</p>
             <button
               className={`${styles.pauseBtn} ${styles.pauseBtnPrimary}`}
               onClick={() => setPaused(false)}
             >
               Resume
             </button>
-            <button
+            {testMode ? (
+              <button
+                className={`${styles.pauseBtn} ${styles.pauseBtnQuit}`}
+                onClick={handleQuit}
+              >
+                Back to editing
+              </button>
+            ) : (
+            <><button
               className={`${styles.pauseBtn} ${styles.pauseBtnSecondary}`}
               onClick={handleHowTo}
             >
@@ -148,7 +159,8 @@ export default function GameBoard({
               onClick={handleQuit}
             >
               Quit Game
-            </button>
+            </button></>
+            )}
           </div>
         </div>
       )}

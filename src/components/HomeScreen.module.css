@@ -128,23 +128,7 @@
   color: #ffffff;
 }
 
-/* Edit — disabled with badge */
-.editBtn {
-  justify-content: space-between;
-  opacity: 0.5;
-  cursor: not-allowed;
-}
 
-.badge {
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 3px 9px;
-  border-radius: 20px;
-  background: var(--color-border);
-  color: var(--color-text-muted);
-}
 
 /* ── Landscape: side-by-side layout ──────────────────────────────────────── */
 @media (orientation: landscape) {

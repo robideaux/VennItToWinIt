@@ -19,6 +19,17 @@ const PERMUTATIONS = [
   { '1': 'C', '2': 'B', '3': 'A' },
 ]
 
+// Category letter -> physical circle, the identity assignment the editor draws with.
+// Play time is permutation-aware, so which circle a category lands on is arbitrary; the
+// editor simply has to pick one consistent arrangement to show while authoring.
+export const CATEGORY_TO_CIRCLE = { A: '1', B: '2', C: '3' }
+
+// 'AB' (category region) -> '12' (physical region). Lets the editor position its inputs
+// with the same geometry the game uses, without either side inventing coordinates.
+export function categoryRegionToPhysical(categoryKey) {
+  return categoryKey.split('').map(c => CATEGORY_TO_CIRCLE[c]).sort().join('')
+}
+
 export function getCorrectRegionKey(term) {
   return [...term.regions].sort().join('')
 }

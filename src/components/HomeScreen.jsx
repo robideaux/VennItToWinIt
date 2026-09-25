@@ -3,7 +3,7 @@ import styles from './HomeScreen.module.css'
 import { CIRCLE_COLORS } from '../styles/colors.js'
 import { fetchUnlockedPuzzles } from '../utils/puzzleSchedule.js'
 
-export default function HomeScreen({ onPlayLatest, onAllVenns, onHowToPlay, onSettings, progress }) {
+export default function HomeScreen({ onPlayLatest, onAllVenns, onHowToPlay, onSettings, onEdit, progress }) {
   const [latestEntry, setLatestEntry] = useState(null)
 
   useEffect(() => {
@@ -51,9 +51,8 @@ export default function HomeScreen({ onPlayLatest, onAllVenns, onHowToPlay, onSe
           <button className={styles.btn} onClick={onSettings}>
             Settings
           </button>
-          <button className={`${styles.btn} ${styles.editBtn}`} disabled>
+          <button className={styles.btn} onClick={onEdit}>
             Edit
-            <span className={styles.badge}>Coming Soon</span>
           </button>
         </nav>
       </div>

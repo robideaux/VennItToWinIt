@@ -6,7 +6,7 @@ import PlayOverlay from './PlayOverlay.jsx'
 import CircleLabel from './CircleLabels.jsx'
 import styles from './GameOverScreen.module.css'
 
-export default function GameOverScreen({ puzzle, placements, lockedCircles, onRetry, onPickNewPuzzle }) {
+export default function GameOverScreen({ puzzle, placements, lockedCircles, onRetry, onPickNewPuzzle, testMode = false }) {
   const { placements: revealPlacements, revealedCircles } = useMemo(
     () => buildRevealState(puzzle, lockedCircles ?? []),
     [puzzle, lockedCircles]
@@ -18,8 +18,8 @@ export default function GameOverScreen({ puzzle, placements, lockedCircles, onRe
       <header className={styles.header}>
         <h2 className={styles.heading}>Out of attempts</h2>
         <div className={styles.buttons}>
-          <button className={styles.btnSecondary} onClick={onPickNewPuzzle}>New Puzzle</button>
-          <button className={styles.btnPrimary} onClick={onRetry}>Try Again</button>
+          <button className={styles.btnSecondary} onClick={onPickNewPuzzle}>{testMode ? 'Back to editing' : 'New Puzzle'}</button>
+          <button className={styles.btnPrimary} onClick={onRetry}>{testMode ? 'Test again' : 'Try Again'}</button>
         </div>
       </header>
 

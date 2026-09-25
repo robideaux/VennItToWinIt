@@ -5,6 +5,8 @@
 //
 // Copy the printed line into the browser console on the running app, then reload.
 // Covers all three record states: complete local, incomplete draft, and received.
+// With the editor built (Stage 4) you can also just make puzzles from Home > Edit > + New;
+// this stays useful for getting a known mix of states in one step.
 
 import fs from 'fs'
 import path from 'path'

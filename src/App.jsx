@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useProgress } from './hooks/useProgress.js'
+import { useCustomPuzzles } from './hooks/useCustomPuzzles.js'
 import { fetchUnlockedPuzzles } from './utils/puzzleSchedule.js'
 import HomeScreen from './components/HomeScreen.jsx'
 import HowToPlayScreen from './components/HowToPlayScreen.jsx'
 import SettingsScreen from './components/SettingsScreen.jsx'
 import PuzzleSelector from './components/PuzzleSelector.jsx'
+import MyVennsScreen from './components/MyVennsScreen.jsx'
+import EditorScreen from './components/EditorScreen.jsx'
 import GameBoard from './components/GameBoard.jsx'
 import WinScreen from './components/WinScreen.jsx'
 import GameOverScreen from './components/GameOverScreen.jsx'
@@ -24,6 +27,7 @@ function HomeFallback({ onHome }) {
 }
 
 // screen: 'home' | 'howto' | 'settings' | 'selector' | 'game' | 'win' | 'gameover'
+//       | 'myvenns' | 'editor'
 const debugMode = new URLSearchParams(window.location.search).has('debug')
 
 export default function App() {
@@ -34,6 +38,9 @@ export default function App() {
   // Overlay rendered on top of GameBoard without unmounting it (preserves game state)
   const [gameOverlay, setGameOverlay] = useState(null) // null | 'settings' | 'howto' | 'selector'
   const { progress, recordResult, clearResult } = useProgress()
+  const custom = useCustomPuzzles()
+  // null = creating a new puzzle; a puzzle object = editing that one
+  const [editingPuzzle, setEditingPuzzle] = useState(null)
 
   useEffect(() => {
     // Seed the initial history entry so back-navigation lands here instead of leaving the app
@@ -80,6 +87,32 @@ export default function App() {
       // stay on home if fetch fails
     }
   }
+
+  function goTo(screen) {
+    history.pushState({ screen }, '')
+    setScreen(screen)
+  }
+
+  function handleOpenEditor(puzzle = null) {
+    setEditingPuzzle(puzzle)
+    goTo('editor')
+  }
+
+  // Save always succeeds for a well-formed draft, complete or not — an unfinished puzzle
+  // is a draft worth keeping, not an error. Only a title clash or full storage can refuse.
+  function handleSaveCustom(puzzle) {
+    const result = custom.save(puzzle)
+    if (result.ok) {
+      setEditingPuzzle(null)
+      history.replaceState({ screen: 'myvenns' }, '')
+      setScreen('myvenns')
+    }
+    return result
+  }
+
+  // MyVennsScreen removes the puzzle through its own useCustomPuzzles instance, so its
+  // list updates immediately. This only clears the progress entry, which would otherwise
+  // linger as an orphan keyed to an id nothing can reach.
 
   function handleAllVenns() {
     history.pushState({ screen: 'selector' }, '')
@@ -144,8 +177,9 @@ export default function App() {
         <HomeScreen
           onPlayLatest={handlePlayLatest}
           onAllVenns={handleAllVenns}
-          onHowToPlay={() => { history.pushState({ screen: 'howto' }, ''); setScreen('howto') }}
-          onSettings={() => { history.pushState({ screen: 'settings' }, ''); setScreen('settings') }}
+          onHowToPlay={() => goTo('howto')}
+          onSettings={() => goTo('settings')}
+          onEdit={() => goTo('myvenns')}
           progress={progress}
         />
       )}
@@ -158,8 +192,24 @@ export default function App() {
       {screen === 'selector' && (
         <PuzzleSelector
           onSelectPuzzle={handleSelectPuzzle}
+          onEditPuzzle={handleOpenEditor}
           onBack={handleBackToHome}
           progress={progress}
+        />
+      )}
+      {screen === 'myvenns' && (
+        <MyVennsScreen
+          onBack={handleBackToHome}
+          onNew={() => handleOpenEditor(null)}
+          onEdit={handleOpenEditor}
+          onDeleted={clearResult}
+        />
+      )}
+      {screen === 'editor' && (
+        <EditorScreen
+          puzzle={editingPuzzle}
+          onSave={handleSaveCustom}
+          onCancel={handleBackToHome}
         />
       )}
       {screen === 'game' && (
