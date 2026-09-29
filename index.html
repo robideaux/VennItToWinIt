@@ -9,7 +9,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="VennItToWinIt" />
-    <meta name="theme-color" content="#1a1a1a" />
+    <!-- Two tags so the very first paint is right before any script runs. Once loaded,
+         src/utils/theme.js replaces them with a single managed tag, because a manual
+         Light/Dark override in Settings is invisible to a media query.
+         Values match --color-surface: the chrome sits against the app's header. -->
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
   </head>
   <body>
     <div id="root"></div>

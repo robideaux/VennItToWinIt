@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import styles from './SettingsScreen.module.css'
+import { applyTheme } from '../utils/theme.js'
 
 const STORAGE_KEY = 'vennit_settings'
 const DEFAULTS = { theme: 'system', audio: true }
@@ -10,10 +11,6 @@ function loadSettings() {
   } catch {
     return { ...DEFAULTS }
   }
-}
-
-function applyTheme(theme) {
-  document.documentElement.dataset.theme = theme === 'system' ? '' : theme
 }
 
 export default function SettingsScreen({ onBack }) {

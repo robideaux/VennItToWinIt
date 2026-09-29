@@ -712,6 +712,20 @@ Costing it from the shared pool also turned out to be safe once attempts were fi
 
 ---
 
+## Phase 19 — Browser Chrome & Theme at Boot
+
+**`theme-color` now follows the theme.** It was a single fixed `#1a1a1a` — the *dark* surface — so in light mode the browser painted its chrome near-black above a white app, which made the bar announce itself rather than disappear into the header. `index.html` now carries one tag per scheme so the first paint is right before any script runs; once loaded, `src/utils/theme.js` replaces both with a single managed tag, because a manual Light/Dark override in Settings is invisible to a media query. Values match `--color-surface`, not `--color-bg`: the chrome sits against the header, so that is what it has to blend with.
+
+**Pre-existing bug fixed alongside it:** `applyTheme` lived inside `SettingsScreen` and only ran while that screen was mounted, so a saved preference was ignored at startup — choose Light on a dark phone and you got dark on every launch until you opened Settings. It now runs in `main.jsx` before render (an effect would show a frame of the wrong theme), with a `matchMedia` listener that follows the OS *only* while the preference is "system".
+
+**Not doing: the PWA install prompt.** Discussed and deliberately parked. An install prompt shown to someone who just tapped a link to try one puzzle gets dismissed reflexively — install prompts work on people who have already decided they like something. It is a feature for returning players, which makes its *trigger* (after two or three finished puzzles, or a return visit) matter more than its design, and it ranks below Phase 9 because it only ever reaches people who already come back.
+
+**Known limitation:** the URL bar cannot be reclaimed. Mobile browsers collapse it on scroll, but the app is `100dvh` with `overflow: hidden` and never scrolls, so it is permanently visible. `dvh` sizes correctly to it so nothing breaks — the space is simply never given back.
+
+**Unverified risk worth knowing:** links opened from Messages, WhatsApp or Instagram often land in an in-app browser rather than Safari or Chrome. Install is frequently unavailable there, and `localStorage` may be sandboxed to the host app — so a custom puzzle received and played inside WhatsApp's browser may not appear later in Safari. Not measured across webviews; flagged before leaning harder on sharing.
+
+---
+
 ## Future Ideas (Parking Lot)
 
 ### Cross-Tab Storage Sync — deferred (investigated 2026-09-25)
