@@ -690,11 +690,42 @@ The mechanic went through two wrong versions first. The original proposal reveal
 
 Costing it from the shared pool also turned out to be safe once attempts were fixed: a miss leaves 4, and three locks are still needed, so there is a spare. Under a *variable* budget it could have made a 3-attempt puzzle unwinnable, which is what made the fixed-5 decision and this one interdependent.
 
-**Score ladder** — 1 via One Shot, 3 clean, 4 after a miss. **2 is impossible**, since no submit locks more than one circle. That gap is a feature: "solved in 1" is a real brag rather than a small increment.
+**Opening move only.** Any circle submit closes the window for good. Left available afterwards it becomes a *hedge* — lock your surest circle first, then risk two groups instead of three — which is strictly safer, so every player would take it and the gamble would stop being one.
 
-**Teaching it** needs three layers, because the surprising part — that a miss reveals *nothing* — is exactly what makes the button look broken to someone expecting circles to light up: a How To Play section, the cost and once-only nature written on the button itself, and a first-use confirmation (remembered in `vennit_oneshot_seen`) that explains the stakes at the moment of decision rather than in a screen read once.
+**Score ladder** — 1 via One Shot, 3 clean, 4 after a miss. **2 is impossible**, since no submit locks more than one circle and One Shot cannot follow one. That gap is a feature: "solved in 1" means "I called the whole board cold", not "3 but slightly better".
 
-`useGameState` also gained a `submissions` log — the ordered record of every submit — because the per-group counts and their order cannot be reconstructed from the final board, and the shareable result block needs them.
+**The result is acknowledged, then gone.** "Two groups are right" stops being true the moment a term moves, and stale information shown as current is worse than none — so it is a modal you dismiss. The count survives as a small `↯2` beside the attempt pips, which is *history* (what you were told) rather than *state* (a claim about the board), and so cannot go stale.
+
+**Teaching it** needs three layers, because the surprising part — that a miss reveals *nothing* — is exactly what makes the button look broken to someone expecting circles to light up. All the wording lives in `src/copy/oneShot.js` so it can be tuned without touching game logic:
+- a **How To Play** section;
+- a **first-run hint** anchored under the button the first time anyone opens a game, dismissed on a timer or the first tap (`vennit_oneshot_hint_seen`) — without it the control is a bare glyph in a corner and easy never to discover;
+- a **first-press confirmation** (`vennit_oneshot_seen`) that states the stakes at the moment of decision rather than in a screen read once.
+
+Two keys, not one: seeing the hint and actually pressing the button are different milestones, and someone may well do the first without the second.
+
+## Shareable result block
+
+`useGameState` gained a `submissions` log — the ordered record of every submit — because the order cannot be reconstructed from the final board.
+
+**A failed submit cannot be attributed to a group.** It matched no category's term set, so there is no group it was "an attempt at" — an earlier plan to show per-group attempt counts was simply not computable. Only successes name a group.
+
+**Circle colour means nothing across players.** The game is permutation-aware, so one player's red holds a different category from another's; "3 tries on red" tells a reader nothing. Groups are therefore numbered by the puzzle's own `A`/`B`/`C` order, which is identical for everyone.
+
+```
+Venn It To Win It — Just Relax
+↯✗②①③
+Solved in 5
+```
+
+One row: One Shot opened, then a miss, then groups 2, 1 and 3 fell in that order.
+
+All glyphs are text-class. `⚡` (U+26A1) is emoji-class and renders larger and coloured than `✗` and `①②③`, making the row ragged; `↯` (U+21AF) sits at the same weight.
+
+**Two things were tried and dropped after seeing a real paste (2026-09-29):**
+- *A superscript count on `↯`.* What One Shot told you shaped how *you* played, but as a number in someone else's block it is noise — it cannot be acted on and compares to nothing.
+- *A triangular layout* showing which group landed in which circle. The circled digits are East-Asian-Ambiguous width, so the centring that looked right locally fell apart once pasted into a chat app. A row that always reads correctly beats a shape that only sometimes does. The group number on each solved circle chip stays, so a shared `①` can still be traced back to a circle.
+
+Nothing in the block can spoil a puzzle: knowing group 2 fell first says nothing about what group 2 *is*.
 
 ### Stage 5 — tasks
 - [x] 17.12 `?p=<base64>` carries a whole custom puzzle; `?puzzle=<id>` keeps working for library puzzles. ~250–400 bytes → ~340–540 base64 chars, well inside the ~2000-char safe URL limit

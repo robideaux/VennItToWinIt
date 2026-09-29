@@ -13,7 +13,7 @@ export default function WinScreen({ puzzle, placements, revealedCircles, submiss
       <header className={styles.header}>
         <h2 className={styles.heading}>You got it!</h2>
         {!testMode && (
-          <button className={styles.btn} onClick={() => share(puzzle, buildResultBlock({ title: puzzle.title, submissions, revealedCircles, won: true }))}>Share</button>
+          <button className={styles.btn} onClick={() => share(puzzle, buildResultBlock({ title: puzzle.title, submissions, won: true }))}>Share</button>
         )}
         <button className={styles.btn} onClick={onPlayAgain}>{testMode ? 'Back to editing' : 'Play Another'}</button>
       </header>

@@ -1,11 +1,14 @@
 // The shareable result block.
 //
-// Two facts are worth sharing, and only two are honestly knowable:
+// One row: what happened, in order.
 //
-//   the ATTEMPT SEQUENCE   what happened, in order. A failed submit cannot be attributed
-//                          to any group — it matched no category's term set, so there is
-//                          no group it was "an attempt at". Only successes name a group.
-//   the FINAL LAYOUT       which group ended up in which circle on your board.
+// A failed submit cannot be attributed to any group — it matched no category's term set,
+// so there is no group it was "an attempt at". Only successes name a group.
+//
+// A triangular layout of where each group landed was tried and dropped: the circled
+// digits are East-Asian-Ambiguous width, so the centring that looked right locally fell
+// apart once pasted into a chat app. A row that always reads correctly beats a shape that
+// sometimes does.
 //
 // Groups are numbered by the puzzle's own A/B/C order, which is identical for every
 // player. Circle colour is not: the game is permutation-aware, so your red holds a
@@ -21,44 +24,26 @@ import { ATTEMPTS } from './gameRules.js'
 // All text-class glyphs, deliberately. ⚡ (U+26A1) is emoji-class and renders larger and
 // coloured than the rest, which made the row look ragged; ↯ (U+21AF) sits at the same
 // weight as ✗ and ①②③.
-const CIRCLED = ['①', '②', '③']
-const MISS    = '✗'
+const CIRCLED  = ['①', '②', '③']
+const MISS     = '✗'
 const ONE_SHOT = '↯'
-const SUPER   = ['⁰', '¹', '²', '³']
-const UNSOLVED = '·'
-
-// Non-breaking, because several chat apps strip ordinary leading whitespace and would
-// collapse the triangle into a straight line.
-const PAD = ' '
 
 const groupNumber = category => CATEGORY_KEYS.indexOf(category) + 1
 
-// "↯²✗①②③" — the run of attempts in the order they were made.
+// "↯✗①②③" — the run of attempts in the order they were made.
+//
+// The One Shot mark carries no count. What it told you shaped how you played, but as a
+// number in someone else's block it is noise: it cannot be acted on and does not compare
+// to anything.
 export function attemptRow(submissions) {
-  return submissions.map(s => {
-    if (s.type === 'oneShot') {
-      // A winning One Shot needs no count: three correct is implied by having won.
-      return s.correctCount === 3 ? ONE_SHOT : ONE_SHOT + SUPER[s.correctCount]
-    }
-    return s.correct ? CIRCLED[groupNumber(s.category) - 1] : MISS
-  }).join('')
+  return submissions.map(s =>
+    s.type === 'oneShot' ? ONE_SHOT
+    : s.correct ? CIRCLED[groupNumber(s.category) - 1]
+    : MISS
+  ).join('')
 }
 
-//   ③
-// ① ②
-// Circle 1 is always the top one, 2 bottom-left, 3 bottom-right — fixed positions with
-// fixed colours — so the layout carries the board's colour implicitly, without needing
-// coloured glyphs that would clash with the normalised numbering.
-export function layoutRows(revealedCircles) {
-  const byCircle = Object.fromEntries(
-    revealedCircles.map(r => [r.circleId, CIRCLED[groupNumber(r.category) - 1]])
-  )
-  const at = id => byCircle[id] ?? UNSOLVED   // never solved: shown, but not credited
-  return [`${PAD}${at('1')}`, `${at('2')}${PAD}${at('3')}`]
-}
-
-// Attempts lead; the layout closes.
-export function buildResultBlock({ title, submissions, revealedCircles, won }) {
+export function buildResultBlock({ title, submissions, won }) {
   const used = submissions.length
   const outcome = won
     ? used === 1 ? 'Solved in 1' : `Solved in ${used}`
@@ -67,7 +52,6 @@ export function buildResultBlock({ title, submissions, revealedCircles, won }) {
   return [
     `Venn It To Win It — ${title}`,
     attemptRow(submissions),
-    ...layoutRows(revealedCircles),
     outcome,
   ].join('\n')
 }
