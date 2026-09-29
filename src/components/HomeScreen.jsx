@@ -3,7 +3,7 @@ import styles from './HomeScreen.module.css'
 import { CIRCLE_COLORS } from '../styles/colors.js'
 import { fetchUnlockedPuzzles } from '../utils/puzzleSchedule.js'
 
-export default function HomeScreen({ onPlayLatest, onAllVenns, onHowToPlay, onSettings, onEdit, progress }) {
+export default function HomeScreen({ onPlayLatest, onAllVenns, onHowToPlay, onSettings, onEdit, progress, notice, onDismissNotice }) {
   const [latestEntry, setLatestEntry] = useState(null)
 
   useEffect(() => {
@@ -32,6 +32,12 @@ export default function HomeScreen({ onPlayLatest, onAllVenns, onHowToPlay, onSe
           <h1 className={styles.title}>Venn It To Win It</h1>
           <p className={styles.tagline}>Sort the terms. Find the overlap.</p>
         </header>
+
+        {notice && (
+          <button className={styles.notice} onClick={onDismissNotice}>
+            {notice} <span className={styles.noticeDismiss}>Dismiss</span>
+          </button>
+        )}
 
         <nav className={styles.nav}>
           <button

@@ -66,3 +66,56 @@
 .vennWrap {
   composes: vennWrap from '../styles/shared.module.css';
 }
+
+.toast {
+  margin: 8px auto 0;
+  width: fit-content;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* Shown only when the clipboard write itself failed — a non-secure context, or denied
+   permission. Without it the user is left with a dead button and no link at all. */
+.copyFallback {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 16px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+}
+
+.copyFallback p {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.copyFallback input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: monospace;
+  font-size: 0.78rem;
+}
+
+.copyFallback button {
+  align-self: flex-end;
+  min-height: 36px;
+  padding: 0 16px;
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  background: none;
+  color: var(--color-accent);
+  font-weight: 700;
+  cursor: pointer;
+}

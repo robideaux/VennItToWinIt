@@ -54,14 +54,15 @@
 
 .main { flex: 1; }
 
-.sectionTitle {
-  padding: 18px 20px 6px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
+/* Same header treatment as the play selector — both list the same sections, so they
+   must look and behave identically. */
+.sectionHead   { composes: sectionHead from '../styles/shared.module.css'; }
+.sectionTitle  { composes: sectionTitle from '../styles/shared.module.css'; }
+.chevron       { composes: chevron from '../styles/shared.module.css'; }
+.chevronCollapsed { composes: chevronCollapsed from '../styles/shared.module.css'; }
+.sectionCount  { composes: sectionCount from '../styles/shared.module.css'; }
+
+.list[hidden] { display: none; }
 
 .list { list-style: none; }
 

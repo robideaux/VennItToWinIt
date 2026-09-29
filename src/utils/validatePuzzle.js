@@ -46,10 +46,8 @@ export const CATEGORY_KEYS = ['A', 'B', 'C']
 // not circle assignments, which is what makes the permutation-aware win check possible.
 export const CATEGORY_REGION_KEYS = ['A', 'B', 'C', 'AB', 'AC', 'BC', 'ABC']
 
-// Attempts a puzzle may allow. 3 is a hard floor rather than a preference: each submit
-// reveals at most one circle, so fewer than 3 attempts is literally unwinnable.
-export const MIN_ATTEMPTS = 3
-export const MAX_ATTEMPTS = 10
+// Attempts are no longer a puzzle property — see ATTEMPTS in gameRules.js for why they
+// are fixed for every puzzle. Files still carrying `maxAttempts` are simply ignored.
 
 const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v)
 const isStr = v => typeof v === 'string'
@@ -122,11 +120,6 @@ export function validatePuzzle(puzzle) {
 
   for (const key of CATEGORY_REGION_KEYS.filter(k => !seen.has(k))) {
     issues.push(issue(`term:${key}`, 'Needs a term'))
-  }
-
-  const attempts = puzzle.maxAttempts
-  if (!Number.isInteger(attempts) || attempts < MIN_ATTEMPTS || attempts > MAX_ATTEMPTS) {
-    issues.push(issue('attempts', `Must be ${MIN_ATTEMPTS}–${MAX_ATTEMPTS}`, 'conflict'))
   }
 
   return { status: issues.length ? 'incomplete' : 'complete', issues }

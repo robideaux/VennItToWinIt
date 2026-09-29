@@ -4,36 +4,12 @@ import { fetchUnlockedPuzzles, formatDisplayDate, formatStoredDate } from '../ut
 import { useCustomPuzzles } from '../hooks/useCustomPuzzles.js'
 import { displayTitle } from '../utils/customPuzzles.js'
 import { validatePuzzle } from '../utils/validatePuzzle.js'
-
-// Which sections are collapsed, remembered across visits. The library can run to dozens
-// of rows, which buries the custom sections under a long scroll — so a collapse has to
-// still be collapsed next time, or you would close it on every single visit.
-const COLLAPSE_KEY = 'vennit_selector_collapsed'
-
-function loadCollapsed() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(COLLAPSE_KEY) || '[]')
-    return new Set(Array.isArray(raw) ? raw : [])
-  } catch {
-    return new Set()
-  }
-}
+import { useCollapsedSections } from '../hooks/useCollapsedSections.js'
+import { useShare } from '../hooks/useShare.js'
 
 export default function PuzzleSelector({ onSelectPuzzle, onEditPuzzle, onBack, progress = {} }) {
-  const [collapsed, setCollapsed] = useState(loadCollapsed)
-
-  function toggleSection(key) {
-    setCollapsed(prev => {
-      const next = new Set(prev)
-      next.has(key) ? next.delete(key) : next.add(key)
-      try {
-        localStorage.setItem(COLLAPSE_KEY, JSON.stringify([...next]))
-      } catch {
-        /* a lost preference is not worth breaking the screen over */
-      }
-      return next
-    })
-  }
+  const { isCollapsed, toggle } = useCollapsedSections('vennit_selector_collapsed')
+  const { share, status: shareStatus, fallbackUrl, dismissFallback } = useShare()
 
   const [library, setLibrary] = useState(null)
   const [manifestError, setManifestError] = useState(null)
@@ -71,6 +47,7 @@ export default function PuzzleSelector({ onSelectPuzzle, onEditPuzzle, onBack, p
         title: entry.title,
         meta: formatDisplayDate(entry.year, entry.sequence),
         onSelect: () => handleSelectLibrary(entry),
+        shareTarget: entry,
       })),
     },
     mine.length && {
@@ -100,6 +77,9 @@ export default function PuzzleSelector({ onSelectPuzzle, onEditPuzzle, onBack, p
       onSelect: incomplete
         ? (onEditPuzzle ? () => onEditPuzzle(puzzle) : null)
         : () => onSelectPuzzle(puzzle),
+      // A draft cannot be shared: import requires a complete puzzle, and a received one
+      // can never be edited into shape by whoever gets it.
+      shareTarget: incomplete ? null : puzzle,
     }
   }
 
@@ -122,16 +102,16 @@ export default function PuzzleSelector({ onSelectPuzzle, onEditPuzzle, onBack, p
           // Drafts can't be played, so they don't belong in a "played" denominator.
           const playable = section.rows.filter(r => !r.incomplete)
           const played = playable.filter(r => progress[r.id]).length
-          const isCollapsed = collapsed.has(section.key)
+          const collapsed = isCollapsed(section.key)
           return (
             <section key={section.key}>
               <button
                 type="button"
                 className={styles.sectionHead}
-                onClick={() => toggleSection(section.key)}
-                aria-expanded={!isCollapsed}
+                onClick={() => toggle(section.key)}
+                aria-expanded={!collapsed}
               >
-                <span className={`${styles.chevron} ${isCollapsed ? styles.chevronCollapsed : ''}`} aria-hidden="true">▾</span>
+                <span className={`${styles.chevron} ${collapsed ? styles.chevronCollapsed : ''}`} aria-hidden="true">▾</span>
                 <h2 className={styles.sectionTitle}>{section.title}</h2>
                 {/* Counts stay visible when collapsed — a closed section should still
                     tell you what is inside, or there is no way to judge opening it. */}
@@ -141,9 +121,9 @@ export default function PuzzleSelector({ onSelectPuzzle, onEditPuzzle, onBack, p
                     : `${section.rows.length} draft${section.rows.length === 1 ? '' : 's'}`}
                 </span>
               </button>
-              <ul className={styles.list} hidden={isCollapsed}>
+              <ul className={styles.list} hidden={collapsed}>
                 {section.rows.map(row => (
-                  <li key={row.id}>
+                  <li key={row.id} className={styles.rowWrap}>
                     <button
                       className={`${styles.row} ${progress[row.id] ? styles.played : ''} ${row.incomplete ? styles.incomplete : ''}`}
                       onClick={row.onSelect ?? undefined}
@@ -157,6 +137,16 @@ export default function PuzzleSelector({ onSelectPuzzle, onEditPuzzle, onBack, p
                           : progress[row.id] ? '✓' : ''}
                       </span>
                     </button>
+                    {row.shareTarget && (
+                      <button
+                        className={styles.shareBtn}
+                        onClick={() => share(row.shareTarget)}
+                        aria-label={`Share ${row.title}`}
+                        title="Share"
+                      >
+                        ⤴
+                      </button>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -165,6 +155,14 @@ export default function PuzzleSelector({ onSelectPuzzle, onEditPuzzle, onBack, p
         })}
 
         {puzzleError && <p className={styles.error}>{puzzleError}</p>}
+        {shareStatus && <p className={styles.toast}>{shareStatus}</p>}
+        {fallbackUrl && (
+          <div className={styles.copyFallback}>
+            <p>Copy this link:</p>
+            <input readOnly value={fallbackUrl} onFocus={e => e.target.select()} />
+            <button onClick={dismissFallback}>Done</button>
+          </div>
+        )}
       </main>
     </div>
   )

@@ -58,3 +58,61 @@
     margin: 0 auto;
   }
 }
+
+/* ── Collapsible list section header ─────────────────────────────────────────
+   Used by the play selector and the edit list. Both present the same sections,
+   so they must look and behave identically — a header that collapsed in one and
+   not the other would read as two different kinds of list.
+
+   Sticky beneath the page header so the section you want stays reachable while
+   scrolling a long list. Assumes that header is exactly --header-height tall.
+   ────────────────────────────────────────────────────────────────────────── */
+.sectionHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  position: sticky;
+  top: var(--header-height);
+  z-index: 5;
+}
+
+.sectionHead:hover {
+  background: var(--color-accent-tint);
+}
+
+.sectionTitle {
+  flex: 1;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.chevron {
+  font-size: 0.8rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  transition: transform 0.18s ease;
+  flex-shrink: 0;
+}
+
+.chevronCollapsed {
+  transform: rotate(-90deg);
+}
+
+.sectionCount {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useProgress } from './hooks/useProgress.js'
 import { useCustomPuzzles } from './hooks/useCustomPuzzles.js'
-import { fetchUnlockedPuzzles } from './utils/puzzleSchedule.js'
+import { fetchUnlockedPuzzles, isPuzzleUnlocked } from './utils/puzzleSchedule.js'
+import { readShareParams, decodePuzzle, clearShareParams } from './utils/shareLink.js'
 import HomeScreen from './components/HomeScreen.jsx'
 import HowToPlayScreen from './components/HowToPlayScreen.jsx'
 import SettingsScreen from './components/SettingsScreen.jsx'
@@ -41,6 +42,54 @@ export default function App() {
   const custom = useCustomPuzzles()
   // null = creating a new puzzle; a puzzle object = editing that one
   const [editingPuzzle, setEditingPuzzle] = useState(null)
+  const [linkError, setLinkError] = useState(null)
+
+  // A shared link goes straight into the game — no preview stop, no save prompt. Runs once
+  // on load, before anything else touches history.
+  useEffect(() => {
+    const params = readShareParams(window.location.search)
+    if (!params) return
+
+    let cancelled = false
+    ;(async () => {
+      let puzzle = null
+
+      if (params.kind === 'custom') {
+        const decoded = decodePuzzle(params.payload)
+        if (decoded) {
+          // Saved on arrival, deduplicated on content — so opening the same link twice
+          // does not make a second copy, and your own link hands back your own editable copy.
+          const result = custom.receive(decoded)
+          puzzle = result.ok ? result.puzzle : null
+        }
+      } else {
+        try {
+          const r = await fetch('/puzzles/index.json')
+          const { puzzles } = await r.json()
+          const entry = puzzles.find(e => e.id === params.id)
+          // The weekly gate still applies: a link must not be a way to reach a puzzle
+          // that has not been released yet.
+          if (entry && isPuzzleUnlocked(entry.year, entry.sequence)) {
+            const pr = await fetch(`/puzzles/${entry.file}`)
+            if (pr.ok) puzzle = await pr.json()
+          }
+        } catch { /* falls through to the error below */ }
+      }
+
+      if (cancelled) return
+      clearShareParams()
+      if (puzzle) {
+        setActivePuzzle(puzzle)
+        setGameKey(k => k + 1)
+        history.pushState({ screen: 'game' }, '')
+        setScreen('game')
+      } else {
+        setLinkError("That puzzle link isn't valid.")
+      }
+    })()
+
+    return () => { cancelled = true }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     // Seed the initial history entry so back-navigation lands here instead of leaving the app
@@ -119,18 +168,18 @@ export default function App() {
     setScreen('selector')
   }
 
-  function handleWin({ placements, revealedCircles, attemptsUsed }) {
+  function handleWin({ placements, revealedCircles, attemptsUsed, submissions }) {
     setGameOverlay(null)
-    setFinalGameState({ placements, revealedCircles })
+    setFinalGameState({ placements, revealedCircles, submissions })
     recordResult(activePuzzle.id, { won: true, attempts: attemptsUsed })
     // Replace the game entry — back from win goes to selector, not back into the finished game
     history.replaceState({ screen: 'win' }, '')
     setScreen('win')
   }
 
-  function handleGameOver({ placements, revealedCircles, attemptsUsed }) {
+  function handleGameOver({ placements, revealedCircles, attemptsUsed, submissions }) {
     setGameOverlay(null)
-    setFinalGameState({ placements, revealedCircles })
+    setFinalGameState({ placements, revealedCircles, submissions })
     recordResult(activePuzzle.id, { won: false, attempts: attemptsUsed })
     history.replaceState({ screen: 'gameover' }, '')
     setScreen('gameover')
@@ -181,6 +230,8 @@ export default function App() {
           onSettings={() => goTo('settings')}
           onEdit={() => goTo('myvenns')}
           progress={progress}
+          notice={linkError}
+          onDismissNotice={() => setLinkError(null)}
         />
       )}
       {screen === 'howto' && (
@@ -257,6 +308,7 @@ export default function App() {
           puzzle={activePuzzle}
           placements={finalGameState?.placements}
           revealedCircles={finalGameState?.revealedCircles}
+          submissions={finalGameState?.submissions}
           onPlayAgain={handleBackToSelector}
         />
       )}
@@ -265,6 +317,7 @@ export default function App() {
           puzzle={activePuzzle}
           placements={finalGameState?.placements}
           lockedCircles={finalGameState?.revealedCircles}
+          submissions={finalGameState?.submissions}
           onRetry={handleRetry}
           onPickNewPuzzle={handleBackToSelector}
         />

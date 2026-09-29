@@ -39,12 +39,7 @@
   flex: 1;
 }
 
-.counter {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-}
+.counter { composes: sectionCount from '../styles/shared.module.css'; }
 
 .main {
   flex: 1;
@@ -60,54 +55,12 @@
   display: none;
 }
 
-/* ── Section head ─────────────────────────────────────────────────────────── */
-
-.sectionHead {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  padding: 14px 20px;
-  border: none;
-  border-bottom: 1px solid var(--color-border);
-  /* Same tone as the page header: both are chrome. Rows sit recessed beneath, so a
-     section reads as a labelled container rather than a divider floating in the list. */
-  background: var(--color-surface);
-  text-align: left;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-
-  /* Sticky so the section you want stays reachable while scrolling a long list.
-     Sits below the page header, which is sticky at 0 with z-index 10. */
-  position: sticky;
-  top: var(--header-height);
-  z-index: 5;
-}
-
-.sectionHead:hover {
-  background: var(--color-accent-tint);
-}
-
-.chevron {
-  font-size: 0.8rem;
-  line-height: 1;
-  color: var(--color-text-muted);
-  transition: transform 0.18s ease;
-  flex-shrink: 0;
-}
-
-.chevronCollapsed {
-  transform: rotate(-90deg);
-}
-
-.sectionTitle {
-  flex: 1;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-}
+/* Section header, chevron and count all come from shared.module.css so this list and
+   the edit list cannot drift apart. */
+.sectionHead   { composes: sectionHead from '../styles/shared.module.css'; }
+.sectionTitle  { composes: sectionTitle from '../styles/shared.module.css'; }
+.chevron       { composes: chevron from '../styles/shared.module.css'; }
+.chevronCollapsed { composes: chevronCollapsed from '../styles/shared.module.css'; }
 
 /* ── Compact row ──────────────────────────────────────────────────────────── */
 
@@ -204,4 +157,90 @@
   padding: 12px;
   background: var(--color-error-bg);
   border-radius: 8px;
+}
+
+/* Row plus its share control. The row itself keeps the whole width for its primary
+   action — tapping it still starts the game — with share as a separate target beside it. */
+.rowWrap {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rowWrap .row {
+  border-bottom: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.shareBtn {
+  flex-shrink: 0;
+  width: 48px;
+  min-height: 52px;
+  border: none;
+  border-left: 1px solid var(--color-border);
+  background: var(--color-bg);
+  color: var(--color-accent);
+  font-size: 1.1rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shareBtn:hover { background: var(--color-accent-tint); }
+.shareBtn:active { background: var(--color-accent-tint-hover); }
+
+/* Transient confirmation for the clipboard fallback; the native sheet confirms itself. */
+.toast {
+  position: sticky;
+  bottom: 16px;
+  margin: 16px auto 0;
+  width: fit-content;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Shown only when the clipboard write itself failed — a non-secure context, or denied
+   permission. Without it the user is left with a dead button and no link at all. */
+.copyFallback {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 12px 16px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+}
+
+.copyFallback p {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.copyFallback input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: monospace;
+  font-size: 0.78rem;
+}
+
+.copyFallback button {
+  align-self: flex-end;
+  min-height: 36px;
+  padding: 0 16px;
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  background: none;
+  color: var(--color-accent);
+  font-weight: 700;
+  cursor: pointer;
 }

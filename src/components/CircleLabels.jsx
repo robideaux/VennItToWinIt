@@ -1,5 +1,6 @@
 import styles from './CircleLabels.module.css'
 import { CIRCLE_COLORS } from '../styles/colors.js'
+import { CATEGORY_KEYS } from '../utils/validatePuzzle.js'
 
 export default function CircleLabel({ circleId, revealedCircles, onSubmit, canSubmit }) {
   const revealed = revealedCircles.find(r => r.circleId === circleId)
@@ -37,6 +38,13 @@ export default function CircleLabel({ circleId, revealedCircles, onSubmit, canSu
       <span className={`${styles.label} ${revealed ? styles.revealed : styles.placeholder}`}>
         {revealed ? revealed.name : 'Group'}
       </span>
+      {/* The puzzle's own group number, so the ① in a shared result block can be tied
+          back to the circle it landed in. Subtle: it is a footnote, not a label. */}
+      {revealed && (
+        <span className={styles.groupNum}>
+          {CATEGORY_KEYS.indexOf(revealed.category) + 1}
+        </span>
+      )}
     </div>
   )
 }

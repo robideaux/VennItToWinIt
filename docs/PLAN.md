@@ -662,10 +662,44 @@ Also restructured during implementation: `id` was initially required by `validat
 
   A test runs the **whole arc**, result screens included: winning or losing shows the real `WinScreen` / `GameOverScreen` with the reveal animation, not an immediate bounce back to the editor. Those screens are part of what an author is checking, and more so if they grow later. Both take a `testMode` that relabels their exits — "Back to editing", and "Test again" in place of "Try Again" — so a test never leads out into the rest of the app. Still nothing recorded: the whole arc lives inside `EditorScreen`.
 
-### Stage 5 — Share links
-- [ ] 17.12 `?p=<base64>` carries a whole custom puzzle; `?puzzle=<id>` keeps working for library puzzles. ~250–400 bytes → ~340–540 base64 chars, well inside the ~2000-char safe URL limit
-- [ ] 17.13 On load: decode, validate 7-term / 3-category shape, save as `source: 'shared'`, go straight to the game — no preview stop, no save prompt
-- [ ] 17.14 Dedupe on a content hash of `categories + terms` so reopening the same link twice doesn't create a second copy
+### Stage 5 — Share links — BUILT (2026-09-25)
+
+**Where sharing lives.** On the **selector rows**, across all three sections. An earlier proposal put custom sharing in Edit Venns and library sharing on the results screens; the review killed that — sharing a months-old curated puzzle would have meant finding it, playing it and *winning* it first. The objection behind the split was that the two kinds need different mechanisms (`?puzzle=<id>` vs an embedded payload), but that difference is entirely internal. Splitting one user-facing action across two screens to suit an implementation detail is backwards.
+
+Result screens also offer Share — the moment you have just enjoyed something is a fair time to pass it on — but never in test mode, where the puzzle may not be saved and the link would point at nothing. Drafts get no share control anywhere, consistent with import requiring a complete puzzle.
+
+**Two link shapes.** `?puzzle=<id>` for curated puzzles, which the recipient already has (50 chars); `?p=<payload>` carrying a custom puzzle whole, since it exists only in the sender's browser (~617 chars, well inside the ~2000 limit). URL-safe base64: plain base64's `+`, `/` and `=` all survive a query string far less reliably than they should.
+
+**The weekly gate still applies to links.** A `?puzzle=` link to an unreleased puzzle does not open — a shared link must not be a way past the release cadence.
+
+**Native share sheet on touch devices only.** Chrome and Edge on Windows *do* expose `navigator.share`, and implement it by handing off to the Windows share sheet — which frequently fails with "We couldn't show you all the ways you could share". That failure is undetectable from our side: `navigator.share` resolves as soon as the sheet **opens**, so by the time Windows fails we have already been told it succeeded, and there is no error to fall back from. Feature-detecting the API was therefore the wrong test.
+
+The test is the device instead: `prefersNativeShare()` requires a coarse primary pointer, meaning a phone or tablet, where the sheet is the whole point. Desktop goes straight to the clipboard, which is both more reliable and more useful there. If the clipboard write itself fails (non-secure context, denied permission) the link is shown in a selectable field, so a dead button never leaves the user with no link at all.
+
+Verified end to end in Node: round trip with local bookkeeping stripped, non-ASCII and emoji intact, dedupe on re-open, an author's own link handing back their editable copy, a re-shared puzzle carrying the *author's* title while the recipient applies their own numbering, the gate refusing unreleased and unknown ids, and every malformed payload (truncated, non-base64, valid base64 that is not JSON, JSON that is not a puzzle, tampered) returning null rather than throwing.
+
+## Phase 18 — Fixed Attempts & One Shot
+
+**Attempts are now fixed at 5 for every puzzle** (`ATTEMPTS` in `src/utils/gameRules.js`). The per-puzzle `maxAttempts` lever was never actually pulled — all 37 library puzzles set 5 — and How To Play already had "5 attempts" hardcoded in its copy, so any puzzle that differed would have made the instructions wrong. The decisive argument is comparability: a variable budget makes "solved in 4" mean different things on different puzzles, which would undermine the shareable score. Wordle fixes six guesses and Connections four mistakes for the same reason. Existing files still carry `maxAttempts`; it is ignored. The editor's pip selector is gone, and `validatePuzzle` no longer range-checks it.
+
+**One Shot** — a single whole-board check, once per game, costing one attempt:
+- Every group right → win outright, in one.
+- Otherwise → told **how many** of the three are correct, but not which. Nothing revealed, nothing locked.
+
+The mechanic went through two wrong versions first. The original proposal revealed every correct circle for one attempt, which made it *strictly better* than a per-circle submit — never worse, sometimes far better — so it stopped being a decision and became a free opening reveal everyone would take, partly undoing the Phase 14 reasoning. A count-without-reveal fixes that: a per-circle submit buys **depth** (a permanent lock on one group), One Shot buys **breadth** (how many are right across the board). Neither dominates.
+
+Costing it from the shared pool also turned out to be safe once attempts were fixed: a miss leaves 4, and three locks are still needed, so there is a spare. Under a *variable* budget it could have made a 3-attempt puzzle unwinnable, which is what made the fixed-5 decision and this one interdependent.
+
+**Score ladder** — 1 via One Shot, 3 clean, 4 after a miss. **2 is impossible**, since no submit locks more than one circle. That gap is a feature: "solved in 1" is a real brag rather than a small increment.
+
+**Teaching it** needs three layers, because the surprising part — that a miss reveals *nothing* — is exactly what makes the button look broken to someone expecting circles to light up: a How To Play section, the cost and once-only nature written on the button itself, and a first-use confirmation (remembered in `vennit_oneshot_seen`) that explains the stakes at the moment of decision rather than in a screen read once.
+
+`useGameState` also gained a `submissions` log — the ordered record of every submit — because the per-group counts and their order cannot be reconstructed from the final board, and the shareable result block needs them.
+
+### Stage 5 — tasks
+- [x] 17.12 `?p=<base64>` carries a whole custom puzzle; `?puzzle=<id>` keeps working for library puzzles. ~250–400 bytes → ~340–540 base64 chars, well inside the ~2000-char safe URL limit
+- [x] 17.13 On load: decode, validate 7-term / 3-category shape, save as `source: 'shared'`, go straight to the game — no preview stop, no save prompt
+- [x] 17.14 Dedupe on a content hash of `categories + terms` so reopening the same link twice doesn't create a second copy
 
 ---
 

@@ -7,9 +7,7 @@
 // Working in fixed slots is also what makes `invalid` puzzles impossible to author:
 // duplicate or unknown region keys cannot arise when the keys are the structure.
 
-import { CATEGORY_REGION_KEYS, CATEGORY_KEYS, MIN_ATTEMPTS } from './validatePuzzle.js'
-
-export const DEFAULT_ATTEMPTS = 5
+import { CATEGORY_REGION_KEYS, CATEGORY_KEYS } from './validatePuzzle.js'
 
 // Term ids follow t1..t7 in region order, matching the curated library's puzzles.
 const termId = regionKey => `t${CATEGORY_REGION_KEYS.indexOf(regionKey) + 1}`
@@ -17,7 +15,6 @@ const termId = regionKey => `t${CATEGORY_REGION_KEYS.indexOf(regionKey) + 1}`
 export function blankDraft() {
   return {
     title: '',
-    maxAttempts: DEFAULT_ATTEMPTS,
     categories: Object.fromEntries(CATEGORY_KEYS.map(k => [k, ''])),
     terms: Object.fromEntries(CATEGORY_REGION_KEYS.map(k => [k, ''])),
   }
@@ -30,8 +27,6 @@ export function toDraft(puzzle) {
   if (!puzzle) return draft
 
   draft.title = String(puzzle.title ?? '')
-  draft.maxAttempts = Number.isInteger(puzzle.maxAttempts) ? puzzle.maxAttempts : DEFAULT_ATTEMPTS
-
   for (const k of CATEGORY_KEYS) draft.categories[k] = String(puzzle.categories?.[k] ?? '')
 
   for (const term of puzzle.terms ?? []) {
@@ -48,7 +43,6 @@ export function fromDraft(draft, base = {}) {
   return {
     ...base,
     title: draft.title.trim(),
-    maxAttempts: draft.maxAttempts,
     categories: Object.fromEntries(CATEGORY_KEYS.map(k => [k, draft.categories[k].trim()])),
     terms: CATEGORY_REGION_KEYS.map(key => ({
       id: termId(key),
@@ -62,5 +56,3 @@ export const isBlankDraft = draft =>
   !draft.title.trim() &&
   CATEGORY_KEYS.every(k => !draft.categories[k].trim()) &&
   CATEGORY_REGION_KEYS.every(k => !draft.terms[k].trim())
-
-export { MIN_ATTEMPTS }

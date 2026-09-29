@@ -142,3 +142,25 @@
   }
 }
 
+
+/* Group number on a solved chip. Deliberately quiet — it exists so a shared block's ①
+   can be traced back to a circle, not to compete with the category name. */
+.groupNum {
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-left: 4px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+  opacity: 0.75;
+}
+
+:global([data-theme="dark"]) .chipRevealed .groupNum { color: #ffffff; opacity: 0.7; }
+
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme="light"]):not([data-theme="dark"])) .chipRevealed .groupNum {
+    color: #ffffff;
+    opacity: 0.7;
+  }
+}

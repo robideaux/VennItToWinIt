@@ -5,7 +5,7 @@ import GameBoard from './GameBoard.jsx'
 import WinScreen from './WinScreen.jsx'
 import GameOverScreen from './GameOverScreen.jsx'
 import { toDraft, fromDraft, isBlankDraft } from '../utils/puzzleDraft.js'
-import { validatePuzzle, issuesByField, MIN_ATTEMPTS, MAX_ATTEMPTS, MAX_TERM_CHARS, COUNTER_WITHIN } from '../utils/validatePuzzle.js'
+import { validatePuzzle, issuesByField, MAX_TERM_CHARS, COUNTER_WITHIN } from '../utils/validatePuzzle.js'
 import styles from './EditorScreen.module.css'
 
 // Authoring screen. Save always succeeds — completeness gates whether a puzzle can be
@@ -145,27 +145,6 @@ export default function EditorScreen({ puzzle, onSave, onCancel }) {
       </div>
 
       <div className={styles.footer}>
-        <div className={styles.attempts}>
-          <span className={styles.attemptsLabel}>Attempts</span>
-          <div className={styles.pips} role="group" aria-label="Maximum attempts">
-            {Array.from({ length: MAX_ATTEMPTS - MIN_ATTEMPTS + 1 }, (_, i) => {
-              const n = MIN_ATTEMPTS + i
-              return (
-                <button
-                  key={n}
-                  type="button"
-                  className={`${styles.pip} ${n <= draft.maxAttempts ? styles.pipOn : ''}`}
-                  onClick={() => setDraft({ ...draft, maxAttempts: n })}
-                  aria-label={`${n} attempts`}
-                  aria-pressed={n === draft.maxAttempts}
-                >
-                  {n}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-
         <div className={styles.statusRow}>
           <button
             type="button"

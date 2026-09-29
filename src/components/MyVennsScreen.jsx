@@ -3,6 +3,7 @@ import { useCustomPuzzles } from '../hooks/useCustomPuzzles.js'
 import { displayTitle } from '../utils/customPuzzles.js'
 import { validatePuzzle } from '../utils/validatePuzzle.js'
 import { formatStoredDate } from '../utils/puzzleSchedule.js'
+import { useCollapsedSections } from '../hooks/useCollapsedSections.js'
 import styles from './MyVennsScreen.module.css'
 
 // Manage your own puzzles, and puzzles people sent you.
@@ -15,6 +16,9 @@ export default function MyVennsScreen({ onBack, onNew, onEdit, onDeleted }) {
   // and leave the row still on screen here. The parent only handles the progress side.
   const { mine, shared, remove } = useCustomPuzzles()
   const [confirming, setConfirming] = useState(null)
+  // Its own key: collapsing a section while picking something to play says nothing about
+  // whether you want it collapsed while editing.
+  const { isCollapsed, toggle } = useCollapsedSections('vennit_edit_collapsed')
 
   function handleDelete(id) {
     remove(id)
@@ -43,10 +47,23 @@ export default function MyVennsScreen({ onBack, onNew, onEdit, onDeleted }) {
           </div>
         )}
 
-        {sections.map(section => (
+        {sections.map(section => {
+          const collapsed = isCollapsed(section.key)
+          return (
           <section key={section.key}>
-            <h2 className={styles.sectionTitle}>{section.title}</h2>
-            <ul className={styles.list}>
+            <button
+              type="button"
+              className={styles.sectionHead}
+              onClick={() => toggle(section.key)}
+              aria-expanded={!collapsed}
+            >
+              <span className={`${styles.chevron} ${collapsed ? styles.chevronCollapsed : ''}`} aria-hidden="true">▾</span>
+              <h2 className={styles.sectionTitle}>{section.title}</h2>
+              <span className={styles.sectionCount}>
+                {section.rows.length} {section.rows.length === 1 ? 'puzzle' : 'puzzles'}
+              </span>
+            </button>
+            <ul className={styles.list} hidden={collapsed}>
               {section.rows.map(puzzle => {
                 const incomplete = validatePuzzle(puzzle).status !== 'complete'
                 const isConfirming = confirming === puzzle.id
@@ -94,7 +111,8 @@ export default function MyVennsScreen({ onBack, onNew, onEdit, onDeleted }) {
               })}
             </ul>
           </section>
-        ))}
+          )
+        })}
       </main>
     </div>
   )
