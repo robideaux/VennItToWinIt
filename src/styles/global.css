@@ -47,6 +47,18 @@
   --chip-bg-unrevealed: rgba(173, 181, 189, 0.25);
   --chip-bg-revealed:   rgba(255, 255, 255, 0.90);
 
+  /* ── Selection & target highlight (Phase 20) ──────────────────────────────
+     Shape and contrast, never hue: any hue lands near one of the three category
+     colours under some colour-vision type. A picked-up term inverts to a dark pill;
+     valid targets get a dashed edge. Pills themselves stay light in both themes. */
+  --pick-bg:      #1a1a1a;
+  --pick-fg:      #ffffff;
+  --pick-border:  #1a1a1a;
+  --pick-line:    #1a1a1a;                 /* callout leader line + dot, on the board */
+  --target-dash:  #343a40;                 /* dashed edge of a target pill (on the pill) */
+  --target-ring:  #343a40;                 /* dashed ring on an empty target region */
+  --target-ring-fill: rgba(0, 0, 0, 0.04);
+
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 16px;
   line-height: 1.5;
@@ -73,6 +85,12 @@
   --color-glass-hover-bg: rgba(35, 30, 70, 0.90);
   --blend-mode-overlay: screen;
   --chip-bg-unrevealed: rgba(35, 35, 58, 0.92);
+
+  /* A dark pill needs a light edge to stand off the dark board */
+  --pick-border:  #ffffff;
+  --pick-line:    #ffffff;
+  --target-ring:  #b0b0c8;
+  --target-ring-fill: rgba(255, 255, 255, 0.06);
 }
 
 /* ── Dark theme: system preference ───────────────────────────────────────────
@@ -95,6 +113,12 @@
     --color-glass-hover-bg: rgba(35, 30, 70, 0.90);
     --blend-mode-overlay: screen;
     --chip-bg-unrevealed: rgba(35, 35, 58, 0.92);
+
+  /* A dark pill needs a light edge to stand off the dark board */
+  --pick-border:  #ffffff;
+  --pick-line:    #ffffff;
+  --target-ring:  #b0b0c8;
+  --target-ring-fill: rgba(255, 255, 255, 0.06);
   }
 }
 

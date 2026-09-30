@@ -5,7 +5,6 @@ import {
   pctX, pctY, UNIT_CSS, clampX,
 } from '../utils/vennGeometry.js'
 import { PILL_W } from '../utils/fitText.js'
-import { COL_SOURCE, COL_TARGET, COL_TARGET_BG } from '../styles/colors.js'
 import TermPill from './TermPill.jsx'
 import styles from './PlayOverlay.module.css'
 
@@ -54,7 +53,9 @@ export default function PlayOverlay({
           const term = termFor(key)
           const { cx, cy } = CENTROIDS[key]
           const { isSource, isTarget } = stateFor(key)
-          const accent = isSource ? COL_SOURCE : (isTarget && term) ? COL_TARGET : null
+          // Same scheme as the pills: solid for the picked-up term, a quieter grey for targets.
+          // Applied through style: CSS variables do not resolve in SVG presentation attributes.
+          const accent = isSource ? 'var(--pick-line)' : (isTarget && term) ? 'var(--target-ring)' : null
 
           // Placed callout region: anchor dot at the centroid, leader line out to the pill
           if (term && CALLOUT_REGIONS.has(key)) {
@@ -63,9 +64,10 @@ export default function PlayOverlay({
               <g key={key}>
                 <line
                   x1={cx} y1={cy} x2={a.cx} y2={a.cy}
-                  stroke={accent ?? '#bbb'} strokeWidth={1.5}
+                  strokeWidth={1.5}
+                  style={{ stroke: accent ?? '#bbb' }}
                 />
-                <circle cx={cx} cy={cy} r={4} fill={accent ?? '#888'} />
+                <circle cx={cx} cy={cy} r={4} style={{ fill: accent ?? '#888' }} />
               </g>
             )
           }
@@ -78,8 +80,8 @@ export default function PlayOverlay({
               {selectedTermId && validTargets.includes(key) && (
                 <circle
                   cx={cx} cy={cy} r={22}
-                  fill={COL_TARGET_BG} stroke={COL_TARGET}
-                  strokeWidth={1.2} strokeDasharray="4 3"
+                  style={{ fill: 'var(--target-ring-fill)', stroke: 'var(--target-ring)' }}
+                  strokeWidth={2} strokeDasharray="5 3"
                 />
               )}
               <circle cx={cx} cy={cy} r={3} fill="#bbb" opacity={0.6} />

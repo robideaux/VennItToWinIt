@@ -1,6 +1,5 @@
 import { fitText, PILL_W, PILL_PAD, BASE_FONT } from '../utils/fitText.js'
 import { pctX, pctY, UNIT_CSS, clampX } from '../utils/vennGeometry.js'
-import { COL_SOURCE, COL_SOURCE_BG, COL_TARGET, COL_TARGET_BG } from '../styles/colors.js'
 import styles from './TermPill.module.css'
 
 // The one term pill used everywhere — game board, editor preview, shuffle and reveal
@@ -34,30 +33,31 @@ export default function TermPill({
 }) {
   const { lines, scale } = fitText(label)
 
-  // Colors carried over verbatim from the previous SVG renderer so the conversion
-  // changes layout only, never palette.
-  const shuffleFrom = variant === 'shuffleFrom'
-  const shuffleTo   = variant === 'shuffleTo'
+  // Highlighting is shape and contrast, not hue (Phase 20): any hue sits near one of the
+  // three category colours under some colour-vision type, and a pill can be on any of
+  // them. The picked-up term inverts to a dark pill and lifts; valid targets get a dashed
+  // edge; everything else dims. The opening shuffle's chips reuse the same two looks.
+  const picked = isSource || variant === 'shuffleFrom'
+  const target = isTarget || variant === 'shuffleTo'
 
   const borderColor =
-    isSource || shuffleFrom ? COL_SOURCE
-    : isTarget || shuffleTo ? COL_TARGET
-    : isInactive            ? '#bbb'
+    picked       ? 'var(--pick-border)'
+    : target     ? 'var(--target-dash)'
+    : isInactive ? '#bbb'
     : '#ccc'
 
   const background =
-    isSource || shuffleFrom ? COL_SOURCE_BG
-    : isTarget || shuffleTo ? COL_TARGET_BG
-    : isInactive            ? '#dadde0'
+    picked       ? 'var(--pick-bg)'
+    : isInactive ? '#dadde0'
     : 'rgba(255,255,255,0.92)'
 
   const color =
-    isSource || shuffleFrom ? '#7d5a00'
-    : isTarget || shuffleTo ? COL_TARGET
-    : isInactive            ? '#999'
+    picked       ? 'var(--pick-fg)'
+    : isInactive ? '#999'
     : '#1a1a1a'
 
-  const borderWidth = (isSource || isTarget || variant) ? 2 : 1
+  // Targets get the heaviest edge: they are what you scan for once a term is picked up
+  const borderWidth = target ? 3 : picked ? 2 : 1
 
   const Tag = onClick ? 'button' : 'div'
 
@@ -68,6 +68,7 @@ export default function TermPill({
         styles.pill,
         onClick  ? styles.interactive : '',
         animated ? styles.animated    : '',
+        picked   ? styles.picked      : '',
       ].join(' ').trim()}
       style={{
         ...PILL_VARS,
@@ -77,6 +78,7 @@ export default function TermPill({
         background,
         color,
         borderWidth,
+        borderStyle: target ? 'dashed' : 'solid',
         '--fit-scale': scale,
       }}
     >

@@ -26,6 +26,9 @@
   border-style: solid;
   border-radius: 999px;
 
+  /* The lift on pick-up, and settling back down */
+  transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
+
   font-family: system-ui, sans-serif;
   font-weight: 600;
   font-size: calc(var(--pill-font) * var(--u) * var(--fit-scale, 1));
@@ -63,9 +66,18 @@
   filter: brightness(0.97);
 }
 
+/* Picked up: lifted off the board. Scaled around its centre, so it stays anchored to
+   its region, and raised above neighbouring pills it now overlaps. */
+.picked {
+  transform: translate(-50%, -50%) scale(1.08);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
 /* Shuffle / reveal chips animate between region centres. Transitioning left/top
    rather than transform keeps the percentage coordinate system intact; it matches
    what the old SVG chip did (animating x/y) and 7 pills at 200ms is not a cost. */
 .animated {
-  transition: left 0.20s ease-out, top 0.20s ease-out;
+  transition: left 0.20s ease-out, top 0.20s ease-out,
+              transform 0.12s ease-out, box-shadow 0.12s ease-out;
 }

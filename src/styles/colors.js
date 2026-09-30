@@ -49,7 +49,5 @@ export const categoryColor = category =>
 export const categoryInk = category =>
   category ? CATEGORY_COLORS[category].ink : null
 
-export const COL_SOURCE    = '#fcc419'
-export const COL_SOURCE_BG = '#fff9db'
-export const COL_TARGET    = '#6c5ce7'
-export const COL_TARGET_BG = '#f3f0ff'
+// Selection and target highlights are theme variables (--pick-*, --target-*) in
+// global.css, and deliberately hue-free — see TermPill.
