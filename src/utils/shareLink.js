@@ -98,7 +98,13 @@ export function prefersNativeShare(nav = globalThis.navigator, mm = globalThis.m
   }
 }
 
-export async function sharePuzzle({ title, url }) {
+// What goes on the clipboard. A result block has to travel with its link — on desktop the
+// clipboard is the only route, so copying the link alone silently dropped the result.
+export function clipboardText({ text = null, url }) {
+  return text ? `${text}\n${url}` : url
+}
+
+export async function sharePuzzle({ title, url, text = null }) {
   if (prefersNativeShare()) {
     try {
       await navigator.share({ title, text: title, url })
@@ -109,7 +115,7 @@ export async function sharePuzzle({ title, url }) {
     }
   }
   try {
-    await navigator.clipboard.writeText(url)
+    await navigator.clipboard.writeText(clipboardText({ text, url }))
     return 'copied'
   } catch {
     // Non-secure context, or permission denied. The caller shows the link so it can be

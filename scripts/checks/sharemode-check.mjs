@@ -25,4 +25,11 @@ const loc = { origin:'https://vennittowinit.netlify.app', pathname:'/' }
 const url = S.shareUrlFor({ id:'2026_001' }, loc)
 chk(url === 'https://vennittowinit.netlify.app/?puzzle=2026_001', url)
 
+console.log('\n=== the clipboard carries the result, not just the link ===')
+const block = 'Venn It To Win It — Just Relax\n🔴🟡🔵\nSolved with no misses'
+chk(S.clipboardText({ text: block, url }) === block + '\n' + url, `result block, then the link on its own line`)
+chk(S.clipboardText({ url }) === url, `a plain puzzle share is still just the link`)
+const src = (await import('fs')).readFileSync(ROOT + '/src/utils/shareLink.js', 'utf8')
+chk(src.includes('writeText(clipboardText({ text, url }))'), `sharePuzzle copies clipboardText, not the bare url`)
+
 console.log(fails===0?'\nPASS':`\nFAIL — ${fails}`); process.exit(fails?1:0)

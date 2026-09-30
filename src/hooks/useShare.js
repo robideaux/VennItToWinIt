@@ -3,6 +3,7 @@ import { shareUrlFor, sharePuzzle } from '../utils/shareLink.js'
 
 const MESSAGES = {
   copied: 'Link copied',
+  copiedResult: 'Result copied',
 }
 
 // Wraps the share action and its transient feedback. The native sheet gives its own
@@ -24,6 +25,7 @@ export function useShare() {
     const result = await sharePuzzle({
       title: resultBlock ?? target.title ?? 'Venn It To Win It',
       url,
+      text: resultBlock,
     })
     clearTimeout(timer.current)
 
@@ -34,7 +36,7 @@ export function useShare() {
     }
 
     setFallbackUrl(null)
-    const message = MESSAGES[result] ?? null
+    const message = (result === 'copied' && resultBlock ? MESSAGES.copiedResult : MESSAGES[result]) ?? null
     setStatus(message)
     if (message) timer.current = setTimeout(() => setStatus(null), 2200)
     return result
