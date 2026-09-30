@@ -19,7 +19,7 @@ export default function GameOverScreen({ puzzle, placements, lockedCircles, subm
   return (
     <div className={styles.screen}>
       <header className={styles.header}>
-        <h2 className={styles.heading}>Out of attempts</h2>
+        <h2 className={styles.heading}>Out of misses</h2>
         <div className={styles.buttons}>
           {!testMode && (
             <button className={styles.btnSecondary} onClick={() => share(puzzle, buildResultBlock({ title: puzzle.title, submissions, won: false }))}>Share</button>

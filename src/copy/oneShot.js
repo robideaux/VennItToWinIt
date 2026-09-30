@@ -17,8 +17,8 @@ export const ONE_SHOT_CONFIRM = {
   // The part players do not expect is that a miss reveals NOTHING. Without saying so,
   // a board that fails to light up reads as a broken button.
   body: [
-    'Checks all three groups at once, for one attempt.',
-    'Get every group right and you win immediately. Otherwise you are told how many are correct — but not which, and nothing is revealed.',
+    'Checks all three groups at once.',
+    'Get every group right and you win on the spot, with a ⚡ in your shared result. Otherwise it costs a miss, and you are told how many are correct — but not which, and nothing is revealed.',
     'You only get one, and it has to be your opening move.',
   ],
   confirm: 'Go for it',

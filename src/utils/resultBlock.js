@@ -2,58 +2,57 @@
 //
 // One row: what happened, in order.
 //
+// A solved group is its category's colour. Colour belongs to the category, not the circle
+// (Phase 20), so red is the same group for every player — which is what lets the row use
+// colour again after Phase 18 had to fall back to ①②③.
+//
 // A failed submit cannot be attributed to any group — it matched no category's term set,
 // so there is no group it was "an attempt at". Only successes name a group.
 //
-// A triangular layout of where each group landed was tried and dropped: the circled
-// digits are East-Asian-Ambiguous width, so the centring that looked right locally fell
-// apart once pasted into a chat app. A row that always reads correctly beats a shape that
-// sometimes does.
+// A triangular layout of where each group landed was tried and dropped: centring built
+// from ambiguous-width glyphs fell apart once pasted into a chat app. A row that always
+// reads correctly beats a shape that sometimes does.
 //
-// Groups are numbered by the puzzle's own A/B/C order, which is identical for every
-// player. Circle colour is not: the game is permutation-aware, so your red holds a
-// different category from mine, and "3 tries on red" would mean nothing to you.
-//
-// Nothing here can spoil the puzzle. Knowing group 2 fell first, or sat bottom-left, says
-// nothing about what group 2 IS — and every arrangement is equally valid, so someone
-// else's layout is no hint toward the answer.
+// Nothing here can spoil the puzzle. Knowing the green group fell first says nothing
+// about what the green group IS.
 
-import { CATEGORY_KEYS } from './validatePuzzle.js'
-import { ATTEMPTS } from './gameRules.js'
+import { CATEGORY_EMOJI } from '../styles/colors.js'
 
-// All text-class glyphs, deliberately. ⚡ (U+26A1) is emoji-class and renders larger and
-// coloured than the rest, which made the row look ragged; ↯ (U+21AF) sits at the same
-// weight as ✗ and ①②③.
-const CIRCLED  = ['①', '②', '③']
-const MISS     = '✗'
-const ONE_SHOT = '↯'
+// The marks for "nothing gained" are text-class on purpose, so they recede next to the
+// colour emoji that carry what you achieved. A One Shot hit is the one coloured bolt.
+const MISS          = '✗'
+const ONE_SHOT_MISS = '↯'
+const ONE_SHOT_HIT  = '⚡'
 
-const groupNumber = category => CATEGORY_KEYS.indexOf(category) + 1
+const isMiss = s => s.type === 'oneShot' ? s.correctCount < 3 : !s.correct
 
-// "↯✗①②③" — the run of attempts in the order they were made.
+// "↯🔴✗🟢🔵" — the run of submits in the order they were made.
 //
 // The One Shot mark carries no count. What it told you shaped how you played, but as a
 // number in someone else's block it is noise: it cannot be acted on and does not compare
 // to anything.
 export function attemptRow(submissions) {
   return submissions.map(s =>
-    s.type === 'oneShot' ? ONE_SHOT
-    : s.correct ? CIRCLED[groupNumber(s.category) - 1]
+    s.type === 'oneShot' ? (isMiss(s) ? ONE_SHOT_MISS : ONE_SHOT_HIT)
+    : s.correct ? CATEGORY_EMOJI[s.category]
     : MISS
   ).join('')
 }
 
-export function buildResultBlock({ title, submissions, won }) {
-  const used = submissions.length
-  const outcome = won
-    ? used === 1 ? 'Solved in 1' : `Solved in ${used}`
-    : 'Out of attempts'
+export const missCount = submissions => submissions.filter(isMiss).length
 
+export function outcomeLine(submissions, won) {
+  if (!won) return 'Out of misses'
+  if (submissions.length === 1 && submissions[0].type === 'oneShot') return 'Solved in one shot'
+  const misses = missCount(submissions)
+  return misses === 0 ? 'Solved with no misses'
+    : `Solved with ${misses} miss${misses === 1 ? '' : 'es'}`
+}
+
+export function buildResultBlock({ title, submissions, won }) {
   return [
     `Venn It To Win It — ${title}`,
     attemptRow(submissions),
-    outcome,
+    outcomeLine(submissions, won),
   ].join('\n')
 }
-
-export { ATTEMPTS }

@@ -1,6 +1,6 @@
 import { REGION_KEYS } from '../utils/puzzleUtils.js'
 import { VB_W, VB_H, CIRCLES, CENTROIDS } from '../utils/vennGeometry.js'
-import { CIRCLE_COLORS } from '../styles/colors.js'
+import { categoryColor, NEUTRAL_FILL, NEUTRAL_STROKE } from '../styles/colors.js'
 import styles from './VennDiagram.module.css'
 
 // Geometry-only diagram shell: the three circles, and a hit-test for clicks that land
@@ -15,11 +15,16 @@ import styles from './VennDiagram.module.css'
 // coordinates line up with the SVG's viewBox.
 export default function VennDiagram({
   revealedCircles = [],
+  // { circleId: category } while the opening shuffle flashes colours, else null
+  flash = null,
   onRegionClick,
   debugMode = false,
   children,
 }) {
   const revealMap = Object.fromEntries(revealedCircles.map(r => [r.circleId, r]))
+  // Colour follows the category solved into a circle, never the circle itself. Unsolved
+  // circles are neutral, apart from the flash during the opening shuffle.
+  const colorOf = id => categoryColor(revealMap[id]?.category ?? flash?.[id])
 
   // Which circles contain the click point. Overlay elements handle their own clicks and
   // stop here; this only ever sees clicks on bare diagram, so the four-layer pill hit-test
@@ -50,10 +55,10 @@ export default function VennDiagram({
             <circle
               key={c.id}
               cx={c.cx} cy={c.cy} r={c.r}
-              fill={revealMap[c.id] ? CIRCLE_COLORS[c.id].bold : '#adb5bd'}
               fillOpacity={0.38}
               stroke="none"
-              style={{ mixBlendMode: 'multiply' }}
+              className={styles.tint}
+              style={{ mixBlendMode: 'multiply', fill: colorOf(c.id) ?? NEUTRAL_FILL }}
             />
           ))}
         </g>
@@ -64,8 +69,9 @@ export default function VennDiagram({
             key={`stroke-${c.id}`}
             cx={c.cx} cy={c.cy} r={c.r}
             fill="none"
-            stroke={CIRCLE_COLORS[c.id].bold}
             strokeWidth={2}
+            className={styles.tint}
+            style={{ stroke: colorOf(c.id) ?? NEUTRAL_STROKE }}
           />
         ))}
 

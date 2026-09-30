@@ -42,9 +42,9 @@ console.log('\n=== an unsaved draft works throughout (no id needed) ===')
 chk(!puzzle.id, `candidate has no id until saved`)
 chk(P.getCorrectCircles(puzzle, solved).length===3, `...and the reducer does not care`)
 
-console.log('\n=== attempts come from the draft, so the pips reflect what was set ===')
+console.log('\n=== the draft carries no budget, so the test board gets the standard one ===')
 const G2 = await import(U('gameRules.js'))
 chk(!('maxAttempts' in puzzle), `the draft carries no attempts value`)
-chk(G2.ATTEMPTS===5, `so the test board gets the standard ${G2.ATTEMPTS}`)
+chk(G2.MISSES===5, `so the test board gets the standard ${G2.MISSES} misses`)
 
 console.log(fails===0?'\nPASS':`\nFAIL — ${fails}`); process.exit(fails?1:0)

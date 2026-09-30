@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { REGION_KEYS, CIRCLE_REGIONS, getCorrectCircles, getValidTargets } from '../utils/puzzleUtils.js'
-import { ATTEMPTS, ONE_SHOT_COST } from '../utils/gameRules.js'
+import { MISSES, ONE_SHOT_MISS_COST } from '../utils/gameRules.js'
 
 function shuffle(arr) {
   const a = [...arr]
@@ -25,7 +25,7 @@ function initialState(puzzle) {
   return {
     placements: randomizePlacements(puzzle),
     selectedTermId: null,
-    attemptsLeft: ATTEMPTS,
+    missesLeft: MISSES,   // only a wrong submit spends one — a correct one is free
     revealedCircles: [],  // [{ circleId, category, name }]
     lastSubmitResult: null,
     oneShotUsed: false,
@@ -105,22 +105,22 @@ export function useGameState(puzzle) {
       const result = getCorrectCircles(puzzle, s.placements).find(c => c.circleId === circleId)
       const merged = result ? [...s.revealedCircles, result] : s.revealedCircles
 
-      const newAttemptsLeft = s.attemptsLeft - 1
+      const newMissesLeft = result ? s.missesLeft : s.missesLeft - 1
 
       const newPhase =
-        merged.length === 3   ? 'won'
-        : newAttemptsLeft <= 0 ? 'lost'
+        merged.length === 3  ? 'won'
+        : newMissesLeft <= 0 ? 'lost'
         : 'playing'
 
       return {
         ...s,
         revealedCircles: merged,
-        attemptsLeft: newAttemptsLeft,
+        missesLeft: newMissesLeft,
         phase: newPhase,
         lastSubmitResult: { circleId, correct: !!result },
-        // The revealed category, not just the circle: the shareable block normalises
-        // groups by the puzzle's own A/B/C order, because circle colour means something
-        // different to every player. A failed submit has no category — it matched no
+        // The revealed category, not just the circle: the share block colours a solved
+        // group by its category, which is the same for every player (a circle is not —
+        // the game is permutation-aware). A failed submit has no category — it matched no
         // group at all, so there is nothing to attribute it to.
         submissions: [...s.submissions, {
           type: 'circle', circleId, correct: !!result, category: result?.category ?? null,
@@ -130,9 +130,9 @@ export function useGameState(puzzle) {
   }
 
   // Checks the whole board at once. Wins outright if every group is right; otherwise
-  // reports ONLY how many were correct — no reveals, no locks — and is spent either way.
-  // That is what stops it dominating the per-circle submit: it trades a permanent lock
-  // for a one-off count.
+  // reports ONLY how many were correct — no reveals, no locks — and costs a miss. It is
+  // spent either way. A hit scores the same as three clean circle submits; its reward is
+  // the ⚡ in the share block.
   function submitAll() {
     setState(s => {
       // Opening move only. Left available after a circle submit it becomes a hedge —
@@ -143,15 +143,15 @@ export function useGameState(puzzle) {
 
       const correct = getCorrectCircles(puzzle, s.placements)
       const won = correct.length === 3
-      const newAttemptsLeft = s.attemptsLeft - ONE_SHOT_COST
+      const newMissesLeft = won ? s.missesLeft : s.missesLeft - ONE_SHOT_MISS_COST
 
       return {
         ...s,
         oneShotUsed: true,
         // Only a win reveals anything. A miss deliberately leaves the board untouched.
         revealedCircles: won ? correct : s.revealedCircles,
-        attemptsLeft: newAttemptsLeft,
-        phase: won ? 'won' : newAttemptsLeft <= 0 ? 'lost' : 'playing',
+        missesLeft: newMissesLeft,
+        phase: won ? 'won' : newMissesLeft <= 0 ? 'lost' : 'playing',
         lastOneShot: { correctCount: correct.length, won },
         submissions: [...s.submissions, { type: 'oneShot', correctCount: correct.length }],
       }
@@ -166,7 +166,7 @@ export function useGameState(puzzle) {
     // State
     placements: state.placements,
     selectedTermId: state.selectedTermId,
-    attemptsLeft: state.attemptsLeft,
+    missesLeft: state.missesLeft,
     revealedCircles: state.revealedCircles,
     lastSubmitResult: state.lastSubmitResult,
     oneShotUsed: state.oneShotUsed,

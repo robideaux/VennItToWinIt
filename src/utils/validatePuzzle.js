@@ -46,7 +46,7 @@ export const CATEGORY_KEYS = ['A', 'B', 'C']
 // not circle assignments, which is what makes the permutation-aware win check possible.
 export const CATEGORY_REGION_KEYS = ['A', 'B', 'C', 'AB', 'AC', 'BC', 'ABC']
 
-// Attempts are no longer a puzzle property — see ATTEMPTS in gameRules.js for why they
+// Attempts are no longer a puzzle property — see MISSES in gameRules.js for why they
 // are fixed for every puzzle. Files still carrying `maxAttempts` are simply ignored.
 
 const isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v)

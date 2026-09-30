@@ -38,10 +38,12 @@ export function useProgress() {
     write(progress)
   }, [progress])
 
-  function recordResult(puzzleId, { won, attempts }) {
+  // `misses` replaced `attempts` in Phase 20. Nothing displays either, so older entries
+  // keep a field nobody reads rather than being migrated.
+  function recordResult(puzzleId, { won, misses }) {
     setProgress(prev => ({
       ...prev,
-      [puzzleId]: { won, attempts, completedAt: new Date().toISOString() },
+      [puzzleId]: { won, misses, completedAt: new Date().toISOString() },
     }))
   }
 

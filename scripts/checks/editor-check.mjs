@@ -48,10 +48,10 @@ chk(getCorrectCircles(candidate, placements).length===3, `all 3 circles read as 
 
 const G = await import(U('gameRules.js'))
 console.log('')
-console.log('=== attempts are fixed for every puzzle ===')
-chk(G.ATTEMPTS===5, `every game gets ${G.ATTEMPTS} attempts`)
+console.log('=== the miss budget is fixed for every puzzle ===')
+chk(G.MISSES===5, `every game gets ${G.MISSES} misses`)
 chk(!('maxAttempts' in D.fromDraft(draft)), `the editor no longer emits a per-puzzle value`)
-chk(G.PERFECT_SCORE===1 && G.CLEAN_SCORE===3, `ladder: ${G.PERFECT_SCORE} via One Shot, ${G.CLEAN_SCORE} clean`)
+chk(!('ATTEMPTS' in G) && !('PERFECT_SCORE' in G), `the old attempts budget and score ladder are gone`)
 console.log('\n=== label cap is what the renderer can actually draw ===')
 chk(V.MAX_TERM_CHARS===40, `editor inputs cap at MAX_TERM_CHARS = ${V.MAX_TERM_CHARS}`)
 const long = D.blankDraft(); Object.assign(long, {title:'x'.repeat(V.MAX_LABEL_CHARS)})

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import styles from './HomeScreen.module.css'
-import { CIRCLE_COLORS } from '../styles/colors.js'
+import { CATEGORY_COLORS } from '../styles/colors.js'
 import { fetchUnlockedPuzzles } from '../utils/puzzleSchedule.js'
 
 export default function HomeScreen({ onPlayLatest, onAllVenns, onHowToPlay, onSettings, onEdit, progress, notice, onDismissNotice }) {
@@ -21,9 +21,9 @@ export default function HomeScreen({ onPlayLatest, onAllVenns, onHowToPlay, onSe
           preserveAspectRatio="xMidYMid slice"
           className={styles.bgSvg}
         >
-          <circle className={styles.bgCircle} cx="160" cy="115" r="97" fill={CIRCLE_COLORS['1'].bold} fillOpacity="0.55" />
-          <circle className={styles.bgCircle} cx="105" cy="235" r="97" fill={CIRCLE_COLORS['2'].bold} fillOpacity="0.55" />
-          <circle className={styles.bgCircle} cx="215" cy="235" r="97" fill={CIRCLE_COLORS['3'].bold} fillOpacity="0.55" />
+          <circle className={styles.bgCircle} cx="160" cy="115" r="97" fill={CATEGORY_COLORS.A.bold} fillOpacity="0.55" />
+          <circle className={styles.bgCircle} cx="105" cy="235" r="97" fill={CATEGORY_COLORS.B.bold} fillOpacity="0.55" />
+          <circle className={styles.bgCircle} cx="215" cy="235" r="97" fill={CATEGORY_COLORS.C.bold} fillOpacity="0.55" />
         </svg>
       </div>
 

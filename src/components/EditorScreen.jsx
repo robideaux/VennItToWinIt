@@ -128,7 +128,7 @@ export default function EditorScreen({ puzzle, onSave, onCancel }) {
         <p className={styles.hint}>
           {testResult === 'solved'
             ? 'Test solved it — the puzzle works.'
-            : 'Test ran out of attempts. Still valid, just hard.'}
+            : 'Test ran out of misses. Still valid, just hard.'}
         </p>
       )}
 

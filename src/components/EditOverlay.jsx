@@ -6,7 +6,7 @@ import {
   pctX, pctY, UNIT_CSS, clampX,
 } from '../utils/vennGeometry.js'
 import { PILL_W, PILL_PAD, BASE_FONT } from '../utils/fitText.js'
-import { CIRCLE_COLORS } from '../styles/colors.js'
+import { CATEGORY_COLORS } from '../styles/colors.js'
 import chipStyles from './CircleLabels.module.css'
 import styles from './EditOverlay.module.css'
 
@@ -66,7 +66,7 @@ export default function EditOverlay({ draft, onChange, fieldIssues = new Map(), 
               styles.category,
               problem(`category:${key}`) ? styles.flagged : '',
             ].join(' ').trim()}
-            style={problem(`category:${key}`) ? undefined : { borderColor: CIRCLE_COLORS[circleId].bold }}
+            style={problem(`category:${key}`) ? undefined : { borderColor: CATEGORY_COLORS[key].bold }}
             title={problem(`category:${key}`) ?? ''}
             value={draft.categories[key]}
             onChange={e => setCategory(key, e.target.value)}

@@ -22,8 +22,8 @@ const pid = saved.puzzle.id
 
 const A = mountTab('Tab A')
 A.activePuzzle = saved.puzzle                       // played it
-A.progress[pid] = { won:true, attempts:3 }; writeProgress(A)
-A.progress['2026_001'] = { won:true, attempts:2 }; writeProgress(A)
+A.progress[pid] = { won:true, misses:0 }; writeProgress(A)
+A.progress['2026_001'] = { won:true, misses:1 }; writeProgress(A)
 
 const B = mountTab('Tab B')                          // opened fresh, sees both
 
@@ -41,7 +41,7 @@ console.log(`  Tab A's selector still lists : ${A.customList.map(p=>p.title).joi
 console.log(`  storage actually holds       : ${C.listCustom(null,shared).map(p=>p.title).join(', ') || '(none)'}`)
 
 console.log('\n=== Tab A plays another game, writing progress from stale memory ===')
-A.progress['2026_002'] = { won:false, attempts:5 }
+A.progress['2026_002'] = { won:false, misses:5 }
 writeProgress(A)
 const final = JSON.parse(shared.getItem('vennit_progress'))
 console.log(`  progress keys after Tab A writes: ${Object.keys(final).join(', ')}`)

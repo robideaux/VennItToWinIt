@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useGameState } from '../hooks/useGameState.js'
-import { ATTEMPTS } from '../utils/gameRules.js'
+import { MISSES } from '../utils/gameRules.js'
 import {
   ONE_SHOT_HINT, ONE_SHOT_CONFIRM, ONE_SHOT_RESULT,
   ONE_SHOT_RESULT_FOOTER, ONE_SHOT_RESULT_DISMISS, oneShotResultTitle,
@@ -37,8 +37,8 @@ export default function GameBoard({
   const [showHint, setShowHint] = useState(() => !hasSeenOneShotHint())
 
   useEffect(() => {
-    if (game.phase === 'won')  onWin({ placements: game.placements, revealedCircles: game.revealedCircles, attemptsUsed: ATTEMPTS - game.attemptsLeft, submissions: game.submissions })
-    if (game.phase === 'lost') onGameOver({ placements: game.placements, revealedCircles: game.revealedCircles, attemptsUsed: ATTEMPTS, submissions: game.submissions })
+    if (game.phase === 'won')  onWin({ placements: game.placements, revealedCircles: game.revealedCircles, missesUsed: MISSES - game.missesLeft, submissions: game.submissions })
+    if (game.phase === 'lost') onGameOver({ placements: game.placements, revealedCircles: game.revealedCircles, missesUsed: MISSES, submissions: game.submissions })
   }, [game.phase]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -109,7 +109,7 @@ export default function GameBoard({
         <h1 className={styles.title}>{puzzle.title}</h1>
         {/* One slot, two states. While it is available this is the button; once spent it
             becomes the record of what it told you, in the same place. Sitting beside the
-            attempt pips groups it with the other thing it costs. */}
+            miss pips groups it with the other thing it costs. */}
         {game.canOneShot ? (
           <span className={styles.oneShotWrap}>
           <button
@@ -140,12 +140,12 @@ export default function GameBoard({
         ) : null}
         <div
           className={styles.pips}
-          aria-label={`${game.attemptsLeft} of ${ATTEMPTS} attempts remaining`}
+          aria-label={`${game.missesLeft} of ${MISSES} misses left`}
         >
-          {Array.from({ length: ATTEMPTS }, (_, i) => (
+          {Array.from({ length: MISSES }, (_, i) => (
             <span
               key={i}
-              className={`${styles.pip} ${i < game.attemptsLeft ? styles.pipActive : ''}`}
+              className={`${styles.pip} ${i < game.missesLeft ? styles.pipActive : ''}`}
             />
           ))}
         </div>
@@ -158,21 +158,25 @@ export default function GameBoard({
             revealedCircles={game.revealedCircles}
             onSubmit={game.submitCircle}
             canSubmit={game.isCircleFilled('1')}
+            flashCategory={shuffle.flash?.['1']}
           />
           <CircleLabel
             circleId="2"
             revealedCircles={game.revealedCircles}
             onSubmit={game.submitCircle}
             canSubmit={game.isCircleFilled('2')}
+            flashCategory={shuffle.flash?.['2']}
           />
           <CircleLabel
             circleId="3"
             revealedCircles={game.revealedCircles}
             onSubmit={game.submitCircle}
             canSubmit={game.isCircleFilled('3')}
+            flashCategory={shuffle.flash?.['3']}
           />
           <VennDiagram
             revealedCircles={game.revealedCircles}
+            flash={shuffle.flash}
             onRegionClick={handleRegionClick}
             debugMode={debugMode}
           >

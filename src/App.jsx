@@ -168,19 +168,19 @@ export default function App() {
     setScreen('selector')
   }
 
-  function handleWin({ placements, revealedCircles, attemptsUsed, submissions }) {
+  function handleWin({ placements, revealedCircles, missesUsed, submissions }) {
     setGameOverlay(null)
     setFinalGameState({ placements, revealedCircles, submissions })
-    recordResult(activePuzzle.id, { won: true, attempts: attemptsUsed })
+    recordResult(activePuzzle.id, { won: true, misses: missesUsed })
     // Replace the game entry — back from win goes to selector, not back into the finished game
     history.replaceState({ screen: 'win' }, '')
     setScreen('win')
   }
 
-  function handleGameOver({ placements, revealedCircles, attemptsUsed, submissions }) {
+  function handleGameOver({ placements, revealedCircles, missesUsed, submissions }) {
     setGameOverlay(null)
     setFinalGameState({ placements, revealedCircles, submissions })
-    recordResult(activePuzzle.id, { won: false, attempts: attemptsUsed })
+    recordResult(activePuzzle.id, { won: false, misses: missesUsed })
     history.replaceState({ screen: 'gameover' }, '')
     setScreen('gameover')
   }

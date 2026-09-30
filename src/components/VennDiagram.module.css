@@ -11,3 +11,9 @@
   user-select: none;
   overflow: visible;
 }
+
+/* Set as style, not attributes, so the change animates: the opening shuffle's colour
+   flash, the fade back to neutral, and a circle taking its colour when solved. */
+.tint {
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}

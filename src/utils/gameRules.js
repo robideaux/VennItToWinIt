@@ -1,32 +1,25 @@
 // The rules that are the same for every puzzle.
 //
-// Attempts used to be per-puzzle (`maxAttempts` in the JSON), but the lever was never
-// pulled: all 37 library puzzles set 5, and the How To Play screen had "5 attempts"
-// hardcoded in its copy, so any puzzle that differed would have made the instructions
-// wrong. More importantly a variable budget makes scores incomparable — "solved in 4"
-// would mean something different on a 3-attempt puzzle than a 10-attempt one, and a
-// shared score is only worth sending if everyone is on the same scale. Wordle fixes six
-// guesses and Connections four mistakes for exactly this reason.
+// The budget counts MISSES, not submits (Phase 20, from beta testing). A correct submit is
+// free; only a wrong one spends a pip. Under the old attempts budget you needed 3 hits out
+// of 5, so only 2 misses were survivable — and after a 3rd the game was already lost but
+// played on until the pips ran out. Counting misses means the game ends exactly when it
+// becomes unwinnable, and every pip matters.
 //
-// Existing puzzle files still carry `maxAttempts`; it is ignored.
-export const ATTEMPTS = 5
+// 5 is deliberately generous, kept to see how it plays. 4 (Connections) or 3 are the
+// obvious fallbacks if it proves too soft.
+//
+// It is fixed rather than per-puzzle so scores compare: a variable budget makes "1 miss"
+// mean different things on different puzzles. Existing puzzle files still carry
+// `maxAttempts`; it is ignored.
+export const MISSES = 5
 
-// One Shot: a single whole-board check, available once per game.
+// One Shot: a single whole-board check, opening move only.
 //
-// It costs an attempt like any submit, but pays in a different currency. A per-circle
-// submit buys DEPTH — a permanent lock on one group. One Shot buys BREADTH — how many of
-// the three are right, across the whole board, revealing and locking nothing. Neither
-// dominates, so choosing between them is a real decision.
+// A hit wins outright and costs nothing — the same 0 misses as three clean circle
+// submits, so it earns no better score. What it earns is the brag: the share block marks
+// a One Shot win with ⚡, "I called the whole board cold".
 //
-// Revealing nothing is the point, and the part players will not expect: a miss tells you
-// only a number. Getting that across before the first press is a UI problem, not a
-// mechanical one.
-export const ONE_SHOT_COST = 1
-
-// Three circles need three successful submits, so:
-//   1   One Shot hits
-//   2   impossible — no submit can lock more than one circle
-//   3   three clean per-circle submits
-//   4   a missed One Shot, or one wrong submit, then three clean
-export const PERFECT_SCORE = 1
-export const CLEAN_SCORE = 3
+// A miss costs one miss and reveals only a count — how many of the three are right, not
+// which, with nothing locked.
+export const ONE_SHOT_MISS_COST = 1

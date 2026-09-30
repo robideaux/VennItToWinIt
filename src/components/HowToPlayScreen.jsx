@@ -48,22 +48,23 @@ export default function HowToPlayScreen({ onBack }) {
         </section>
 
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Attempts</h2>
-          <p>Every puzzle gives you the same 5 attempts, shared across all three circles and shown as pips in the header. Every submit costs one — right or wrong.</p>
+          <h2 className={styles.sectionTitle}>Misses</h2>
+          <p>Every puzzle gives you the same 5 misses, shared across all three circles and shown as pips in the header. A correct submit is free — only a wrong one costs a pip.</p>
           <p>Run out before you've revealed all 3 circles and the puzzle shows you the solution.</p>
         </section>
 
         <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>⚡ One Shot</h2>
+          <h2 className={styles.sectionTitle}>↯ One Shot</h2>
           <p>Once per puzzle, you can check the whole board at once instead of a single circle.</p>
-          <p><strong>Every group right:</strong> you win there and then — in a single attempt.</p>
+          <p><strong>Every group right:</strong> you win there and then, and your shared result gets a ⚡.</p>
           <p><strong>Otherwise:</strong> you're told <em>how many</em> groups are correct, but not which. Nothing is revealed and nothing locks.</p>
-          <p>It costs one attempt either way, and you only get one. Three clean circle submits will always win a puzzle; One Shot is the gamble that can win it in one — at the cost of finishing a move behind if you're wrong.</p>
+          <p>You only get one, and only as your opening move. A miss costs a pip, just like a wrong circle submit. It scores no better than three clean submits — it's for calling the whole board at once.</p>
         </section>
 
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Good to Know</h2>
-          <p>A circle keeps its category name hidden until you solve it — until then it's just "Group 1", "Group 2", "Group 3".</p>
+          <p>A circle keeps its category hidden until you solve it — until then it's grey and just says "Group". Solving it reveals the category's name and its colour.</p>
+          <p>Each category has its own colour, the same for every player, wherever it lands on your board.</p>
           <p>It doesn't matter which circle holds which category. Any arrangement that groups the terms correctly wins.</p>
         </section>
       </main>
