@@ -125,8 +125,10 @@ export const displayTitle = puzzle =>
 // not the "Demo 03" you happen to file it under.
 export function toShareable(puzzle) {
   // `year`/`sequence` go too: they schedule the curated weekly library and mean nothing
-  // on a custom puzzle, which is never gated. Links pay for every byte they carry.
-  const { id, source, createdAt, localTitle, year, sequence, ...content } = puzzle ?? {}
+  // on a custom puzzle, which is never gated. So does `maxAttempts`, ignored since the
+  // budget was fixed (Phase 18) but still carried by older puzzles. Links pay for every
+  // byte they carry.
+  const { id, source, createdAt, localTitle, year, sequence, maxAttempts, ...content } = puzzle ?? {}
   return content
 }
 

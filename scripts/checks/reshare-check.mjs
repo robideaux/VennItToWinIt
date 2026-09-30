@@ -24,9 +24,10 @@ const outgoing = C.toShareable(p3.puzzle)
 chk(outgoing.title==='Demo', `link carries "${outgoing.title}" — the author's title, not mine`)
 chk(!('localTitle' in outgoing), `localTitle stripped`)
 for (const k of ['id','source','createdAt']) chk(!(k in outgoing), `${k} stripped`)
-chk(JSON.stringify(Object.keys(outgoing).sort())===JSON.stringify(['categories','maxAttempts','terms','title'].sort()),
+chk(JSON.stringify(Object.keys(outgoing).sort())===JSON.stringify(['categories','terms','title'].sort()),
     `only puzzle content remains: ${Object.keys(outgoing).join(', ')}`)
 for (const k of ['year','sequence']) chk(!(k in outgoing), `${k} stripped (library scheduling, meaningless on a custom puzzle)`)
+chk(!('maxAttempts' in C.toShareable({ ...p3.puzzle, maxAttempts: 5 })), `maxAttempts stripped (ignored since the budget was fixed)`)
 const bytes = Buffer.byteLength(JSON.stringify(outgoing))
 console.log(`   payload ${bytes} bytes -> ~${Math.ceil(bytes*4/3)} base64 chars (safe URL limit ~2000)`)
 

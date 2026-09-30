@@ -825,6 +825,23 @@ Choosing text-class `✗` and `↯` for the "nothing gained" marks is deliberate
 
 ## Future Ideas (Parking Lot)
 
+### Shorter custom-puzzle links — raised 2026-09-30
+
+`?p=` links are long. Measured over all 37 library puzzles encoded as custom ones, the payload today is a median of **635 characters (max 743)**, plus 37 for the URL. That is more than the 340–540 estimated in Phase 17. Options, cheapest first:
+
+1. **Compact encoding: no backend, recommended first.** Today's payload is base64 of the puzzle's JSON, keys and region arrays included. Every puzzle has exactly one term per region, so sending the words in a fixed region order (`A B C AB AC BC ABC`) carries the regions for free: title, 3 categories, 7 labels, separated by `\u001f`. Measured: **median 159, max 267**, about 4× shorter. Adding deflate gets a median of **130, max 192**. It shortened all 37 puzzles and lengthened none: the worst saved 1 character, the median 23, the best 141. It only loses below about 40 characters of text, and no real puzzle is that short. It also hides the answers better: plain base64 decodes to readable words on any website, while deflated data does not without inflating it too. A JSON array of the 11 strings costs 20–30 characters more than a separator, even compressed. Async is not an obstacle, because App's link handling is already async. **Browser support is the catch:** native `CompressionStream('deflate-raw')` needs Safari 16.4+, so bundle `fflate` (about 8 KB) instead. **Agreed direction (2026-09-30):** 11 strings, `\u001f`-separated, deflated, base64url. Raw text in the URL is ruled out because it spoils the answers.
+
+**Format is versioned.** The first character of the `?p=` payload is a version, **outside** the compressed data: `?p=1<deflated base64url>`. The decoder reads it before choosing how to decode the rest, so a later version can change anything, compression included. A version stored inside the compressed data would lock every future format into the same compression. A single base64url character allows 64 versions. Links from before this change have no version character and are **version 0**, decoded as today's base64 JSON. Distinguishing them is safe: a v0 payload always starts with `ey` (base64 of `{"`), which is not a version character we will assign.
+
+**Done now, ahead of the rest:** `toShareable` strips `maxAttempts`, which is ignored since Phase 18. That makes today's links about 20 characters shorter. Needs a version marker so existing `?p=` links keep decoding, e.g. a new `?v=` param, with `?p=` handled as today.
+2. **QR code: complements shortening, doesn't replace it.** Good for passing a puzzle in person, useless in a chat. A small client-side library, lazy-loaded behind a "Show QR" button. Payload length drives QR density, so do option 1 first. A 200-character URL is a comfortably scannable QR on screen; 700 is dense.
+3. **Own short links: `/p/abc123` via a Netlify Function and Netlify Blobs.** Shortest possible and first-party, but it is the app's **first backend**: storage, rate limiting, abuse. It also makes a link depend on our server staying up, where today a link is self-contained and works forever.
+4. **Third-party shortener (TinyURL, is.gd, …): not recommended.** It sends puzzle content to a third party. It comes with API keys, rate limits and CORS, and links can rot. Some chat apps flag shortened links as spam.
+
+On phones the native share sheet usually shows a link preview, so length mostly hurts desktop copy-paste and QR density.
+
+**Confirmed by beta (2026-09-30):** a custom-puzzle link pasted into Facebook Messenger showed as a huge "wall of random text". Option 1 cuts it to about a quarter, but it is still visible random text. Only option 3 makes it genuinely short. Adding Open Graph tags (`og:title`, `og:image`) to `index.html` would at least give chat apps a proper preview card under the link. That is cheap and independent of the other options.
+
 ### Cross-Tab Storage Sync — deferred (investigated 2026-09-25)
 
 Neither `useProgress` nor `useCustomPuzzles` re-reads `localStorage` after mount, so two tabs
