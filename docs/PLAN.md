@@ -2,7 +2,7 @@
 
 ## Current Status
 
-**Last updated:** 2026-09-30 · **At commit:** `678d6c7` · **Working tree:** clean
+**Last updated:** 2026-09-30 · **At commit:** `ad23050` · **Working tree:** clean
 
 **Verification:** `node scripts/checks/run-all.mjs` — 22 standalone checks against the real modules and real puzzle data. No browser works in this environment, so anything visual still needs a human; everything else is covered there.
 
@@ -14,7 +14,7 @@ Since then: the diagram was split into a geometry-only SVG shell plus swappable 
 
 | Item | Status |
 |---|---|
-| **Phase 20 — Misses & Category Colours** | **Built, not yet committed (2026-09-30).** From beta feedback: the budget counts misses, not submits, and colour belongs to a category rather than a circle. **Open:** the final palette (task 20.8), which the user is testing in Chrome's vision-deficiency emulator; red / green / violet is on trial (third attempt, chosen by simulation). Visual check pending, including a real paste of the share row into a chat app. |
+| **Phase 20 — Misses & Category Colours** | **Shipped (2026-09-30, `e4f47f8`..`ad23050`).** From beta feedback: the budget counts misses; colour belongs to the category (red / green / violet, chosen by colour-blindness simulation); the results screens have a single ‹ Back; replays are marked in the share text; the first result is kept in full. **Still open:** task 20.13, the selection and target highlight colours, and the deferred past-results view (20.16). |
 | **Phase 9 — Feedback & Animation** | **Not started — follows Phase 20.** No `navigator.vibrate` and no `@keyframes` anywhere in `src/`. The existing shuffle/reveal hooks drive discrete swap steps; they are not the tap, submit and transition feedback this phase describes. Most likely to make the phone build feel finished rather than merely functional. |
 | **Legacy puzzle cleanup** | 34 older-format puzzles are live in `index.json` with placeholder `year: 2025, sequence: 0`. Intentionally active as test content; a review sweep with the other devs decides which to keep, then assigns final `2026_NNN` filenames and sequence numbers. Known: a duplicate "Just Relax", and a typo "Natrually Irrational". |
 | **`docs/DEPLOYMENT.md`** | Knowingly stale — documents `puzzle-XXX.json` naming and omits the required `year`/`sequence` fields. Deliberately waiting on the puzzle sweep so it is rewritten once. |
