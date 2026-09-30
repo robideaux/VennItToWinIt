@@ -2,20 +2,24 @@
 
 ## Current Status
 
-**Last updated:** 2026-09-22 · **At commit:** `7d0a2f6` · **Working tree:** Phase 16 Stage 1 in progress
+**Last updated:** 2026-09-30 · **At commit:** `678d6c7` · **Working tree:** clean
 
-**Shipped:** Phases 1–8, 10, 11, 13, 14, 15. The game is fully playable end to end — shuffled-start board (no term bank), true-swap placement, permutation-aware answer checking, per-circle submit chips drawing on a shared 5-attempt pool, group locking, weekly puzzle gating with `localStorage` progress, Home / Settings / How To Play screens, light-dark theming, and an animated game-over reveal that keeps already-solved circles pinned in place.
+**Verification:** `node scripts/checks/run-all.mjs` — 20 standalone checks against the real modules and real puzzle data. No browser works in this environment, so anything visual still needs a human; everything else is covered there.
+
+**Shipped:** Phases 1–8 and 10–19. The game is fully playable end to end — shuffled-start board (no term bank), true-swap placement, permutation-aware answer checking, per-circle submit chips drawing on a shared 5-attempt pool, group locking, weekly puzzle gating with `localStorage` progress, Home / Settings / How To Play screens, light-dark theming, and an animated game-over reveal that keeps already-solved circles pinned in place.
+
+Since then: the diagram was split into a geometry-only SVG shell plus swappable HTML overlays (Phase 16); a full puzzle editor with test-play, plus custom-puzzle storage and a three-section selector (Phase 17); attempts fixed at 5 with the One Shot mechanic and a shareable result block (Phase 18); and browser chrome that follows the theme (Phase 19). The loop is complete — author a puzzle, test-play it, save it, share it by link, and play what other people send you.
 
 **Open work:**
 
 | Item | Status |
 |---|---|
-| **Phase 9 — Feedback & Animation** | Not started. No `navigator.vibrate` and no `@keyframes` anywhere in `src/`. The existing `useShuffleAnimation` / `useRevealAnimation` hooks drive discrete swap steps — they are not the tap / submit / error feedback this phase describes. |
-| **Phase 12 — Puzzle Editor** | **Scoped 2026-09-22.** Split into Phase 16 (overlay refactor — enabling work) and Phase 17 (custom puzzles + editor). All open questions answered; decisions locked in those sections. |
-| **Phase 16 — Overlay Refactor** | In progress. Stage 1 (geometry extraction) done and verified byte-identical against `7d0a2f6`. Stage 2 (HTML overlays + text fitting) next — it is the visual review gate. |
-| **Phase 17 — Custom Puzzles & Editor** | Planned, not started. Depends on Phase 16. |
-| **Legacy puzzle cleanup** | 34 older-format puzzles are live in `index.json` with placeholder `year: 2025, sequence: 0`. Intentionally active as test content; a review sweep with the other devs will decide which to keep, then assign final `2026_NNN` filenames and real sequence numbers. See "Older Puzzle Conversion" in the parking lot. |
-| **`docs/DEPLOYMENT.md`** | Knowingly stale — still documents `puzzle-XXX.json` naming and omits the required `year` / `sequence` manifest fields. Deliberately deferred until the puzzle sweep settles the naming scheme, so it only gets rewritten once. |
+| **Phase 9 — Feedback & Animation** | **Not started — the agreed next step.** No `navigator.vibrate` and no `@keyframes` anywhere in `src/`. The existing shuffle/reveal hooks drive discrete swap steps; they are not the tap, submit and transition feedback this phase describes. Most likely to make the phone build feel finished rather than merely functional. |
+| **Legacy puzzle cleanup** | 34 older-format puzzles are live in `index.json` with placeholder `year: 2025, sequence: 0`. Intentionally active as test content; a review sweep with the other devs decides which to keep, then assigns final `2026_NNN` filenames and sequence numbers. Known: a duplicate "Just Relax", and a typo "Natrually Irrational". |
+| **`docs/DEPLOYMENT.md`** | Knowingly stale — documents `puzzle-XXX.json` naming and omits the required `year`/`sequence` fields. Deliberately waiting on the puzzle sweep so it is rewritten once. |
+| **PWA install prompt** | Discussed and deliberately parked — see Phase 19 for why it ranks below Phase 9. |
+| **Cross-tab storage sync** | Investigated and deferred — see the parking lot. |
+| **Dependabot advisories** | Reported by GitHub on push; not yet looked at. Likely transitive dev dependencies. |
 
 Everything else lives in the phase sections below, with the parking lot at the end of the file.
 
