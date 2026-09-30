@@ -49,10 +49,14 @@ export function outcomeLine(submissions, won) {
     : `Solved with ${misses} miss${misses === 1 ? '' : 'es'}`
 }
 
-export function buildResultBlock({ title, submissions, won }) {
+// `play` is which play of this puzzle the result came from. Replays are allowed, but a
+// replayed score is marked as one, so nobody can pass off a replay as their first go.
+// A first play carries no mark.
+export function buildResultBlock({ title, submissions, won, play = 1 }) {
+  const outcome = outcomeLine(submissions, won)
   return [
     `Venn It To Win It — ${title}`,
     attemptRow(submissions),
-    outcomeLine(submissions, won),
+    play > 1 ? `${outcome} · play ${play}` : outcome,
   ].join('\n')
 }

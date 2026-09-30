@@ -23,7 +23,7 @@ trip over Windows drive letters) and exits non-zero on failure.
 | `hittest` | diagram geometry: every centroid resolves to its own region, no pill escapes the box |
 | `caps` | the two length limits — what the editor accepts vs what the renderer can draw |
 | `draft` | puzzle ↔ editor-slot conversion round-trips unchanged |
-| `editor` | authoring flow: save, rename, title collisions, fixed attempts |
+| `editor` | authoring flow: save, rename, title collisions, fixed miss budget |
 | `dupes` | duplicate categories and terms are rejected |
 | `flags` | which fields get marked in the editor, and which deliberately do not |
 | `store` | custom puzzle storage, defensive parsing, quota and blocked-storage handling |
@@ -31,8 +31,10 @@ trip over Windows drive letters) and exits non-zero on failure.
 | `reshare` | re-sharing carries the author's title, never your local numbering |
 | `share` / `link-flow` | share link encode/decode, import, dedupe, the weekly gate |
 | `sharemode` | native share sheet vs clipboard, per device |
-| `oneshot` | the One Shot mechanic and the score ladder |
+| `oneshot` | the misses budget and the One Shot mechanic |
+| `colour` | colour follows the category; the opening shuffle's colour flash |
 | `block` | the shareable result block |
 | `testplay` | data handed to the win/lose screens from a test play |
 | `theme` | theme applied at boot, and browser chrome colour |
+| `results` | leaving the results screen (Back lands where the game started), first-play record, play count, and the replay mark in the share text |
 | `edge` / `nav` / `twotab` | one-off investigations kept as documentation of known behaviour |

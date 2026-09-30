@@ -23,6 +23,20 @@ function write(progress) {
   }
 }
 
+// One puzzle's entry after another play of it.
+//
+// The FIRST play is the official record and is never overwritten — later plays only count
+// up `plays`. Try Again is allowed, but a retried perfect score must not quietly replace
+// the real first attempt; the share block shows the play number instead. `submissions` is
+// kept so the share row can be rebuilt after leaving the results screen.
+//
+// Older entries predate `plays` and `submissions` (and may carry `attempts`, which
+// `misses` replaced); they count as one play and are otherwise left as they are.
+export function applyResult(entry, { won, misses, submissions }, completedAt) {
+  if (entry) return { ...entry, plays: (entry.plays ?? 1) + 1 }
+  return { won, misses, submissions, completedAt, plays: 1 }
+}
+
 export function useProgress() {
   const [progress, setProgress] = useState(read)
 
@@ -38,12 +52,10 @@ export function useProgress() {
     write(progress)
   }, [progress])
 
-  // `misses` replaced `attempts` in Phase 20. Nothing displays either, so older entries
-  // keep a field nobody reads rather than being migrated.
-  function recordResult(puzzleId, { won, misses }) {
+  function recordResult(puzzleId, result) {
     setProgress(prev => ({
       ...prev,
-      [puzzleId]: { won, misses, completedAt: new Date().toISOString() },
+      [puzzleId]: applyResult(prev[puzzleId], result, new Date().toISOString()),
     }))
   }
 

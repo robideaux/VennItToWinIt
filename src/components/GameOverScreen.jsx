@@ -8,7 +8,8 @@ import { useShare } from '../hooks/useShare.js'
 import { buildResultBlock } from '../utils/resultBlock.js'
 import styles from './GameOverScreen.module.css'
 
-export default function GameOverScreen({ puzzle, placements, lockedCircles, submissions = [], onRetry, onPickNewPuzzle, testMode = false }) {
+// `play` is which play of this puzzle this was; a replay's share text says so.
+export default function GameOverScreen({ puzzle, placements, lockedCircles, submissions = [], play = 1, onRetry, onBack, testMode = false }) {
   const { placements: revealPlacements, revealedCircles } = useMemo(
     () => buildRevealState(puzzle, lockedCircles ?? []),
     [puzzle, lockedCircles]
@@ -19,12 +20,13 @@ export default function GameOverScreen({ puzzle, placements, lockedCircles, subm
   return (
     <div className={styles.screen}>
       <header className={styles.header}>
+        {/* Back returns to wherever this game was started from — see handleResultsBack */}
+        <button className={styles.backBtn} onClick={onBack}>{testMode ? '‹ Edit' : '‹ Back'}</button>
         <h2 className={styles.heading}>Out of misses</h2>
         <div className={styles.buttons}>
           {!testMode && (
-            <button className={styles.btnSecondary} onClick={() => share(puzzle, buildResultBlock({ title: puzzle.title, submissions, won: false }))}>Share</button>
+            <button className={styles.btnSecondary} onClick={() => share(puzzle, buildResultBlock({ title: puzzle.title, submissions, won: false, play }))}>Share</button>
           )}
-          <button className={styles.btnSecondary} onClick={onPickNewPuzzle}>{testMode ? 'Back to editing' : 'New Puzzle'}</button>
           <button className={styles.btnPrimary} onClick={onRetry}>{testMode ? 'Test again' : 'Try Again'}</button>
         </div>
       </header>

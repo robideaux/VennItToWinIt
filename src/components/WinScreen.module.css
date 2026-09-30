@@ -16,10 +16,35 @@
   border-bottom: 1px solid var(--color-border);
 }
 
+/* Left nav slot, matching the Back button on every other screen */
+.backBtn {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: none;
+  border: none;
+  border-right: 1px solid var(--color-border);
+  padding: 0 16px 0 4px;
+  min-height: 44px;
+  width: var(--nav-slot);
+  flex-shrink: 0;
+  white-space: nowrap;
+  text-align: left;
+  cursor: pointer;
+}
+
 .heading {
   font-size: 1rem;
   font-weight: 800;
   color: var(--color-text);
+}
+
+/* Right-hand actions; also keeps the heading centred when empty (test play) */
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: var(--nav-slot);
 }
 
 .btn {

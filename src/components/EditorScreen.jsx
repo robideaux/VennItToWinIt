@@ -82,7 +82,7 @@ export default function EditorScreen({ puzzle, onSave, onCancel }) {
         puzzle={candidate}
         placements={testFinal?.placements}
         revealedCircles={testFinal?.revealedCircles}
-        onPlayAgain={() => endTest('solved')}
+        onBack={() => endTest('solved')}
       />
     )
   }
@@ -95,7 +95,7 @@ export default function EditorScreen({ puzzle, onSave, onCancel }) {
         placements={testFinal?.placements}
         lockedCircles={testFinal?.revealedCircles}
         onRetry={startTest}
-        onPickNewPuzzle={() => endTest('lost')}
+        onBack={() => endTest('lost')}
       />
     )
   }

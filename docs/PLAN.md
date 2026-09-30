@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-09-30 · **At commit:** `678d6c7` · **Working tree:** clean
 
-**Verification:** `node scripts/checks/run-all.mjs` — 20 standalone checks against the real modules and real puzzle data. No browser works in this environment, so anything visual still needs a human; everything else is covered there.
+**Verification:** `node scripts/checks/run-all.mjs` — 22 standalone checks against the real modules and real puzzle data. No browser works in this environment, so anything visual still needs a human; everything else is covered there.
 
 **Shipped:** Phases 1–8 and 10–19. The game is fully playable end to end — shuffled-start board (no term bank), true-swap placement, permutation-aware answer checking, per-circle submit chips drawing on a shared 5-attempt pool, group locking, weekly puzzle gating with `localStorage` progress, Home / Settings / How To Play screens, light-dark theming, and an animated game-over reveal that keeps already-solved circles pinned in place.
 
@@ -14,7 +14,8 @@ Since then: the diagram was split into a geometry-only SVG shell plus swappable 
 
 | Item | Status |
 |---|---|
-| **Phase 9 — Feedback & Animation** | **Not started — the agreed next step.** No `navigator.vibrate` and no `@keyframes` anywhere in `src/`. The existing shuffle/reveal hooks drive discrete swap steps; they are not the tap, submit and transition feedback this phase describes. Most likely to make the phone build feel finished rather than merely functional. |
+| **Phase 20 — Misses & Category Colours** | **Built, not yet committed (2026-09-30).** From beta feedback: the budget counts misses, not submits, and colour belongs to a category rather than a circle. **Open:** the final palette (task 20.8), which the user is testing in Chrome's vision-deficiency emulator; red / green / violet is on trial (third attempt, chosen by simulation). Visual check pending, including a real paste of the share row into a chat app. |
+| **Phase 9 — Feedback & Animation** | **Not started — follows Phase 20.** No `navigator.vibrate` and no `@keyframes` anywhere in `src/`. The existing shuffle/reveal hooks drive discrete swap steps; they are not the tap, submit and transition feedback this phase describes. Most likely to make the phone build feel finished rather than merely functional. |
 | **Legacy puzzle cleanup** | 34 older-format puzzles are live in `index.json` with placeholder `year: 2025, sequence: 0`. Intentionally active as test content; a review sweep with the other devs decides which to keep, then assigns final `2026_NNN` filenames and sequence numbers. Known: a duplicate "Just Relax", and a typo "Natrually Irrational". |
 | **`docs/DEPLOYMENT.md`** | Knowingly stale — documents `puzzle-XXX.json` naming and omits the required `year`/`sequence` fields. Deliberately waiting on the puzzle sweep so it is rewritten once. |
 | **PWA install prompt** | Discussed and deliberately parked — see Phase 19 for why it ranks below Phase 9. |
@@ -758,6 +759,67 @@ Nothing in the block can spoil a puzzle: knowing group 2 fell first says nothing
 **Known limitation:** the URL bar cannot be reclaimed. Mobile browsers collapse it on scroll, but the app is `100dvh` with `overflow: hidden` and never scrolls, so it is permanently visible. `dvh` sizes correctly to it so nothing breaks — the space is simply never given back.
 
 **Unverified risk worth knowing:** links opened from Messages, WhatsApp or Instagram often land in an in-app browser rather than Safari or Chrome. Install is frequently unavailable there, and `localStorage` may be sandboxed to the host app — so a custom puzzle received and played inside WhatsApp's browser may not appear later in Safari. Not measured across webviews; flagged before leaning harder on sharing.
+
+---
+
+## Phase 20 — Misses & Category Colours — BUILT except the palette (2026-09-30)
+
+Two changes that came out of beta testing with other players.
+
+### 1. The budget counts misses, not submits
+
+A correct submit no longer costs anything. The pips mean **misses remaining**, and there are still **5** of them. We're keeping 5 for now to see how it plays, knowing it is far more lenient than before. Under the old rule you needed 3 hits from 5 attempts, so you could only afford **2 misses**, and after a 3rd miss the game was unwinnable but carried on until the pips ran out. With a misses budget the game ends exactly when it is lost, so every pip matters. 3 or 4 misses (Connections uses 4) are the obvious fallbacks if 5 proves too soft.
+
+Side effects:
+- **The score is the miss count.** "Solved in N" becomes "Solved with N misses", and 0 misses is "Perfect". The old 1 / 3 / 4 score ladder in `gameRules.js` goes, and 2 is no longer an impossible score.
+- **Progress:** `useProgress` stores `attempts` but nothing displays it, so it is renamed to `misses` with no migration. Old entries keep a field nobody reads.
+- **One Shot stays, as a brag (Option B).** Once hits are free, a One Shot hit scores the same as three clean circle submits (0 misses), and a One Shot miss costs a miss and reveals only a count. Mechanically, circle submits now beat it almost everywhere. It stays because "I called the whole board at once" is worth showing off, and the share block marks it out. Still opening move only, still costs 1 miss when it misses. The copy in `src/copy/oneShot.js` and How To Play needs rewording: it no longer "wins it in one", and it is no longer "a move behind" when wrong.
+- Copy: "Out of attempts" becomes misses wording everywhere: GameOverScreen, the editor's test-play message, How To Play, and the pip aria-label.
+
+Options considered: 3 or 4 misses (kept as fallbacks); dropping One Shot entirely (A); giving One Shot a new reward mechanic (C, not designed).
+
+### 2. Colour belongs to the category, not the circle
+
+- Unsolved circles and label chips are **neutral**, with no category colour.
+- Solving a circle reveals its category's colour: **A is colour 1, B is colour 2, C is colour 3**, wherever that category sits on the board. The game-over reveal colours every circle the same way.
+- The group-number footnote on solved chips goes away, because colour now does its job. Chip aria-labels name the position instead ("Submit top circle").
+- The editor already draws A, B and C in colours 1, 2 and 3 in circles 1, 2 and 3, which now matches the rule. No change needed.
+- The Phase 18 argument that "circle colour means nothing across players" no longer applies. Colour is the same for every player, so the share block goes back to colour.
+
+**Share row glyphs (decided):**
+- A solved group is a coloured emoji circle.
+- A miss is `✗`, the current text glyph.
+- A One Shot miss is `↯`, the current text glyph.
+- A One Shot hit is `⚡` **alone**, e.g. a row of just `⚡`.
+- An example of a missed One Shot and then a win, assuming red/yellow/blue: `↯🔴✗🟡🔵`.
+
+Choosing text-class `✗` and `↯` for the "nothing gained" marks is deliberate: they recede while the colour carries what you achieved. Emoji circles render larger than text glyphs, though, and that height mismatch is why Phase 18 dropped `⚡`. Check a real paste into a chat app before calling it done.
+
+**Palette — open, user testing in Chrome's vision-deficiency emulator.** It has to be three of the fixed emoji set 🔴🟠🟡🟢🔵🟣🟤⚫⚪.
+- **Red / yellow / blue:** recommended on colour-blind grounds. It stays distinct under protan/deutan (blue↔yellow axis survives, red goes dark olive) and under tritan (red↔cyan axis survives).
+- **Green / yellow / blue:** the user's alternative, to avoid red reading as "bad". Weaker for colour-blind players, because it has a confusable pair under every type: green/yellow under protan/deutan and green/blue under tritan.
+- **Pairs to avoid:** red/green, blue/purple, green/orange.
+- **If yellow is in:** the yellow selection highlight (`COL_SOURCE`) needs a new colour, and the in-game yellow should be a deeper gold for contrast on light backgrounds.
+
+**Known trade-offs:** the board starts colourless and flatter until the first solve, which in return makes each solve a colour moment that pairs with Phase 9's reveal animation (9.5). Nothing leaks: seeing a solved circle is colour 2 tells you it is category B and nothing about the terms. Authors could later order categories by difficulty on purpose, as Connections does.
+
+### Tasks
+- [x] 20.1 `useGameState`: `attemptsLeft` becomes `missesLeft`, and only misses decrement it. Loss fires at 0
+- [x] 20.2 `gameRules.js`: `ATTEMPTS` becomes `MISSES = 5`, and the score ladder comments go
+- [x] 20.3 Win/lose payloads and `useProgress` record `misses`
+- [x] 20.4 Copy: pips, GameOverScreen, editor test-play, How To Play, `oneShot.js`
+- [x] 20.5 Colour lookup keyed by category, not circle, in `VennDiagram` and `CircleLabels`. Neutral styling for unsolved circles and chips
+- [x] 20.6 Drop the group-number footnote. Position-based aria-labels
+- [x] 20.7 `resultBlock.js`: emoji circles by category, keep `✗` and `↯`, a One Shot win is `⚡` alone, and the outcome line is based on misses
+- [x] 20.9 Update the `scripts/checks/` checks that assert attempts or the old row format, and add a `colour` check
+- [~] 20.8 **Palette trials.** (1) Red / yellow / blue: the user missed the green, and red `#ff6b6b` (L* 64) and blue `#339af0` (L* 62) were indistinguishable under achromatopsia. (2) Red `#f03e3e` / lime `#82c91e` / blue `#1864ab`: better, but under simulation deutan red-lime scored ΔE 12 and tritan lime-blue 28.5, matching what the user saw. (3) **Now trialling `#d6336c` / `#70df20` / `#501bbb` with 🔴🟢🟣**, chosen by simulation: Machado CVD matrices, CIEDE2000, maximising the worst pair across all modes. Worst pair is 17 (achromatopsia, red-violet); every other mode is 20+. The table is in `colors.js` (L* 54 / 74 / 42), spreading the colours in lightness as well as hue. The user suggested pushing red toward purple; not done, because purple reads as blue to red-green colour-blind players and would collide with blue. Solved chips have an `ink` text colour (dark on lime). Still to check: the dark blue stroke in dark mode, and the yellow selection highlight (`COL_SOURCE`) against lime
+- [x] 20.11 **Bug found while testing:** on desktop the Share button copied only the link, and the result block was silently dropped, because the clipboard path in `sharePuzzle` wrote `url` alone. It now copies the block followed by the link. The copy-by-hand fallback, shown only when the clipboard itself fails, still shows just the link
+- [x] 20.12 **Navigation bug (beta):** after a game, Play Another / New Puzzle pushed a selector on top of the results, and the selector's Back (`history.back()`) returned to those results, a loop with no way Home. App now records where a game started (`gameOrigin` ref): from the selector, Play Another goes back to that entry; from Home (Play Latest or a link), it replaces the results entry with the selector. Either way Home is directly beneath. Also fixed: choosing a puzzle from the mid-game selector replaced the overlay entry and left the old game's entry beneath the new one; it now pops the overlay. The `gameOrigin` part was superseded by 20.14. Covered by `results`
+- [x] 20.14 **Results screens: one ‹ Back button** (decided 2026-09-30). Play Another / New Puzzle are removed. Since 20.12, the entry beneath the results is always where the game started (the list, Home, or Home for a shared link), so Back is plain `history.back()`, like every other screen, and the `gameOrigin` ref from 20.12 goes. The mid-game overlay fix stays. Header: ‹ Back · heading · Share · Try Again (loss only). Editor test-play keeps its own "back to editing" and "Test again"
+- [x] 20.15 **Replays are allowed but visible (option B).** Try Again stays, and a replay's share text carries its play number, e.g. `Solved with no misses · play 3`. A first play shows no number. Rejected: removing Try Again (A), too harsh for a replayable library; and always sharing the first result (C), which is confusing when you win a retry and Share sends your old loss
+- [x] 20.16 **Progress keeps the first result in full.** The entry becomes `{ won, misses, submissions, completedAt, plays }`. The FIRST play's fields are the official record and never change, so later plays only bump `plays`. That means the share row can be rebuilt after leaving the results page. Old entries lack `submissions` and `plays` and are treated as 1 play. **Deferred:** a view of past results reachable from the list, with re-share. Designed separately; this task only stops the data being lost in the meantime
+- [ ] 20.13 **Open for discussion:** the yellow/purple selection and target highlight colours against the new palette
+- [x] 20.10 Opening shuffle flashes the category colours across the circles and chips, then settles neutral. This signals that colour is hidden too, not simply absent. `flashSequence()` in `useShuffleAnimation`: one full A/B/C permutation per swap step, never repeating the previous one, cleared on finish or skip. Fill, stroke and chip border now transition over 0.2s, so a circle also fades into its colour when solved, which gives Phase 9's 9.5 a head start
 
 ---
 

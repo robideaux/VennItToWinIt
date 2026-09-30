@@ -109,10 +109,13 @@ export default function App() {
   function handleSelectPuzzle(puzzle) {
     setActivePuzzle(puzzle)
     setGameKey(k => k + 1)
-    // If selecting from the mid-game selector overlay, replace that entry so back
-    // doesn't reopen the overlay on the new game
+    // From the mid-game selector overlay, pop the overlay rather than replacing it. The
+    // entry beneath is already { screen: 'game' }, and the new puzzle is in state, so it
+    // simply becomes the new game's entry. Replacing instead left the OLD game's entry
+    // under the new one, so Back led to a stale game. Beneath that is still wherever the
+    // first game was started from, which is where results Back should go.
     if (gameOverlay) {
-      history.replaceState({ screen: 'game' }, '')
+      history.back()
     } else {
       history.pushState({ screen: 'game' }, '')
     }
@@ -171,7 +174,7 @@ export default function App() {
   function handleWin({ placements, revealedCircles, missesUsed, submissions }) {
     setGameOverlay(null)
     setFinalGameState({ placements, revealedCircles, submissions })
-    recordResult(activePuzzle.id, { won: true, misses: missesUsed })
+    recordResult(activePuzzle.id, { won: true, misses: missesUsed, submissions })
     // Replace the game entry — back from win goes to selector, not back into the finished game
     history.replaceState({ screen: 'win' }, '')
     setScreen('win')
@@ -180,7 +183,7 @@ export default function App() {
   function handleGameOver({ placements, revealedCircles, missesUsed, submissions }) {
     setGameOverlay(null)
     setFinalGameState({ placements, revealedCircles, submissions })
-    recordResult(activePuzzle.id, { won: false, misses: missesUsed })
+    recordResult(activePuzzle.id, { won: false, misses: missesUsed, submissions })
     history.replaceState({ screen: 'gameover' }, '')
     setScreen('gameover')
   }
@@ -190,13 +193,16 @@ export default function App() {
     setScreen('game')
   }
 
-  function handleBackToSelector() {
-    // Deliberately keeps activePuzzle. The win/gameover entry is still on the history
-    // stack and those screens rebuild their whole reveal from this puzzle — clearing it
-    // here meant pressing Back rendered GameOverScreen with puzzle={null}, which threw
-    // inside buildRevealState and blanked the app. The next puzzle chosen replaces it.
-    history.pushState({ screen: 'selector' }, '')
-    setScreen('selector')
+  // The results screens' only way out. The entry beneath them is always where the game
+  // was started from — the list, or Home (Play Latest, Recent, or a shared link) — because
+  // the game entry is replaced by the results rather than pushed over, and a puzzle picked
+  // mid-game pops the selector overlay. So Back is simply Back, like every other screen.
+  //
+  // activePuzzle is deliberately kept: the results entry is still reachable with Forward,
+  // and those screens rebuild their whole reveal from it — clearing it once blanked the app
+  // (GameOverScreen with puzzle={null} threw inside buildRevealState).
+  function handleResultsBack() {
+    history.back()
   }
 
   function handleBackToHome() {
@@ -309,7 +315,8 @@ export default function App() {
           placements={finalGameState?.placements}
           revealedCircles={finalGameState?.revealedCircles}
           submissions={finalGameState?.submissions}
-          onPlayAgain={handleBackToSelector}
+          play={progress[activePuzzle.id]?.plays ?? 1}
+          onBack={handleResultsBack}
         />
       )}
       {screen === 'gameover' && activePuzzle && (
@@ -319,7 +326,8 @@ export default function App() {
           lockedCircles={finalGameState?.revealedCircles}
           submissions={finalGameState?.submissions}
           onRetry={handleRetry}
-          onPickNewPuzzle={handleBackToSelector}
+          play={progress[activePuzzle.id]?.plays ?? 1}
+          onBack={handleResultsBack}
         />
       )}
     </>
