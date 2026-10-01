@@ -7,40 +7,83 @@
 //
 // No backend is involved in either case.
 
+import { deflateSync, inflateSync, strToU8, strFromU8 } from 'fflate'
 import { toShareable, isCustomId } from './customPuzzles.js'
-import { validatePuzzle } from './validatePuzzle.js'
+import { validatePuzzle, CATEGORY_KEYS, CATEGORY_REGION_KEYS } from './validatePuzzle.js'
+import { toDraft, fromDraft } from './puzzleDraft.js'
 
 // URL-safe base64. Plain base64 uses + and /, which are meaningful inside a query string,
 // and the = padding gets percent-encoded by some clients — all three survive a round trip
 // far less reliably than they should.
-const b64encode = str => {
-  const bytes = new TextEncoder().encode(str)
+const bytesToB64 = bytes => {
   let bin = ''
   for (const b of bytes) bin += String.fromCharCode(b)
   return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
-const b64decode = payload => {
+const b64ToBytes = payload => {
   const b64 = payload.replace(/-/g, '+').replace(/_/g, '/')
-  const bin = atob(b64 + '='.repeat((4 - (b64.length % 4)) % 4))
-  return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0)))
+  return Uint8Array.from(atob(b64 + '='.repeat((4 - (b64.length % 4)) % 4)), c => c.charCodeAt(0))
 }
+
+// ── Link format versions ────────────────────────────────────────────────────────
+//
+// The first character of a ?p= payload names its format, and sits OUTSIDE any
+// compression, so the decoder knows how to read the rest before touching it. A future
+// version can change anything, compression included.
+//
+//   v0  no version character: base64url of the puzzle's JSON. Every link sent before
+//       Phase 21. Always begins "eyJ" (base64 of `{"`), so "e" is never assigned.
+//   v1  "1" + base64url(deflateRaw(the 11 fields joined by FIELD_SEP)): title, categories
+//       A/B/C, then the 7 terms in CATEGORY_REGION_KEYS order. Position carries the
+//       region, so regions, ids and JSON keys cost nothing. About a quarter the length of
+//       v0. Compressed rather than plain text so a glance at the link does not spoil the
+//       answers.
+export const LINK_VERSION = '1'
+const FIELD_SEP = '\u001f'
+const FIELD_COUNT = 1 + CATEGORY_KEYS.length + CATEGORY_REGION_KEYS.length
+
+// Control characters are never meaningful in a label, and a stray separator would shift
+// every field after it, so they become spaces on the way out.
+const clean = s => String(s ?? '').replace(/[\u0000-\u001f\u007f]/g, ' ')
 
 // Encodes only shareable content: the author's title, categories and terms. Local
 // bookkeeping — your id for it, when you received it, any suffix you needed to tell two
 // arrivals apart — is yours and must not travel.
 export function encodePuzzle(puzzle) {
-  return b64encode(JSON.stringify(toShareable(puzzle)))
+  const d = toDraft(toShareable(puzzle))
+  const fields = [d.title, ...CATEGORY_KEYS.map(k => d.categories[k]),
+    ...CATEGORY_REGION_KEYS.map(k => d.terms[k])].map(clean)
+  return LINK_VERSION + bytesToB64(deflateSync(strToU8(fields.join(FIELD_SEP)), { level: 9 }))
 }
 
+function decodeV1(body) {
+  const fields = strFromU8(inflateSync(b64ToBytes(body))).split(FIELD_SEP)
+  if (fields.length !== FIELD_COUNT) return null
+  const [title, ...rest] = fields
+  const cats = rest.slice(0, CATEGORY_KEYS.length)
+  const terms = rest.slice(CATEGORY_KEYS.length)
+  return fromDraft({
+    title,
+    categories: Object.fromEntries(CATEGORY_KEYS.map((k, i) => [k, cats[i]])),
+    terms: Object.fromEntries(CATEGORY_REGION_KEYS.map((k, i) => [k, terms[i]])),
+  })
+}
+
+const decodeV0 = payload => JSON.parse(strFromU8(b64ToBytes(payload)))
+
 // Returns a puzzle, or null for anything that is not one. Everything here arrives from a
-// URL, so it is untrusted: a truncated link, an old format, or someone's idea of a joke.
+// URL, so it is untrusted: a truncated link, an unknown version, or someone's idea of a
+// joke.
 export function decodePuzzle(payload) {
   try {
-    const puzzle = JSON.parse(b64decode(payload))
+    const puzzle =
+      payload.startsWith('e')            ? decodeV0(payload)
+      : payload[0] === LINK_VERSION      ? decodeV1(payload.slice(1))
+      : null                             // a version from the future, or garbage
     // Complete only. Received puzzles cannot be edited, so an unfinished one could never
     // be repaired by whoever got it.
-    return validatePuzzle(puzzle).status === 'complete' ? puzzle : null
+    return puzzle && validatePuzzle(puzzle).status === 'complete' ? puzzle : null
   } catch {
     return null
   }
