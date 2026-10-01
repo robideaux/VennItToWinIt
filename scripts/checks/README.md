@@ -29,6 +29,8 @@ trip over Windows drive letters) and exits non-zero on failure.
 | `store` | custom puzzle storage, defensive parsing, quota and blocked-storage handling |
 | `suffix` | "Demo 02" disambiguation for same-titled received puzzles |
 | `reshare` | re-sharing carries the author's title, never your local numbering |
+| `linkformat` | the versioned ?p= format: v1 round-trips every library puzzle, v0 links still open, a frozen v1 link still decodes, hostile input is refused |
+| `card` | the link preview card: Open Graph tags present, image absolute, a PNG of the declared size, no per-puzzle data |
 | `share` / `link-flow` | share link encode/decode, import, dedupe, the weekly gate |
 | `sharemode` | native share sheet vs clipboard, per device |
 | `oneshot` | the misses budget and the One Shot mechanic |

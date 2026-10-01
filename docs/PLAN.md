@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-09-30 · **At commit:** `ad23050` · **Working tree:** clean
 
-**Verification:** `node scripts/checks/run-all.mjs` — 22 standalone checks against the real modules and real puzzle data. No browser works in this environment, so anything visual still needs a human; everything else is covered there.
+**Verification:** `node scripts/checks/run-all.mjs` — 24 standalone checks against the real modules and real puzzle data. No browser works in this environment, so anything visual still needs a human; everything else is covered there.
 
 **Shipped:** Phases 1–8 and 10–19. The game is fully playable end to end — shuffled-start board (no term bank), true-swap placement, permutation-aware answer checking, per-circle submit chips drawing on a shared 5-attempt pool, group locking, weekly puzzle gating with `localStorage` progress, Home / Settings / How To Play screens, light-dark theming, and an animated game-over reveal that keeps already-solved circles pinned in place.
 
@@ -15,6 +15,7 @@ Since then: the diagram was split into a geometry-only SVG shell plus swappable 
 | Item | Status |
 |---|---|
 | **Phase 20 — Misses & Category Colours** | **Shipped (2026-09-30, `e4f47f8`..`ad23050`).** From beta feedback: the budget counts misses; colour belongs to the category (red / green / violet, chosen by colour-blindness simulation); the results screens have a single ‹ Back; replays are marked in the share text; the first result is kept in full. **Still open:** the deferred past-results view (20.16). |
+| **Phase 21 — Short Share Links & Preview Cards** | **Built (2026-10-01), not yet pushed.** Custom-puzzle links are about a fifth of their old length (versioned, compressed, old links still open), and every link gets an Open Graph preview card. Needs checking in Messenger after deploy. |
 | **Phase 9 — Feedback & Animation** | **Not started — follows Phase 20.** No `navigator.vibrate` and no `@keyframes` anywhere in `src/`. The existing shuffle/reveal hooks drive discrete swap steps; they are not the tap, submit and transition feedback this phase describes. Most likely to make the phone build feel finished rather than merely functional. |
 | **Legacy puzzle cleanup** | 34 older-format puzzles are live in `index.json` with placeholder `year: 2025, sequence: 0`. Intentionally active as test content; a review sweep with the other devs decides which to keep, then assigns final `2026_NNN` filenames and sequence numbers. Known: a duplicate "Just Relax", and a typo "Natrually Irrational". |
 | **`docs/DEPLOYMENT.md`** | Knowingly stale — documents `puzzle-XXX.json` naming and omits the required `year`/`sequence` fields. Deliberately waiting on the puzzle sweep so it is rewritten once. |
@@ -820,6 +821,23 @@ Choosing text-class `✗` and `↯` for the "nothing gained" marks is deliberate
 - [x] 20.16 **Progress keeps the first result in full.** The entry becomes `{ won, misses, submissions, completedAt, plays }`. The FIRST play's fields are the official record and never change, so later plays only bump `plays`. That means the share row can be rebuilt after leaving the results page. Old entries lack `submissions` and `plays` and are treated as 1 play. **Deferred:** a view of past results reachable from the list, with re-share. Designed separately; this task only stops the data being lost in the meantime
 - [x] 20.13 **Selection & target highlight: option A, shape and contrast with no hue.** Measured against the new palette, the old selection yellow vs the green circle scored ΔE 2 to 5 for red-green colour-blind players (invisible), and the target purple `#6c5ce7` vs the violet circle about 16 in every mode. Any highlight hue lands near a category colour under some colour-vision type. Now: the picked-up term inverts to a dark pill, lifts (scale 1.08 plus shadow) and gets a light border in dark mode; valid targets get a dashed edge; invalid ones dim as before. Theme variables `--pick-*` and `--target-*` live in `global.css`. `COL_SOURCE` and `COL_TARGET` are gone. Rejected: other highlight hues (B), since orange hits red and green and blue hits violet; and A plus an accent-purple dash (C). Approved in both themes. After testing, the target edges were thickened because they were still hard to spot: 3px dashed on pills (the heaviest edge on the board), a 2-unit ring with 5/3 dashes on empty regions, and a darker dash `#343a40`
 - [x] 20.10 Opening shuffle flashes the category colours across the circles and chips, then settles neutral. This signals that colour is hidden too, not simply absent. `flashSequence()` in `useShuffleAnimation`: one full A/B/C permutation per swap step, never repeating the previous one, cleared on finish or skip. Fill, stroke and chip border now transition over 0.2s, so a circle also fades into its colour when solved, which gives Phase 9's 9.5 a head start
+
+---
+
+## Phase 21 — Short Share Links & Preview Cards — BUILT (2026-10-01)
+
+Beta testers pasting a custom-puzzle link into Messenger got a wall of random text. Design and measurements are in the parking-lot entry "Shorter custom-puzzle links", now promoted to this phase.
+
+### Stage 1 — Compact link format (v1)
+- [x] 21.1 `?p=1<payload>`. The version character comes first, **outside** the compressed data. The payload is `base64url(deflateRaw(utf8(fields.join('\u001f'))))`, with 11 fields: title, categories A/B/C, then terms in `CATEGORY_REGION_KEYS` order (`A B C AB AC BC ABC`). The order carries the regions.
+- [x] 21.2 Built on `toDraft` / `fromDraft`, which already translate between a puzzle and the 7 fixed slots. Decoded terms get ids `t1`–`t7` as the editor does. `contentKey` ignores ids and order, so v0 and v1 links to the same puzzle still dedupe to one copy, and your own link still hands back your own copy.
+- [x] 21.3 Version 0 is every link from before this change. It has no version character, and its base64 JSON always begins `eyJ` (`{"`), so `e` is never assigned as a version. It decodes exactly as before.
+- [x] 21.4 `fflate` for deflate/inflate. It is synchronous, about 8 KB, and works on every browser. Native `CompressionStream('deflate-raw')` would lock out Safari before 16.4.
+- [x] 21.5 Control characters, the separator included, are replaced with a space when encoding. They are never meaningful in a label, and a stray `\u001f` would shift every field after it.
+- [x] 21.6 Checks (`linkformat`): every library puzzle round-trips through v1 unchanged; v0 links still decode; v0 and v1 of one puzzle share a `contentKey`; a **frozen v1 link** must still decode, so the format cannot drift under links already sent; separator, control characters, unknown versions, truncation, garbage and Unicode are all handled. **Measured: median payload 614 → 132 characters, longest full link 234.** `fflate` added about 10 KB to the bundle (5 KB gzipped)
+
+### Stage 2 — Preview cards
+- [x] 21.7 Open Graph and Twitter meta in `index.html` (title, description, image), so chat apps render a card under any link. Static and site-wide. A card is not per-puzzle: there is no server to vary it, and a per-puzzle card would spoil the answers anyway. The image `public/og-image.png` (1200×630, 13 KB) is drawn by `scripts/make-og-image.mjs` from `CATEGORY_COLORS`, with no text and a PNG because Messenger and Facebook do not render SVG. Re-run it after a palette change. Covered by `card`. **To verify after deploy:** Facebook's Sharing Debugger shows exactly what Messenger will render and refreshes its cache
 
 ---
 
