@@ -19,8 +19,10 @@
   transition: fill 0.2s ease, stroke 0.2s ease, fill-opacity 0.45s ease;
 }
 
-/* Going dim is quick; coming back up is the slower .tint above. A transition uses the
-   destination state's timing, so the two directions can differ. */
+/* Going dim is INSTANT; only coming back up is gradual (.tint above). A transition uses
+   the destination state's timing, so the two directions can differ. Fading down first
+   spent the first 200 ms of every submit before the circle visibly responded to the tap,
+   which made the press feel unanswered. */
 .tintDim {
-  transition: fill 0.2s ease, stroke 0.2s ease, fill-opacity 0.2s ease;
+  transition: fill 0.2s ease, stroke 0.2s ease, fill-opacity 0s;
 }

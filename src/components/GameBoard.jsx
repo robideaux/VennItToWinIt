@@ -43,9 +43,10 @@ export default function GameBoard({
   // ── A submit is a beat, not an instant ────────────────────────────────────────
   // The game state moves the moment a submit happens; what the player SEES lags it by
   // SUBMIT_DIM_MS. For that beat the circle concerned (all three, for a One Shot) is dim
-  // and shown unsolved, the miss pip has not yet gone, and nothing has buzzed. Then the
-  // result lands together: colour rises out of the dim or the grey returns, the pip pops,
-  // the haptic fires. `resolved` is how many submits the view has caught up with.
+  // and shown unsolved, and the miss pip has not yet gone. Then the result lands: colour
+  // rises out of the dim or the grey returns, and the pip pops. The BUZZ is the exception:
+  // it fires at the tap, with the result's pattern, so the press is felt as it happens
+  // rather than 350 ms later. `resolved` is how many submits the view has caught up with.
   const submitted = game.submissions.length
   const [resolved, setResolved] = useState(0)
   const [popPip, setPopPip] = useState(null)   // index of the pip that just went
@@ -58,11 +59,12 @@ export default function GameBoard({
   useEffect(() => {
     if (!pending) return
     const last = game.submissions[submitted - 1]
+    // At the tap, not when the result is shown: waiting for the reveal left the press
+    // feeling unanswered. The end of the game outranks the submit that caused it — see
+    // cueForSubmit. Fired from here, not the reducer, which must stay pure.
+    haptic(cueForSubmit(last, game.phase))
     const t = setTimeout(() => {
       setResolved(submitted)
-      // The end of the game outranks the submit that caused it — see cueForSubmit. Fired
-      // from here, not the reducer, which must stay pure.
-      haptic(cueForSubmit(last, game.phase))
       if (isMiss(last)) setPopPip(game.missesLeft)
       // Held until now: it states the result, and would give it away mid-pulse
       if (last.type === 'oneShot' && last.correctCount < 3) setOneShotNotice(last.correctCount)

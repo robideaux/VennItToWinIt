@@ -72,7 +72,7 @@ console.log('\n=== wired to the board without a cue for a refused move ===')
 const gb = fs.readFileSync(ROOT + '/src/components/GameBoard.jsx', 'utf8')
 chk(/validTargetsFor\(game\.selectedTermId\)\.includes\(regionKey\)\) \{[\s\S]*?game\.placeTerm\(regionKey\)\s*haptic\('put'\)/.test(gb), `a put-down buzzes only when the move was allowed`)
 chk(/game\.selectTerm\(term\.id\)\s*haptic\('pick'\)/.test(gb), `picking up buzzes`)
-chk(/setTimeout\(\(\) => \{[\s\S]*?haptic\(cueForSubmit\(last, game\.phase\)\)[\s\S]*?\}, SUBMIT_DIM_MS\)/.test(gb), `a submit buzzes via cueForSubmit, when its result lands rather than when it is tapped`)
+chk(/haptic\(cueForSubmit\(last, game\.phase\)\)\s*const t = setTimeout/.test(gb), `a submit buzzes via cueForSubmit AT THE TAP, before the reveal timer, so the press is felt as it happens`)
 chk(!/vibrate/.test(fs.readFileSync(ROOT + '/src/hooks/useGameState.js', 'utf8')), `the reducer stays pure: no vibration inside it`)
 
 console.log(fails===0?'\nPASS':`\nFAIL — ${fails}`); process.exit(fails?1:0)

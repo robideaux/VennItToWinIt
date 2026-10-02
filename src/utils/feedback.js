@@ -4,9 +4,10 @@
 // Swapping two terms on a drop. Slow enough to see: the opening shuffle's 0.2s slide is not.
 export const SWAP_MS = 420
 
-// A submit is a beat, not an instant: the circle dims while it is "checked", then the
-// result lands — colour fades up if it was right, the grey returns if not, a miss pip
-// pops, and the haptic fires. Everything below is held back until that moment.
+// A submit is a beat, not an instant: the circle dims at once while it is "checked", then
+// the result lands — colour fades up if it was right, the grey returns if not, and a miss
+// pip pops. The result is held back until that moment; the haptic is not, it fires at the
+// tap.
 export const SUBMIT_DIM_MS = 350
 
 // After the last submit resolves, hold the board before moving to the results screen, so
