@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useGameState } from '../hooks/useGameState.js'
 import { MISSES } from '../utils/gameRules.js'
+import { haptic, cueForSubmit } from '../utils/haptics.js'
 import {
   ONE_SHOT_HINT, ONE_SHOT_CONFIRM, ONE_SHOT_RESULT,
   ONE_SHOT_RESULT_FOOTER, ONE_SHOT_RESULT_DISMISS, oneShotResultTitle,
@@ -45,6 +46,15 @@ export default function GameBoard({
     shuffle.start()
   }, [game.gameKey]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // One cue per submit, chosen from where the game ended up. Fired from an effect on the
+  // submission count, not from the reducer, which must stay pure. The end of the game
+  // outranks the submit that caused it: the winning solve is a win, the fatal miss a loss.
+  const submitted = game.submissions.length
+  useEffect(() => {
+    if (submitted === 0) return
+    haptic(cueForSubmit(game.submissions[submitted - 1], game.phase))
+  }, [submitted]) // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     if (!showHint) return
     rememberOneShotHint()          // shown once ever, even if it is never dismissed
@@ -72,14 +82,26 @@ export default function GameBoard({
       return
     }
     if (regionKey === null) {
-      if (game.selectedTermId) game.selectTerm(game.selectedTermId)
+      // Tapping bare diagram puts the term back down
+      if (game.selectedTermId) {
+        game.selectTerm(game.selectedTermId)
+        haptic('put')
+      }
       return
     }
     if (game.selectedTermId) {
-      game.placeTerm(regionKey)
+      // A dimmed or locked spot does nothing and keeps the term in hand. Deliberately no
+      // cue for that: the dimming already says it, and a buzz would read as an error.
+      if (game.validTargetsFor(game.selectedTermId).includes(regionKey)) {
+        game.placeTerm(regionKey)
+        haptic('put')
+      }
     } else {
       const term = game.termInRegion(regionKey)
-      if (term) game.selectTerm(term.id)
+      if (term) {
+        game.selectTerm(term.id)
+        haptic('pick')
+      }
     }
   }
 

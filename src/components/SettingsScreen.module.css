@@ -141,3 +141,10 @@
 .toggleOn .toggleThumb {
   transform: translateX(22px);
 }
+
+/* A toggle that cannot be used: the sound effects that do not exist yet, or vibration on a
+   device that has none. Dimmed rather than hidden, so the setting is still discoverable. */
+.toggle:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

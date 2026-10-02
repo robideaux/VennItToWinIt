@@ -1,23 +1,16 @@
 import { useState, useEffect } from 'react'
 import styles from './SettingsScreen.module.css'
 import { applyTheme } from '../utils/theme.js'
-
-const STORAGE_KEY = 'vennit_settings'
-const DEFAULTS = { theme: 'system', audio: true }
-
-function loadSettings() {
-  try {
-    return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') }
-  } catch {
-    return { ...DEFAULTS }
-  }
-}
+import { loadSettings, saveSettings } from '../utils/settings.js'
+import { vibrationSupported, haptic } from '../utils/haptics.js'
 
 export default function SettingsScreen({ onBack }) {
   const [settings, setSettings] = useState(loadSettings)
+  // Decided once per visit: it depends on the device, which does not change under us
+  const [canVibrate] = useState(() => vibrationSupported())
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings))
+    saveSettings(settings)
     applyTheme(settings.theme)
   }, [settings])
 
@@ -49,20 +42,48 @@ export default function SettingsScreen({ onBack }) {
               </button>
             ))}
           </div>
-          <p className={styles.hint}>Dark mode styling coming in a future update.</p>
+        </section>
+
+        <section className={styles.section}>
+          <div className={styles.row}>
+            <div className={styles.rowText}>
+              <h2 className={styles.sectionTitle}>Vibration</h2>
+              <p className={styles.hint}>
+                {canVibrate
+                  ? 'Short taps and buzzes as you play.'
+                  : "Not available on this device. iPhones don't allow websites to vibrate."}
+              </p>
+            </div>
+            <button
+              className={`${styles.toggle} ${canVibrate && settings.vibration ? styles.toggleOn : ''}`}
+              onClick={() => {
+                const next = !settings.vibration
+                set('vibration', next)
+                // A buzz on switching it ON, so you can tell it works. The setting is not
+                // saved yet at this moment, hence force.
+                if (next) haptic('solve', { force: true })
+              }}
+              disabled={!canVibrate}
+              aria-pressed={canVibrate && settings.vibration}
+              aria-label="Toggle vibration"
+            >
+              <span className={styles.toggleThumb} />
+            </button>
+          </div>
         </section>
 
         <section className={styles.section}>
           <div className={styles.row}>
             <div className={styles.rowText}>
               <h2 className={styles.sectionTitle}>Sound Effects</h2>
-              <p className={styles.hint}>Audio support coming in a future update.</p>
+              <p className={styles.hint}>Coming in a future update.</p>
             </div>
+            {/* No audio exists yet, so this stays off and cannot be changed */}
             <button
-              className={`${styles.toggle} ${settings.audio ? styles.toggleOn : ''}`}
-              onClick={() => set('audio', !settings.audio)}
-              aria-pressed={settings.audio}
-              aria-label="Toggle sound effects"
+              className={styles.toggle}
+              disabled
+              aria-pressed={false}
+              aria-label="Toggle sound effects (not available yet)"
             >
               <span className={styles.toggleThumb} />
             </button>
