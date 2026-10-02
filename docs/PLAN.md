@@ -21,7 +21,8 @@ Since then: the diagram was split into a geometry-only SVG shell plus swappable 
 | **`docs/DEPLOYMENT.md`** | Knowingly stale — documents `puzzle-XXX.json` naming and omits the required `year`/`sequence` fields. Deliberately waiting on the puzzle sweep so it is rewritten once. |
 | **PWA install prompt** | Discussed and deliberately parked — see Phase 19 for why it ranks below Phase 9. |
 | **Cross-tab storage sync** | Investigated and deferred — see the parking lot. |
-| **Dependabot advisories** | Reported by GitHub on push; not yet looked at. Likely transitive dev dependencies. |
+| **Toolchain upgrade (Vite 8, React 19)** | Deferred: see the parking lot. Not a security issue, just catching up on majors. |
+| **Dependabot advisories** | **Fixed (2026-10-02), committed, not pushed.** 10 alerts, all in development tooling: none reach the shipped bundle, which contains only React, React DOM and fflate. Vite 5.4 → **6.4.3** fixes the Vite and esbuild alerts (fs.deny bypass on Windows, path traversal, dev-server request forgery). `npm audit fix` moved transitive postcss, nanoid, browserslist, @babel/core and baseline-browser-mapping to patched versions. `npm audit`: 0. Vite 6 rather than 8 (latest): 8 swaps the bundler to Rolldown and needs @vitejs/plugin-react 6, a migration beyond a security fix. plugin-react 4.7 supports Vite 6 unchanged, and the build, all 24 checks and the dev server were verified |
 
 Everything else lives in the phase sections below, with the parking lot at the end of the file.
 
@@ -859,6 +860,18 @@ Beta testers pasting a custom-puzzle link into Messenger got a wall of random te
 On phones the native share sheet usually shows a link preview, so length mostly hurts desktop copy-paste and QR density.
 
 **Confirmed by beta (2026-09-30):** a custom-puzzle link pasted into Facebook Messenger showed as a huge "wall of random text". Option 1 cuts it to about a quarter, but it is still visible random text. Only option 3 makes it genuinely short. Adding Open Graph tags (`og:title`, `og:image`) to `index.html` would at least give chat apps a proper preview card under the link. That is cheap and independent of the other options.
+
+### Toolchain Upgrade: Vite 8 & React 19 — deferred (2026-10-02)
+
+The Dependabot fix moved Vite only as far as **6.4.3**, the smallest jump that cleared every alert. The current majors are a separate, deliberate project:
+
+| Package | Now | Latest | What the jump involves |
+|---|---|---|---|
+| `vite` | 6.4.3 | 8.x | 7 and 8 replace the bundler (esbuild/Rollup → Rolldown/Oxc). Our config is three lines, so the risk is behaviour, not configuration |
+| `@vitejs/plugin-react` | 4.7.0 | 6.x | 6 requires Vite 8, so the two move together. Its peers change too (`@rolldown/plugin-babel`, `oxc-transform-react`) |
+| `react` / `react-dom` | 18.3 | 19.x | Independent of Vite and can go first. Check StrictMode double-invocation (`useProgress` already writes from an effect for this reason), ref-as-prop, and the removed legacy APIs. Nothing here uses `defaultProps` on function components or string refs, but confirm |
+
+Node 24 here already satisfies plugin-react 6's `^20.19 || >=22.12`. Verification is the usual: `npm audit`, the build, all checks, a dev-server smoke test, then a real look in the browser (a headless browser is unavailable here). **When:** between phases, not mid-feature. Do it in its own commits, so a regression bisects to the upgrade rather than to new work.
 
 ### Cross-Tab Storage Sync — deferred (investigated 2026-09-25)
 
