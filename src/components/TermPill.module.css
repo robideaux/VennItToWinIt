@@ -78,6 +78,6 @@
    rather than transform keeps the percentage coordinate system intact; it matches
    what the old SVG chip did (animating x/y) and 7 pills at 200ms is not a cost. */
 .animated {
-  transition: left 0.20s ease-out, top 0.20s ease-out,
+  transition: left var(--slide-ms, 0.20s) ease-out, top var(--slide-ms, 0.20s) ease-out,
               transform 0.12s ease-out, box-shadow 0.12s ease-out;
 }

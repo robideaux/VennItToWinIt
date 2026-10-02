@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-09-30 · **At commit:** `ad23050` · **Working tree:** clean
 
-**Verification:** `node scripts/checks/run-all.mjs` — 25 standalone checks against the real modules and real puzzle data. No browser works in this environment, so anything visual still needs a human; everything else is covered there.
+**Verification:** `node scripts/checks/run-all.mjs` — 26 standalone checks against the real modules and real puzzle data. No browser works in this environment, so anything visual still needs a human; everything else is covered there.
 
 **Shipped:** Phases 1–8 and 10–19. The game is fully playable end to end — shuffled-start board (no term bank), true-swap placement, permutation-aware answer checking, per-circle submit chips drawing on a shared 5-attempt pool, group locking, weekly puzzle gating with `localStorage` progress, Home / Settings / How To Play screens, light-dark theming, and an animated game-over reveal that keeps already-solved circles pinned in place.
 
@@ -16,7 +16,7 @@ Since then: the diagram was split into a geometry-only SVG shell plus swappable 
 |---|---|
 | **Phase 20 — Misses & Category Colours** | **Shipped (2026-09-30, `e4f47f8`..`ad23050`).** From beta feedback: the budget counts misses; colour belongs to the category (red / green / violet, chosen by colour-blindness simulation); the results screens have a single ‹ Back; replays are marked in the share text; the first result is kept in full. **Still open:** the deferred past-results view (20.16). |
 | **Phase 21 — Short Share Links & Preview Cards** | **Shipped (2026-10-01, `cdef906`, `ac4e498`).** Custom-puzzle links are about a fifth of their old length (versioned, compressed, old links still open), and every link gets an Open Graph preview card. Card verified in Facebook's Sharing Debugger. |
-| **Phase 9 — Feedback & Animation** | **In progress.** 9.1 haptics is built and committed (a real Android phone is needed to judge the feel). 9.2 and 9.5 are half done by Phase 20. Still to decide, one at a time: 9.2 landing animation, 9.3 region ripple, 9.4 submit press, 9.5 name cross-fade, 9.6 miss shake, 9.7 win/lose transition. |
+| **Phase 9 — Feedback & Animation** | **In progress.** 9.1 haptics, 9.2 drop swap, 9.4/9.5 circle pulse and 9.6 lost pip are built (9.3 dropped by the user). None can be seen from here: **all need the user's eyes**, and the haptics a real Android phone. Open: 9.7, a real win/lose transition, and optionally a cross-fade for the chip's name. |
 | **Legacy puzzle cleanup** | 34 older-format puzzles are live in `index.json` with placeholder `year: 2025, sequence: 0`. Intentionally active as test content; a review sweep with the other devs decides which to keep, then assigns final `2026_NNN` filenames and sequence numbers. Known: a duplicate "Just Relax", and a typo "Natrually Irrational". |
 | **`docs/DEPLOYMENT.md`** | Knowingly stale — documents `puzzle-XXX.json` naming and omits the required `year`/`sequence` fields. Deliberately waiting on the puzzle sweep so it is rewritten once. |
 | **PWA install prompt** | Discussed and deliberately parked — see Phase 19 for why it ranks below Phase 9. |
@@ -363,7 +363,7 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 
 ---
 
-## Phase 9 — Feedback & Animation — IN PROGRESS (9.1 built 2026-10-02)
+## Phase 9 — Feedback & Animation — IN PROGRESS (9.1–9.6 built 2026-10-02)
 
 Being taken one item at a time, deciding for each whether it is still wanted. Two items were partly delivered by Phase 20 and are noted below.
 
@@ -375,14 +375,14 @@ Being taken one item at a time, deciding for each whether it is still wanted. Tw
   - The end of the game outranks the submit that caused it: the winning solve is a win, the fatal miss a loss. `cueForSubmit` is pure and tested; the reducer stays free of I/O.
   - Covered by the `haptics` check. **Needs a real Android phone to judge the feel**: the durations are a starting point, and motors vary.
   - **Also done:** the Sound Effects toggle is disabled and shown off (nothing reads it). The stale "dark mode coming" text is gone from Settings. How To Play, the PRD and the technical spec were brought back in line with the game (they still described attempts, `maxAttempts`, yellow/purple highlights and an SVG diagram).
-- [ ] 9.2 Visual feedback: brief scale-pop animation on TermTile tap; placement animation when term lands on a region. **Half done by Phase 20:** the pick-up lift (scale 1.08 plus shadow, 0.12s) is built. The landing animation is not
-- [ ] 9.3 Visual feedback: region flash or ripple when a term is placed or swapped
+- [x] 9.2 **Drop = a visible two-way swap** (2026-10-02). The pick-up lift came with Phase 20. The user asked to reuse the shuffle animation and noted its slide is far too quick to see (0.2s). The opening shuffle is cosmetic (the board is already final, and one chip slides over another), so a real drop needed more: the move commits at once, the two real pills are held out, and two chips trade places. They reuse the shuffle's two looks (dark lifted pill for the term in hand, dashed edge for the one it displaces) at **420 ms** (`SWAP_MS`). Interruptible: the next tap snaps it to the end rather than waiting. Skipped under `prefers-reduced-motion`
+- [-] 9.3 Region flash or ripple on every placement: **dropped** by the user. The swap in 9.2 is enough, and a flash on every move would be noise
 
 ### Submit Animations
-- [ ] 9.4 Submit button press animation (scale down/up)
-- [ ] 9.5 Correct circle reveal animation — circle fill fades in; chip label cross-fades from "Group" to real name. **Half done by Phase 20:** fill, stroke and chip border now fade over 0.2s; the name still snaps in
-- [ ] 9.6 Incorrect submit feedback — subtle shake or flash on the board; pip transitions from active to spent
-- [ ] 9.7 Win / loss transition animation into result screen
+- [x] 9.4 **A submit pulses the circle you are on** (2026-10-02), in place of a button-press animation; the chip's existing press shrink stays. The circle dims (fill opacity 0.38 → 0.1, in 0.2s), holds for **350 ms** (`SUBMIT_DIM_MS`) while it is "checked", then settles over 0.45s: up into its category colour if solved, back to the original grey if not. **One Shot** does the same for all three at once. Neutral on a miss, so a miss reads as the grey coming back
+- [x] 9.5 Correct circle reveal: covered by the pulse above, whose settle-up is the colour fade. The chip's name still snaps in when the result lands rather than cross-fading; an easy add if wanted
+- [x] 9.6 **The lost pip is the feedback** (2026-10-02). The user chose to focus on the pip rather than shake the board. It stays full through the dim, then at the moment the result lands it swells to 2.6× and flashes the error colour before settling to spent (0.75s). Size carries it as much as colour, for colour-blind players. Reduced motion keeps only the colour flash
+- [ ] 9.7 Win / loss transition animation into result screen. **Minimum delivered as a side effect of 9.4–9.6:** the results screen now waits for the last submit to land, then holds the board for **800 ms** (`RESULTS_HOLD_MS`), so the final colour or the fatal pip is seen before the screen changes. Without that, the winning solve and the fatal miss, the two most important submits, would have been cut off. A real transition is still open
 
 ---
 

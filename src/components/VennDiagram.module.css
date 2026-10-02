@@ -15,5 +15,12 @@
 /* Set as style, not attributes, so the change animates: the opening shuffle's colour
    flash, the fade back to neutral, and a circle taking its colour when solved. */
 .tint {
-  transition: fill 0.2s ease, stroke 0.2s ease;
+  /* Settling: slower, so the colour rising out of a dim reads as a reveal */
+  transition: fill 0.2s ease, stroke 0.2s ease, fill-opacity 0.45s ease;
+}
+
+/* Going dim is quick; coming back up is the slower .tint above. A transition uses the
+   destination state's timing, so the two directions can differ. */
+.tintDim {
+  transition: fill 0.2s ease, stroke 0.2s ease, fill-opacity 0.2s ease;
 }

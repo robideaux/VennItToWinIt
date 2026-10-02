@@ -263,6 +263,12 @@ The board starts **fully populated** — all 7 terms shuffled into the 7 regions
 3. **Tap the selected term again, or bare diagram** → put it back down
 4. Targets excluded by group locking are inert — tapping one does nothing and keeps the term in hand, with no haptic cue (the dimming already says it)
 
+### Feedback timing (`feedback.js`)
+
+**A drop** commits the move at once, then `PlayOverlay` holds the two real pills out and slides two chips between the regions for 420 ms, using the shuffle's two looks. It is cosmetic and interruptible: the next tap ends it. Skipped under `prefers-reduced-motion`.
+
+**A submit is a beat.** `useGameState` updates the instant a submit happens, but what the board *shows* lags it by 350 ms, via `feedbackView`, which is derived in render so there is no frame where the answer shows early. For that beat the circle concerned (all three for a One Shot) is dim and shown unsolved, the miss pip is still full, and nothing has buzzed. Then the result lands together: the colour rises out of the dim, or the grey returns; the pip swells and goes; the haptic fires; and a missed One Shot's popup opens. Input is ignored during the beat. The results screen is reached only after the last submit lands plus an 800 ms hold, so the winning colour or the fatal pip is seen.
+
 ### Haptics
 
 `haptics.js`. The Vibration API takes only durations (one number, or alternating vibrate/pause), with no intensity control, so the cues differ in length and rhythm only. iOS Safari lacks the API entirely; desktop browsers may expose it and do nothing, so support means the API **and** a coarse primary pointer. Off by default, switched on in Settings (disabled where unsupported).

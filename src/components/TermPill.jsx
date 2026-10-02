@@ -28,6 +28,7 @@ export default function TermPill({
   isTarget   = false,
   isInactive = false,
   animated   = false,
+  slideMs    = null,   // slide duration when `animated`; defaults to the quick shuffle step
   onClick    = null,
   variant    = null,   // 'shuffleFrom' | 'shuffleTo' — animation chips, not board state
 }) {
@@ -80,6 +81,7 @@ export default function TermPill({
         borderWidth,
         borderStyle: target ? 'dashed' : 'solid',
         '--fit-scale': scale,
+        ...(slideMs ? { '--slide-ms': `${slideMs}ms` } : {}),
       }}
     >
       {lines.map((line, i) => (

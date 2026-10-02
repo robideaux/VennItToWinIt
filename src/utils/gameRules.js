@@ -23,3 +23,7 @@ export const MISSES = 5
 // A miss costs one miss and reveals only a count — how many of the three are right, not
 // which, with nothing locked.
 export const ONE_SHOT_MISS_COST = 1
+
+// Whether a submission cost a miss: a wrong circle, or a One Shot that was not a clean
+// sweep. Shared by the share row, the outcome line and the miss pip.
+export const isMiss = s => s.type === 'oneShot' ? s.correctCount < 3 : !s.correct

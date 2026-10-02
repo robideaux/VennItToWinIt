@@ -17,14 +17,13 @@
 // about what the green group IS.
 
 import { CATEGORY_EMOJI } from '../styles/colors.js'
+import { isMiss } from './gameRules.js'
 
 // The marks for "nothing gained" are text-class on purpose, so they recede next to the
 // colour emoji that carry what you achieved. A One Shot hit is the one coloured bolt.
 const MISS          = '✗'
 const ONE_SHOT_MISS = '↯'
 const ONE_SHOT_HIT  = '⚡'
-
-const isMiss = s => s.type === 'oneShot' ? s.correctCount < 3 : !s.correct
 
 // "↯🔴✗🟢🔵" — the run of submits in the order they were made.
 //

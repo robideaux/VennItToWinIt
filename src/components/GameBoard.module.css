@@ -284,3 +284,27 @@
 @media (prefers-reduced-motion: reduce) {
   .coachMark { animation: none; }
 }
+
+/* A miss pip going: a visible beat, not a quiet colour change. It swells and flashes the
+   error colour, then settles to the spent look. It is the one thing that costs you in this
+   game, so it earns the emphasis. Size carries it as much as colour. */
+.pipLost {
+  animation: pipLose 0.75s ease-out;
+}
+
+@keyframes pipLose {
+  0%   { transform: scale(1);   background: var(--color-accent); }
+  22%  { transform: scale(2.6); background: var(--color-error); }
+  55%  { transform: scale(1.7); background: var(--color-error); }
+  100% { transform: scale(1);   background: var(--color-border); }
+}
+
+@keyframes pipLoseCalm {
+  0%   { background: var(--color-accent); }
+  30%  { background: var(--color-error); }
+  100% { background: var(--color-border); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pipLost { animation: pipLoseCalm 0.75s ease-out; }
+}

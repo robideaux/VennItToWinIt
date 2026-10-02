@@ -3,6 +3,9 @@ import { VB_W, VB_H, CIRCLES, CENTROIDS } from '../utils/vennGeometry.js'
 import { categoryColor, NEUTRAL_FILL, NEUTRAL_STROKE } from '../styles/colors.js'
 import styles from './VennDiagram.module.css'
 
+// How faint a circle goes while its submit is being checked
+const DIM_OPACITY = 0.1
+
 // Geometry-only diagram shell: the three circles, and a hit-test for clicks that land
 // on bare diagram rather than on an overlay element.
 //
@@ -17,6 +20,8 @@ export default function VennDiagram({
   revealedCircles = [],
   // { circleId: category } while the opening shuffle flashes colours, else null
   flash = null,
+  // circle ids dimmed while a submit is being checked; they settle to their true colour after
+  dimmed = [],
   onRegionClick,
   debugMode = false,
   children,
@@ -55,10 +60,13 @@ export default function VennDiagram({
             <circle
               key={c.id}
               cx={c.cx} cy={c.cy} r={c.r}
-              fillOpacity={0.38}
               stroke="none"
-              className={styles.tint}
-              style={{ mixBlendMode: 'multiply', fill: colorOf(c.id) ?? NEUTRAL_FILL }}
+              className={dimmed.includes(c.id) ? styles.tintDim : styles.tint}
+              style={{
+                mixBlendMode: 'multiply',
+                fill: colorOf(c.id) ?? NEUTRAL_FILL,
+                fillOpacity: dimmed.includes(c.id) ? DIM_OPACITY : 0.38,
+              }}
             />
           ))}
         </g>

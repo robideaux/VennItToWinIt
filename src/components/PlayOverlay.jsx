@@ -6,6 +6,7 @@ import {
 } from '../utils/vennGeometry.js'
 import { PILL_W } from '../utils/fitText.js'
 import TermPill from './TermPill.jsx'
+import { SWAP_MS } from '../utils/feedback.js'
 import styles from './PlayOverlay.module.css'
 
 // The game's diagram overlay: term pills, callout leader lines, empty-region dots and the
@@ -22,6 +23,7 @@ export default function PlayOverlay({
   validTargets   = [],
   onRegionClick  = null,
   shuffleStep    = null,
+  swap           = null,   // { fromKey, toKey, movedId, displacedId } while a drop animates
 }) {
   const selectedRegionKey = selectedTermId
     ? REGION_KEYS.find(k => placements[k] === selectedTermId) ?? null
@@ -94,6 +96,9 @@ export default function PlayOverlay({
       {REGION_KEYS.map(key => {
         const term = termFor(key)
         if (!term) return null
+        // The two terms that just traded places are drawn by SwapChips instead, sliding
+        // between the regions. The board state already has them in their new homes.
+        if (swap && (key === swap.fromKey || key === swap.toKey)) return null
         const { cx, cy } = visualCenter(key)
         return (
           <TermPill
@@ -124,6 +129,15 @@ export default function PlayOverlay({
         )
       })}
 
+      {swap && (
+        <SwapChips
+          key={swap.id}
+          swap={swap}
+          movedLabel={puzzle.terms.find(t => t.id === swap.movedId)?.label ?? ''}
+          displacedLabel={puzzle.terms.find(t => t.id === swap.displacedId)?.label ?? ''}
+        />
+      )}
+
       {shuffleStep && (
         <ShuffleChips
           step={shuffleStep}
@@ -131,6 +145,33 @@ export default function PlayOverlay({
           toLabel={termFor(shuffleStep.toKey)?.label ?? ''}
         />
       )}
+    </div>
+  )
+}
+
+// A real two-way swap after a drop: the term you moved slides to the target while the term
+// it displaced slides back to where yours came from. They reuse the shuffle's two looks —
+// the dark lifted pill for the one in hand, the dashed edge for the one it lands on — but
+// both travel, and slowly enough to see.
+function SwapChips({ swap, movedLabel, displacedLabel }) {
+  const a = visualCenter(swap.fromKey)
+  const b = visualCenter(swap.toKey)
+  const [go, setGo] = useState(false)
+
+  useEffect(() => {
+    // Armed after the start position has painted, or there is nothing to transition from
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setGo(true))
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
+  const moved     = go ? b : a
+  const displaced = go ? a : b
+  return (
+    <div className={styles.shuffle}>
+      <TermPill label={displacedLabel} x={displaced.cx} y={displaced.cy} variant="shuffleTo"   animated slideMs={SWAP_MS} />
+      <TermPill label={movedLabel}     x={moved.cx}     y={moved.cy}     variant="shuffleFrom" animated slideMs={SWAP_MS} />
     </div>
   )
 }

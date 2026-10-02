@@ -123,6 +123,7 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
 - When the fifth miss is spent without a full solve → **Game Over** screen (animated solution reveal). The game ends exactly when it becomes unwinnable
 - When all 3 labels are revealed → **Win** screen
 - **Sharing** produces a spoiler-free result row: a coloured circle per solved group in the order they fell (🔴🟢🟣), `✗` for a miss, `↯` for a missed One Shot, a lone `⚡` for a One Shot sweep, then an outcome line ("Solved with 1 miss", "Solved in one shot", "Out of misses"). On desktop it is copied with the puzzle link; on phones it goes through the share sheet
+- **Feedback.** Dropping a term visibly swaps it with the one it displaces. A submit pauses for a beat on the circle concerned (all three for a One Shot): it dims, then the colour rises out of the dim if the group was right and the grey returns if not. A wrong submit's miss pip swells and flashes as it goes. The results screen follows after a short hold. All of this is skipped or calmed under reduced-motion settings
 - **Vibration** is optional and **off by default**. The Settings toggle is disabled where the device cannot vibrate (iPhones, desktops). Cues: a short tick for pick-up and put-down, a double buzz for a miss, a longer buzz for a solve, a drawn-out pattern for a win and three slow pulses for a loss. A refused move (tapping a dimmed spot) deliberately gives none
 
 ---
@@ -172,4 +173,4 @@ Items originally listed as out of scope, and features added since:
 - **Share links** — a custom puzzle travels whole in the link (`?p=`), as a versioned, compressed payload about a fifth the length of the original; links already sent keep working. Library puzzles share by id (`?puzzle=`). Every link carries the same preview card for chat apps (Phase 21)
 - **Misses budget, One Shot and category colours** (Phases 18 and 20)
 
-Still not built: a view of past results with re-share, sound, and the Phase 9 animations.
+Still not built: a view of past results with re-share, sound, and a transition into the results screen.
