@@ -45,7 +45,7 @@ export default function GameBoard({
   // SUBMIT_DIM_MS. For that beat the circle concerned (all three, for a One Shot) is dim
   // and shown unsolved, the miss pip has not yet gone, and nothing has buzzed. Then the
   // result lands together: colour rises out of the dim or the grey returns, the pip pops,
-  // the haptic fires. \`resolved\` is how many submits the view has caught up with.
+  // the haptic fires. `resolved` is how many submits the view has caught up with.
   const submitted = game.submissions.length
   const [resolved, setResolved] = useState(0)
   const [popPip, setPopPip] = useState(null)   // index of the pip that just went
