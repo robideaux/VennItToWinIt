@@ -29,30 +29,54 @@ venn-it-to-win-it/
 │   ├── main.jsx                 # React entry point
 │   ├── App.jsx                  # Root component, screen routing, progress recording
 │   ├── components/
-│   │   ├── HomeScreen.jsx       # Screen: landing page (Play Latest / All Venns / Settings / How To Play)
-│   │   ├── PuzzleSelector.jsx   # Screen: choose a puzzle ("All Venns…")
-│   │   ├── SettingsScreen.jsx   # Screen: theme + audio preferences
+│   │   ├── HomeScreen.jsx       # Screen: landing page (Play Latest / All Venns / Settings / How To Play / Edit)
+│   │   ├── PuzzleSelector.jsx   # Screen: choose a puzzle — All Venns / My Venns / Shared With Me
+│   │   ├── MyVennsScreen.jsx    # Screen: your own puzzles; new, edit, delete
+│   │   ├── EditorScreen.jsx     # Screen: the puzzle editor, with test-play
+│   │   ├── SettingsScreen.jsx   # Screen: theme and vibration (sound is a disabled placeholder)
 │   │   ├── HowToPlayScreen.jsx  # Screen: static rules explainer
 │   │   ├── GameBoard.jsx        # Screen: main game
-│   │   ├── VennDiagram.jsx      # SVG Venn diagram; hit-test, term labels, shuffle overlay
+│   │   ├── VennDiagram.jsx      # Geometry-only SVG shell: the three circles and a bare-diagram hit-test
+│   │   ├── PlayOverlay.jsx      # HTML overlay for play: term pills, callout lines, target rings
+│   │   ├── EditOverlay.jsx      # HTML overlay for the editor: the same coordinates, but inputs
+│   │   ├── TermPill.jsx         # One term, as HTML; text fitted by utils/fitText.js
 │   │   ├── CircleLabels.jsx     # Per-circle chip — doubles as that circle's SUBMIT button
 │   │   ├── WinScreen.jsx        # Win state
 │   │   └── GameOverScreen.jsx   # Loss state + animated solution reveal
 │   ├── hooks/
 │   │   ├── useGameState.js      # Core game logic hook
 │   │   ├── usePuzzleLoader.js   # Fetch & parse puzzle JSON
-│   │   ├── useProgress.js       # localStorage read/write for "vennit_progress"
-│   │   ├── useShuffleAnimation.js  # Animates the game-start shuffle
+│   │   ├── useProgress.js       # localStorage for "vennit_progress"; keeps the FIRST result per puzzle
+│   │   ├── useCustomPuzzles.js  # localStorage store of your own and received puzzles
+│   │   ├── useShare.js          # Share action, clipboard fallback and its feedback
+│   │   ├── useCollapsedSections.js  # Remembers which selector sections are collapsed
+│   │   ├── useShuffleAnimation.js  # Game-start shuffle, plus the category-colour flash
 │   │   └── useRevealAnimation.js   # Animates the game-over solution reveal
+│   ├── copy/
+│   │   └── oneShot.js           # All One Shot wording, tunable without touching logic
 │   ├── utils/
 │   │   ├── puzzleUtils.js       # Region key logic, answer checking, reveal/swap helpers
-│   │   └── puzzleSchedule.js    # ISO-week gating, display dates, unlocked-puzzle fetch
+│   │   ├── puzzleSchedule.js    # ISO-week gating, display dates, unlocked-puzzle fetch
+│   │   ├── vennGeometry.js      # Circle, centroid and callout coordinates; shared by every overlay
+│   │   ├── fitText.js           # Line-breaking and shrink-to-fit for term labels
+│   │   ├── gameRules.js         # MISSES (5) and the One Shot cost
+│   │   ├── validatePuzzle.js    # complete | incomplete | invalid, and the editor's field flags
+│   │   ├── puzzleDraft.js       # Puzzle <-> the editor's seven fixed slots
+│   │   ├── customPuzzles.js     # Custom-puzzle records, ids, content key, dedupe
+│   │   ├── shareLink.js         # ?p= (versioned, compressed) and ?puzzle= links; clipboard text
+│   │   ├── resultBlock.js       # The shareable result row
+│   │   ├── haptics.js           # Vibration cues; support detection; the cue for each submit
+│   │   ├── settings.js          # "vennit_settings": theme and vibration
+│   │   └── theme.js             # Applies the theme at boot; keeps browser chrome in step
 │   └── styles/
-│       ├── global.css
-│       ├── colors.js            # Centralized circle colors (shared by SVG + chips)
+│       ├── global.css           # Theme variables, including the --pick-* and --target-* highlights
+│       ├── colors.js            # Category colours (A/B/C) and emoji; keyed by CATEGORY, not circle
 │       ├── shared.module.css    # vennWrap sizing shared across game/win/gameover
 │       └── *.module.css         # Per-component styles
-├── index.html
+├── scripts/
+│   ├── checks/                  # Standalone Node checks against the real modules: run-all.mjs
+│   └── make-og-image.mjs        # Draws public/og-image.png, the link preview card
+├── index.html                   # Includes the Open Graph / Twitter preview-card tags
 ├── vite.config.js
 └── package.json
 ```
@@ -96,9 +120,12 @@ The puzzle itself is passed into `useGameState(puzzle)` and is not held in its s
     '12': 't3', '13': 't6', '23': 't2', '123': 't5'
   },
   selectedTermId: null,  // Currently tapped term (always already on the board)
-  attemptsLeft: 5,       // Shared pool; every per-circle submit costs 1
+  missesLeft: 5,         // Shared pool; ONLY a wrong submit (or a missed One Shot) spends one
   revealedCircles: [],   // [{ circleId: '1', category: 'B', name: 'Things that Swim' }]
-  lastSubmitResult: null,// { circleId, correct } — feedback for the most recent submit
+  lastSubmitResult: null,// { circleId, correct } — the most recent circle submit
+  oneShotUsed: false,    // One Shot is spent once pressed, hit or miss
+  lastOneShot: null,     // { correctCount, won } — all a missed One Shot reveals
+  submissions: [],       // Ordered log of every submit: feeds the share row, the haptic cue and saved progress
   phase: 'playing',      // 'playing' | 'won' | 'lost'
   gameKey: 0,            // Bumped by resetGame() to force a fresh shuffle animation
 }
@@ -118,36 +145,38 @@ Two things differ from earlier drafts:
 - Actions:
   - `selectTerm(termId)` — toggle selection
   - `placeTerm(regionKey)` — true-swap the selected term into the target region; rejects the move outright if the target isn't in `getValidTargets` (group locking)
-  - `submitCircle(circleId)` — check **only that circle**, decrement the shared `attemptsLeft`, reveal + lock on success, recompute phase
+  - `submitCircle(circleId)` — check **only that circle**; reveal + lock on success (free), or spend a miss on failure; recompute phase
+  - `submitAll()` — **One Shot**: opening move only. A clean sweep wins outright at no cost; otherwise it spends one miss and records only `lastOneShot.correctCount`, revealing and locking nothing
   - `resetGame()` — restart same puzzle with a fresh shuffle
-- Derived: `unplacedTerms`, `isTermPlaced(termId)`, `termInRegion(regionKey)`, `isCircleFilled(circleId)`, `validTargetsFor(termId)`
+- Derived: `unplacedTerms`, `isTermPlaced(termId)`, `termInRegion(regionKey)`, `isCircleFilled(circleId)`, `validTargetsFor(termId)`, `canOneShot`
 
-`submitCircle` is guarded against double-submitting an already-revealed circle, so a circle can never cost two attempts.
+`submitCircle` is guarded against double-submitting an already-revealed circle, so a circle can never cost a miss twice. The reducer is pure and does no I/O: haptics, saved progress and navigation all happen in `GameBoard` and `App`, reacting to the state it produces.
 
 ### `VennDiagram.jsx`
-- Renders the **SVG** diagram: 3 overlapping circles, fills using `mix-blend-mode: multiply`, plus a separate always-colored stroke circle layered on top (avoids blend artifacts at overlap edges)
-- **One `onClick` on the SVG root** performs a layered hit-test — no per-region elements, no clipPaths. Order: inline term pills → callout anchor dots and pills → empty callout zones → geometric point-in-circle fallback. See the layout section below.
-- Renders each region's term: inline pill at the centroid for regions `1`/`2`/`3`/`123`; anchor dot + leader line + pill in dead space for the lens-shaped `12`/`13`/`23`
-- Visual states per term: source (selected, yellow), valid target (purple), inactive, plus a hint ring on empty valid targets
-- Hosts `ShuffleOverlay`, the animated swap used by both the game-start shuffle and the game-over reveal
+- A **geometry-only SVG shell** (Phase 16): the three circles — a multiply-blended fill and a stroke — and nothing else. It has no idea what a term is
+- **Colour follows the category.** Each circle's fill and stroke come from the category solved into it (`CATEGORY_COLORS`), neutral grey until then. During the opening shuffle `flash` overrides this with colours cycling across the circles. Colours are set through `style`, with a CSS transition, so a circle fades into its colour when solved
+- One `onClick` resolves **bare diagram only** (point-in-circle against `CIRCLES`); term pills and callout slots handle their own clicks
+- Everything term-related is passed in as children — the overlay. `PlayOverlay` draws the terms as HTML `TermPill`s at the coordinates in `vennGeometry.js`, plus the callout lines and dots for the lens-shaped regions `12`/`13`/`23`, and the dashed ring on empty target regions. `EditOverlay` is the same geometry with inputs
+- Highlight states per term are **shape and contrast, not hue** (`TermPill`, theme variables `--pick-*` / `--target-*`): a picked-up term inverts to a dark pill and lifts; valid targets get a heavy dashed edge; invalid ones dim. Any highlight hue lands near one of the three category colours under some colour-vision type
+- The animated swap used by the game-start shuffle and the game-over reveal runs in `PlayOverlay`, driven by `useShuffleAnimation` / `useRevealAnimation`
 
 ### `CircleLabels.jsx`
 - One absolutely-positioned chip per circle, overlaid on the `vennWrap` next to its circle
-- **Unrevealed → it is a `<button>`:** reads "SUBMIT / Group", bordered in that circle's color, and firing it submits that circle. Enabled only when that circle's own 4 regions are filled.
-- **Revealed → plain chip:** shows the real category name and stops being a submit target. Outline-vs-filled is the only "solved" signal.
+- **Unrevealed → it is a `<button>`:** reads "SUBMIT / Group" with a neutral border, and firing it submits that circle. Enabled only when that circle's own 4 regions are filled. Its accessible name is by position ("Submit the top circle"), because there is no colour to name it by yet.
+- **Revealed → plain chip:** shows the real category name, bordered in that category's colour. In dark mode the chip fills with the colour and uses that category's `ink` for its text (dark on the light green).
 - `pointer-events: auto` on the button variant so taps are captured rather than falling through to the SVG hit-test underneath
 
-Attempts pips live in the `GameBoard` header (right side), not next to any submit control.
+Miss pips and the One Shot button live in the `GameBoard` header (right side), not next to any submit control.
 
 ---
 
 ## Venn Diagram Layout
 
-As built (values live at the top of [`VennDiagram.jsx`](../src/components/VennDiagram.jsx)):
+As built. Every coordinate lives in [`vennGeometry.js`](../src/utils/vennGeometry.js) and is read by the SVG shell and by both overlays, so play and the editor cannot drift apart:
 
-- SVG `viewBox="0 0 320 380"`, `preserveAspectRatio="none"` — the diagram stretches to fill its container; the hit-test compensates via `getBoundingClientRect`
+- SVG `viewBox="0 0 320 380"`, `preserveAspectRatio="none"` — the diagram stretches to fill its container; overlay positions are percentages of the same box, and sizes use `UNIT_CSS` (one viewBox unit as a CSS length, taking the smaller axis) so a pill is never stretched out of shape
 - Three circles, **radius 97**: circle `1` at (160, 115) top, `2` at (105, 235) bottom-left, `3` at (215, 235) bottom-right
-- **No clipPaths.** The 7 regions are not elements at all — a single SVG `onClick` resolves the region mathematically (see `VennDiagram.jsx` above)
+- **No clipPaths.** The 7 regions are not elements at all — a bare-diagram click is resolved mathematically in `VennDiagram.jsx`, and pills and callout slots take their own clicks
 - `vennWrap` caps its size to keep the stretch reasonable on large screens — portrait `max-height` and landscape `max-width`, cap multiplier 160, defined once in `shared.module.css` and shared by the game, win and game-over screens
 
 ### Region Centroids (as shipped)
@@ -204,7 +233,6 @@ Manifest entries carry `year` and `sequence` so release gating and sorting need 
   "year": 2026,
   "sequence": 1,
   "title": "Fly, Swim, or Cold?",
-  "maxAttempts": 5,
   "categories": {
     "A": "Things that Fly",
     "B": "Things that Swim",
@@ -230,17 +258,32 @@ Manifest entries carry `year` and `sequence` so release gating and sorting need 
 
 The board starts **fully populated** — all 7 terms shuffled into the 7 regions. There is no bank and no empty state, so every interaction is a rearrangement.
 
-1. **Tap a term on the board** → selects it (yellow); valid target regions highlight purple, invalid ones dim
+1. **Tap a term on the board** → picks it up (a dark, lifted pill); valid target regions get a dashed outline, invalid ones dim
 2. **Tap another region** → **true swap**: the selected term moves there and that region's occupant moves back to where the selected term came from
-3. **Tap the selected term again** → deselect
-4. Targets excluded by group locking are inert — tapping one does nothing rather than failing silently mid-swap
+3. **Tap the selected term again, or bare diagram** → put it back down
+4. Targets excluded by group locking are inert — tapping one does nothing and keeps the term in hand, with no haptic cue (the dimming already says it)
+
+### Haptics
+
+`haptics.js`. The Vibration API takes only durations (one number, or alternating vibrate/pause), with no intensity control, so the cues differ in length and rhythm only. iOS Safari lacks the API entirely; desktop browsers may expose it and do nothing, so support means the API **and** a coarse primary pointer. Off by default, switched on in Settings (disabled where unsupported).
+
+| Moment | Cue (ms) |
+|---|---|
+| Pick up / put down | `10` / `15` |
+| Miss — a wrong circle, or a One Shot that did not sweep | `60 · 50 · 60` |
+| Circle solved | `150` |
+| Win | `60 · 40 · 60 · 40 · 60 · 40 · 220` |
+| Loss | three `100` pulses |
+
+`cueForSubmit(last, phase)` picks the cue after a submit, and the end of the game outranks the submit that caused it. Pulses stay at 10 ms or more, since many motors cannot render less.
 
 ### Submit
 
 - **Each circle submits independently**, via its own label chip. A chip is enabled once that circle's 4 regions are filled — effectively always, given the pre-filled board.
-- Every per-circle submit costs **1 attempt from the shared pool**, the same price the old global submit charged. Submitting an already-revealed circle is a no-op and costs nothing.
+- A **correct** circle submit is free; a **wrong** one spends 1 of the 5 misses. Submitting an already-revealed circle is a no-op and costs nothing.
 - A correct circle reveals its category name and **locks** its 4 terms into that circle: they can still be rearranged among its own 4 sub-regions, but can never leave.
-- Win: all 3 circles revealed. Loss: `attemptsLeft` hits 0 first → `'lost'` phase.
+- **One Shot** (`submitAll`): a whole-board check, available only while `submissions` is empty. A clean sweep wins at no cost; otherwise one miss is spent and only the count is kept.
+- Win: all 3 circles revealed. Loss: `missesLeft` hits 0 first → `'lost'` phase. Counting misses rather than submits means the game ends exactly when it becomes unwinnable.
 
 **Why per-circle:** with one global Submit, a player could fill the board while only ever reasoning about a single circle, then win everything on one accidental submit — never deliberately committing to the other two groups. Per-circle submit forces an explicit commitment per group.
 
@@ -259,17 +302,17 @@ The board starts **fully populated** — all 7 terms shuffled into the 7 regions
 ## Visual Design Direction
 
 - Clean, playful aesthetic — think puzzle-game, not productivity tool
-- Clear visual states for: filled region, selected term (source), valid target, inactive target, revealed circle
+- Clear visual states for: filled region, picked-up term, valid target, inactive target, revealed circle
 - Use color and subtle animation (CSS transitions) for state changes
-- Each circle owns a distinct color, defined once in `src/styles/colors.js` and shared by the SVG stroke, the fill and the label chip border
-- **Circles are colored from turn 1**, not on reveal. Color is taught as "this circle = this group" before any guess: colored stroke and colored chip border from the start, with unrevealed chips reading "Group N" in italic. Submitting adds the fill and the real category name — outline vs. filled is the solved signal.
+- **Colour belongs to the category, not the circle** (Phase 20). Category `A`, `B` and `C` are red, green and violet (`CATEGORY_COLORS` in `src/styles/colors.js`), the same for every player wherever the category lands. Circles and chips start **neutral grey** and take their category's colour only when solved; the opening shuffle flashes the three colours across them before settling grey, to show colour is hidden too. This is what lets the shared result row use coloured emoji again.
+- The palette was chosen by simulation, not by eye: each colour-vision type (Machado 2009 matrices) scored by CIEDE2000 distance over every pair, maximising the worst pair. Every pair stays at 17 or more in every mode, where the original red/green/blue fell to 2. Highlights use shape and contrast instead of hue for the same reason.
 - Both light and dark themes are supported via CSS custom properties, following `prefers-color-scheme` with a manual override in Settings (`data-theme` on `<html>`)
 
 ---
 
 ## Development Phases
 
-The original 8-phase sketch has been superseded. The project now tracks 15 phases plus several layout-redesign passes — **see [PLAN.md](PLAN.md)** for the live checklist, decisions log and parking lot.
+The original 8-phase sketch has been superseded. The project now tracks 21 phases plus several layout-redesign passes — **see [PLAN.md](PLAN.md)** for the live checklist, decisions log and parking lot.
 
 ---
 
@@ -277,8 +320,8 @@ The original 8-phase sketch has been superseded. The project now tracks 15 phase
 
 | # | Question | Resolution |
 |---|---|---|
-| 1 | How many max attempts? | **5**, read from each puzzle's `maxAttempts`, so it's tunable per puzzle without code changes |
+| 1 | How many max attempts? | **5 misses**, fixed for every puzzle (`MISSES` in `gameRules.js`) so scores compare. It started as a per-puzzle `maxAttempts`, then became a fixed attempts budget (Phase 18), then counted misses only (Phase 20). Old files still carry `maxAttempts`; it is ignored |
 | 2 | Show placed terms in term bank (grayed) or remove them? | **Moot** — the bank was removed entirely (`ba20432`). The board starts fully shuffled and placed. |
 | 3 | Swapping behavior — swap two board terms, or return to bank? | **True swap** between regions. With no bank there is nowhere to return to. |
-| 4 | What feedback for incorrect regions? | **Deferred.** No per-region right/wrong marking — circle reveal is the feedback. `lastSubmitResult` is in state for a future incorrect-submit cue (Phase 9, not started). |
+| 4 | What feedback for incorrect regions? | **None per region** — circle reveal is the feedback. A wrong submit spends a miss pip and, where enabled, gives a double-buzz haptic. Visual submit feedback (shake, transitions) is Phase 9, partly done. |
 | 5 | Should partial progress be saveable? | **Partly.** Per-puzzle *results* persist to `localStorage` (`vennit_progress`, via `useProgress`), as do settings. An in-progress board is still not resumable. |

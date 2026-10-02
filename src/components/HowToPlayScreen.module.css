@@ -88,3 +88,11 @@
   flex-direction: column;
   gap: 6px;
 }
+
+/* An example result row. Larger, with room between glyphs, so the emoji read clearly. */
+.section .sample {
+  font-size: 1.5rem;
+  letter-spacing: 0.15em;
+  text-align: center;
+  line-height: 1.3;
+}

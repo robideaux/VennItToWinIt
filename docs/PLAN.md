@@ -4,7 +4,7 @@
 
 **Last updated:** 2026-09-30 · **At commit:** `ad23050` · **Working tree:** clean
 
-**Verification:** `node scripts/checks/run-all.mjs` — 24 standalone checks against the real modules and real puzzle data. No browser works in this environment, so anything visual still needs a human; everything else is covered there.
+**Verification:** `node scripts/checks/run-all.mjs` — 25 standalone checks against the real modules and real puzzle data. No browser works in this environment, so anything visual still needs a human; everything else is covered there.
 
 **Shipped:** Phases 1–8 and 10–19. The game is fully playable end to end — shuffled-start board (no term bank), true-swap placement, permutation-aware answer checking, per-circle submit chips drawing on a shared 5-attempt pool, group locking, weekly puzzle gating with `localStorage` progress, Home / Settings / How To Play screens, light-dark theming, and an animated game-over reveal that keeps already-solved circles pinned in place.
 
@@ -16,7 +16,7 @@ Since then: the diagram was split into a geometry-only SVG shell plus swappable 
 |---|---|
 | **Phase 20 — Misses & Category Colours** | **Shipped (2026-09-30, `e4f47f8`..`ad23050`).** From beta feedback: the budget counts misses; colour belongs to the category (red / green / violet, chosen by colour-blindness simulation); the results screens have a single ‹ Back; replays are marked in the share text; the first result is kept in full. **Still open:** the deferred past-results view (20.16). |
 | **Phase 21 — Short Share Links & Preview Cards** | **Shipped (2026-10-01, `cdef906`, `ac4e498`).** Custom-puzzle links are about a fifth of their old length (versioned, compressed, old links still open), and every link gets an Open Graph preview card. Card verified in Facebook's Sharing Debugger. |
-| **Phase 9 — Feedback & Animation** | **Not started — follows Phase 20.** No `navigator.vibrate` and no `@keyframes` anywhere in `src/`. The existing shuffle/reveal hooks drive discrete swap steps; they are not the tap, submit and transition feedback this phase describes. Most likely to make the phone build feel finished rather than merely functional. |
+| **Phase 9 — Feedback & Animation** | **In progress.** 9.1 haptics is built and committed (a real Android phone is needed to judge the feel). 9.2 and 9.5 are half done by Phase 20. Still to decide, one at a time: 9.2 landing animation, 9.3 region ripple, 9.4 submit press, 9.5 name cross-fade, 9.6 miss shake, 9.7 win/lose transition. |
 | **Legacy puzzle cleanup** | 34 older-format puzzles are live in `index.json` with placeholder `year: 2025, sequence: 0`. Intentionally active as test content; a review sweep with the other devs decides which to keep, then assigns final `2026_NNN` filenames and sequence numbers. Known: a duplicate "Just Relax", and a typo "Natrually Irrational". |
 | **`docs/DEPLOYMENT.md`** | Knowingly stale — documents `puzzle-XXX.json` naming and omits the required `year`/`sequence` fields. Deliberately waiting on the puzzle sweep so it is rewritten once. |
 | **PWA install prompt** | Discussed and deliberately parked — see Phase 19 for why it ranks below Phase 9. |
@@ -363,16 +363,24 @@ Option A solves the chip-tracking problem cleanly by design. Option B only fully
 
 ---
 
-## Phase 9 — Feedback & Animation
+## Phase 9 — Feedback & Animation — IN PROGRESS (9.1 built 2026-10-02)
+
+Being taken one item at a time, deciding for each whether it is still wanted. Two items were partly delivered by Phase 20 and are noted below.
 
 ### Selection & Placement Feedback
-- [ ] 9.1 Haptic feedback on term selection (tap), placement, swap, and invalid action — use `navigator.vibrate()` where available
-- [ ] 9.2 Visual feedback: brief scale-pop animation on TermTile tap; placement animation when term lands on a region
+- [x] 9.1 **Haptics** (`src/utils/haptics.js`, `settings.js`). The Vibration API takes **durations only**: a number, or an array alternating vibrate / pause. There is **no intensity control**, so cues differ in length and rhythm. **iOS Safari does not implement it at all** (so neither does Chrome on an iPhone); Android Chrome, Firefox and Samsung Internet do. Desktop browsers may expose the function and do nothing, so support = API present **and** a coarse primary pointer, the same test the native share sheet uses. An iOS 18 trick (toggling a hidden switch control) was rejected: one fixed tick, and it can break with any iOS update.
+  - **Decided with the user:** a Settings toggle that is **disabled where unsupported** and **off by default where supported**. Switching it on gives a confirming buzz.
+  - **Cues (ms):** pick up `10`; put down `15`; miss (failed circle or missed One Shot) `60·50·60`, an "uh oh" double buzz; circle solved `150`; win `60·40·60·40·60·40·220`; loss three `100` pulses. Nothing under 10 ms, which many motors cannot render.
+  - **Invalid move: no cue, deliberately.** Tapping a dimmed or locked spot does nothing and keeps the term in hand; the dimming already says so, and a buzz would read as an error. Tapping bare diagram puts the term back down and gets the put-down tick.
+  - The end of the game outranks the submit that caused it: the winning solve is a win, the fatal miss a loss. `cueForSubmit` is pure and tested; the reducer stays free of I/O.
+  - Covered by the `haptics` check. **Needs a real Android phone to judge the feel**: the durations are a starting point, and motors vary.
+  - **Also done:** the Sound Effects toggle is disabled and shown off (nothing reads it). The stale "dark mode coming" text is gone from Settings. How To Play, the PRD and the technical spec were brought back in line with the game (they still described attempts, `maxAttempts`, yellow/purple highlights and an SVG diagram).
+- [ ] 9.2 Visual feedback: brief scale-pop animation on TermTile tap; placement animation when term lands on a region. **Half done by Phase 20:** the pick-up lift (scale 1.08 plus shadow, 0.12s) is built. The landing animation is not
 - [ ] 9.3 Visual feedback: region flash or ripple when a term is placed or swapped
 
 ### Submit Animations
 - [ ] 9.4 Submit button press animation (scale down/up)
-- [ ] 9.5 Correct circle reveal animation — circle fill fades in; chip label cross-fades from "Group N" to real name
+- [ ] 9.5 Correct circle reveal animation — circle fill fades in; chip label cross-fades from "Group" to real name. **Half done by Phase 20:** fill, stroke and chip border now fade over 0.2s; the name still snaps in
 - [ ] 9.6 Incorrect submit feedback — subtle shake or flash on the board; pip transitions from active to spent
 - [ ] 9.7 Win / loss transition animation into result screen
 

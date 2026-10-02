@@ -34,22 +34,24 @@ It draws inspiration from NYT Connections (hidden category groupings) and adds a
 
 ## User Flow
 
-1. Player opens the app to the **home screen** — Play Latest Venn, All Venns…, Settings, How To Play
+1. Player opens the app to the **home screen** — Play Latest Venn, All Venns…, Settings, How To Play, Edit
 2. Player either jumps straight into the latest unlocked puzzle or picks one from the selector
 3. Game board loads:
    - All 7 terms are **already placed**, shuffled into the 7 regions — there is no term bank
-   - Each circle carries a colored label chip reading "Group 1 / 2 / 3", which doubles as that circle's **SUBMIT** button
-   - The 3 real category names are hidden
-4. Player **taps a placed term** to select it, then **taps another region** to move it
+   - The circles are **neutral grey**, each with a label chip reading "Group" that doubles as that circle's **SUBMIT** button. The opening shuffle flashes the three category colours across them before they settle grey, to show the colours are hidden too
+   - The 3 real category names and the 3 category colours are hidden
+4. Player **taps a placed term** to pick it up, then **taps another region** to move it. A picked-up term turns dark and lifts, and every spot it can move to gets a dashed outline; spots it cannot go are dimmed
 5. Every move is a **true swap** — the displaced term takes the selected term's old region. The board stays full at all times.
 6. When confident about one circle's group, the player taps that circle's **SUBMIT** chip
 7. App checks **only that circle**, leniently — right 4 terms inside it, in any arrangement:
-   - Correct → the category name is revealed and those 4 terms are **locked** into that circle
-   - Incorrect → nothing moves; the attempt is spent
-8. Attempts are a **shared pool** (`maxAttempts`, currently 5) shown as pips in the header. Every per-circle submit costs one.
-9. Game ends in:
-   - **Win**: all 3 circles revealed
-   - **Loss**: attempts exhausted first → the board animates from where the player left it into the full solution
+   - Correct → the category name is revealed, the circle takes its **category's colour**, and those 4 terms are **locked** into that circle. This is free
+   - Incorrect → nothing moves; **a miss is spent**
+8. Misses are a **shared pool of 5**, fixed for every puzzle and shown as pips in the header. Only a miss spends one
+9. **One Shot** — once per game, as the opening move only, the player may check the whole board at once. A clean sweep wins outright and earns a ⚡ in the shared result; otherwise it costs a miss and reports only *how many* of the three groups are right, revealing and locking nothing
+10. Game ends in:
+    - **Win**: all 3 circles revealed
+    - **Loss**: misses exhausted first → the board animates from where the player left it into the full solution
+11. The results screen offers **Share**, **Try Again** (after a loss) and **‹ Back**, which returns to wherever the game was started from — the puzzle list, Home, or Home for a shared link. Replays are allowed: the **first** result is the one kept, and a replay's shared text says "· play N"
 
 ---
 
@@ -65,7 +67,6 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
   "year": 2026,
   "sequence": 1,
   "title": "Puzzle Title (shown in selector)",
-  "maxAttempts": 5,
   "categories": {
     "A": "Category A Name",
     "B": "Category B Name",
@@ -86,6 +87,8 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
 - `regions` is an array of 1, 2, or 3 category keys indicating which **categories** the term belongs to — not which physical circle it sits in. The puzzle defines grouping relationships only; any assignment of the 3 categories onto the 3 circles is a valid solution.
 - The combination of `regions` values uniquely maps each term to one of the 7 Venn regions
 - `year` + `sequence` drive release gating and the displayed date; `id` matches the filename
+- The miss budget is fixed at 5 for every puzzle (`MISSES` in `gameRules.js`), so scores compare. Older files still carry a `maxAttempts` field; it is ignored
+- Category `A`, `B` and `C` are also the category **colours** (red, green, violet): a circle takes the colour of whichever category is solved into it
 - Puzzle files should live in `/public/puzzles/` and be referenced by a manifest file (`/public/puzzles/index.json`)
 
 ### Puzzle Manifest Schema
@@ -108,15 +111,19 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
 - There are always exactly **7 terms** and **7 Venn regions** — one term per region
 - The board starts fully populated with a shuffled arrangement, guaranteed not to have any circle already correct
 - Terms are repositioned by **true swap**; the board is never partially empty
-- **Each circle is submitted separately**, via its own label chip. Every submit costs one attempt from a single shared pool.
+- **Each circle is submitted separately**, via its own label chip. A correct submit is free; a wrong one costs one **miss** from a single shared pool of 5.
+- **Colour belongs to the category, not the circle.** Unsolved circles are neutral; a solved circle takes its category's colour wherever it sits, so colours mean the same to every player. Highlights use shape and contrast, never hue, so they stay readable on every circle colour and under every kind of colour vision
+- **One Shot** is an opening-move-only whole-board check: a clean sweep wins at no cost; otherwise it costs a miss and gives only a count. Any circle submit closes the window
 - A circle is judged **leniently**: it's correct when the right 4 terms are somewhere inside it, regardless of which sub-region each occupies
 - On a correct circle:
   - Its category label is revealed
   - Its 4 terms are **locked** to that circle — still rearrangeable among its own 4 sub-regions, but they can never leave, and no outside term can enter
 - Re-submitting an already-revealed circle is a no-op and costs nothing
 - Any assignment of the 3 categories onto the 3 physical circles is a valid win — the circles are interchangeable
-- When all attempts are used without a full solve → **Game Over** screen (animated solution reveal)
+- When the fifth miss is spent without a full solve → **Game Over** screen (animated solution reveal). The game ends exactly when it becomes unwinnable
 - When all 3 labels are revealed → **Win** screen
+- **Sharing** produces a spoiler-free result row: a coloured circle per solved group in the order they fell (🔴🟢🟣), `✗` for a miss, `↯` for a missed One Shot, a lone `⚡` for a One Shot sweep, then an outcome line ("Solved with 1 miss", "Solved in one shot", "Out of misses"). On desktop it is copied with the puzzle link; on phones it goes through the share sheet
+- **Vibration** is optional and **off by default**. The Settings toggle is disabled where the device cannot vibrate (iPhones, desktops). Cues: a short tick for pick-up and put-down, a double buzz for a miss, a longer buzz for a solve, a drawn-out pattern for a win and three slow pulses for a loss. A refused move (tapping a dimmed spot) deliberately gives none
 
 ---
 
@@ -124,13 +131,14 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
 
 | Screen | Description |
 |---|---|
-| **Home** | Landing page — Play Latest Venn (with NEW badge when unplayed), All Venns…, Settings, How To Play |
-| **Puzzle Selector** | "All Venns…" — compact scrollable list, newest first, with an `X / Y played` counter; played rows muted and checked |
-| **Settings** | Theme (Light / System / Dark) and audio toggles, persisted to `localStorage` |
+| **Home** | Landing page — Play Latest Venn (with NEW badge when unplayed), All Venns…, Settings, How To Play, Edit (your own puzzles) |
+| **Puzzle Selector** | "All Venns…" — scrollable list in three collapsible sections (All Venns, My Venns, Shared With Me), newest first, with an `X / Y played` counter; played rows muted and checked |
+| **Edit (My Venns) / Editor** | Author a puzzle in the seven region slots, test-play it, save it (an unfinished puzzle saves as a draft), and share it by link |
+| **Settings** | Theme (Light / System / Dark) and Vibration, persisted to `localStorage`. A Sound Effects toggle is shown disabled until audio exists |
 | **How To Play** | Static rules explainer |
-| **Game Board** | Main gameplay screen — Venn diagram with per-circle submit chips and attempt pips in the header |
-| **Win Screen** | Celebration state, shows the completed board |
-| **Game Over Screen** | Animates the player's final board into the correct solution, keeping any circle they already solved pinned in place; retry or pick a new puzzle |
+| **Game Board** | Main gameplay screen — neutral Venn diagram with per-circle submit chips, miss pips and the One Shot button in the header |
+| **Win Screen** | Shows the completed board in its category colours; Share and ‹ Back |
+| **Game Over Screen** | Animates the player's final board into the correct solution, keeping any circle they already solved pinned in place; Share, Try Again and ‹ Back |
 
 ---
 
@@ -150,13 +158,18 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
 - User accounts or server-side score tracking
 - Timer
 - Hints system
-- Sound effects (a settings toggle exists, reserved for future audio)
+- Sound effects (a disabled settings toggle is a placeholder for future audio)
 - Multiplayer
 - Resuming an in-progress board — only finished results are persisted
 
 ### Shipped since the original v1 scope
 
-Two items originally listed as out of scope have since been built:
+Items originally listed as out of scope, and features added since:
 
 - **Date-based puzzle locking** — shipped in Phase 13 as a weekly system (`year` + `sequence`, ISO-week gating)
-- **Progress tracking** — per-puzzle win/attempt results persisted to `localStorage`, surfaced as the selector's played counter and the home screen's NEW badge
+- **Progress tracking** — per-puzzle results persisted to `localStorage`, surfaced as the selector's played counter and the home screen's NEW badge. The **first** play is kept in full, including its moves, and later plays only count up
+- **Custom puzzles and the editor** — authored in the browser, stored locally, shared by link with no server (Phases 12 and 17)
+- **Share links** — a custom puzzle travels whole in the link (`?p=`), as a versioned, compressed payload about a fifth the length of the original; links already sent keep working. Library puzzles share by id (`?puzzle=`). Every link carries the same preview card for chat apps (Phase 21)
+- **Misses budget, One Shot and category colours** (Phases 18 and 20)
+
+Still not built: a view of past results with re-share, sound, and the Phase 9 animations.

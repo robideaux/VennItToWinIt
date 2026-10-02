@@ -31,10 +31,10 @@ export default function HowToPlayScreen({ onBack }) {
           <h2 className={styles.sectionTitle}>Moving Terms</h2>
           <p>All 7 terms start on the board, shuffled into random regions. Your job is to rearrange them.</p>
           <ol className={styles.list}>
-            <li>Tap a term to select it — it highlights yellow, and every region you can move it to highlights purple.</li>
+            <li>Tap a term to pick it up — it turns dark and lifts, and every spot you can move it to gets a dashed outline.</li>
             <li>Tap one of those regions to move it there.</li>
             <li>The term already sitting there swaps back into the spot you just left — the board always stays full.</li>
-            <li>Tap a selected term again to deselect it.</li>
+            <li>Tap the term again, or tap empty space, to put it back down.</li>
           </ol>
         </section>
 
@@ -45,6 +45,19 @@ export default function HowToPlayScreen({ onBack }) {
           <p><strong>Correct:</strong> the circle's real category name appears, and those 4 terms lock to it. You can still slide them between that circle's own regions, but they can't leave.</p>
           <p><strong>Wrong:</strong> nothing moves. Rethink that group and try again.</p>
           <p>Reveal all 3 circles to win!</p>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Sharing</h2>
+          <p>After a game, Share sends your result without giving anything away:</p>
+          <p className={styles.sample}>↯🔴✗🟢🟣</p>
+          <ul className={styles.list}>
+            <li>A coloured circle for each group you solved, in the order they fell</li>
+            <li>✗ for a miss</li>
+            <li>↯ for a One Shot that didn't sweep the board</li>
+            <li>A lone ⚡ if your One Shot did</li>
+          </ul>
+          <p>You can replay a puzzle with Try Again, but your first result is the one that's kept, and a replay's shared result says which play it was.</p>
         </section>
 
         <section className={styles.section}>
@@ -66,6 +79,7 @@ export default function HowToPlayScreen({ onBack }) {
           <p>A circle keeps its category hidden until you solve it — until then it's grey and just says "Group". Solving it reveals the category's name and its colour.</p>
           <p>Each category has its own colour, the same for every player, wherever it lands on your board.</p>
           <p>It doesn't matter which circle holds which category. Any arrangement that groups the terms correctly wins.</p>
+          <p>On a phone that supports it, Settings can switch on vibration: a tick as you move terms, a double buzz for a miss, a longer one for a solve.</p>
         </section>
       </main>
     </div>
