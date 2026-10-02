@@ -30,6 +30,20 @@ export function swapFor(placements, selectedId, targetKey) {
 
 const ALL_CIRCLES = ['1', '2', '3']
 
+// The loss screen, staged. `revealedCircles` is the full solution (every circle, with its
+// category); `lockedCircles` is what the player had solved before running out. While the
+// board shuffles itself into the solution the circles you had NOT solved stay dim and
+// unnamed, as though being worked out; only when the shuffle ends do they take their
+// colours and labels. Circles you did solve keep theirs throughout, pinned where they were.
+export function revealView({ revealedCircles, lockedCircles, done }) {
+  if (done) return { shown: revealedCircles, dimmed: [] }
+  const locked = new Set(lockedCircles.map(c => c.circleId))
+  return {
+    shown: revealedCircles.filter(r => locked.has(r.circleId)),
+    dimmed: ALL_CIRCLES.filter(id => !locked.has(id)),
+  }
+}
+
 // What the board should SHOW while the latest submit is still "being checked".
 //
 // The game state is updated the instant a submit happens; the view lags it by one beat.

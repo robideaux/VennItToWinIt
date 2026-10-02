@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { buildRevealState } from '../utils/puzzleUtils.js'
 import { useRevealAnimation } from '../hooks/useRevealAnimation.js'
+import { revealView } from '../utils/feedback.js'
 import VennDiagram from './VennDiagram.jsx'
 import PlayOverlay from './PlayOverlay.jsx'
 import CircleLabel from './CircleLabels.jsx'
@@ -15,7 +16,9 @@ export default function GameOverScreen({ puzzle, placements, lockedCircles, subm
     [puzzle, lockedCircles]
   )
   const { share, status, fallbackUrl, dismissFallback } = useShare()
-  const { board, step } = useRevealAnimation(placements ?? revealPlacements, revealPlacements)
+  const { board, step, done } = useRevealAnimation(placements ?? revealPlacements, revealPlacements)
+  // The circles you did not solve stay dim until the board has finished solving itself
+  const { shown, dimmed } = revealView({ revealedCircles, lockedCircles: lockedCircles ?? [], done })
 
   return (
     <div className={styles.screen}>
@@ -41,10 +44,10 @@ export default function GameOverScreen({ puzzle, placements, lockedCircles, subm
 
       <div className={styles.body}>
         <div className={styles.vennWrap}>
-          <CircleLabel circleId="1" revealedCircles={revealedCircles} />
-          <CircleLabel circleId="2" revealedCircles={revealedCircles} />
-          <CircleLabel circleId="3" revealedCircles={revealedCircles} />
-          <VennDiagram revealedCircles={revealedCircles}>
+          <CircleLabel circleId="1" revealedCircles={shown} />
+          <CircleLabel circleId="2" revealedCircles={shown} />
+          <CircleLabel circleId="3" revealedCircles={shown} />
+          <VennDiagram revealedCircles={shown} dimmed={dimmed}>
             <PlayOverlay puzzle={puzzle} placements={board} shuffleStep={step} />
           </VennDiagram>
         </div>

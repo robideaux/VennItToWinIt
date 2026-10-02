@@ -51,6 +51,20 @@ chk(v.pulseIds.length === 3 && v.shownRevealed.length === 0 && v.shownMisses ===
 v = F.feedbackView({ ...base, submissions: [circle('1', true, 'A'), circle('2', false)], resolved: 1, missesLeft: 4, revealedCircles: [revealed('1', 'A')] })
 chk(v.pending && v.pulseIds.join() === '2' && v.shownRevealed.length === 1, `an earlier solved circle stays solved while a later submit pulses`)
 
+console.log('\n=== a loss solves itself before it reveals ===')
+const full = [revealed('1', 'A'), revealed('2', 'B'), revealed('3', 'C')]
+let r = F.revealView({ revealedCircles: full, lockedCircles: [], done: false })
+chk(r.shown.length === 0 && r.dimmed.join() === '1,2,3', `nothing solved: all three stay dim and unnamed while the board shuffles`)
+r = F.revealView({ revealedCircles: full, lockedCircles: [revealed('2', 'B')], done: false })
+chk(r.shown.map(c => c.circleId).join() === '2' && r.dimmed.join() === '1,3', `a circle you solved keeps its colour throughout; only the others dim`)
+r = F.revealView({ revealedCircles: full, lockedCircles: [revealed('2', 'B')], done: true })
+chk(r.shown.length === 3 && r.dimmed.length === 0, `once the shuffle is done, every circle is revealed and none is dim`)
+const hook = read('/src/hooks/useRevealAnimation.js')
+chk(/setDone\(true\), swaps\.length \* STEP_DURATION \+ SETTLE_MS/.test(hook), `"done" lands after the last swap plus a settling pause`)
+chk(/setDone\(false\)/.test(hook) && /return \{ board, step, done \}/.test(hook), `it resets with each new animation and is returned`)
+const go = read('/src/components/GameOverScreen.jsx')
+chk((go.match(/revealedCircles=\{shown\}/g) ?? []).length === 4 && /dimmed=\{dimmed\}/.test(go), `the chips and the diagram show the staged view, never the full solution`)
+
 console.log('\n=== timings ===')
 chk(F.SWAP_MS >= 350, `the swap slides for ${F.SWAP_MS} ms (the shuffle's 200 ms slide was too quick to see)`)
 chk(F.SUBMIT_DIM_MS >= 250 && F.SUBMIT_DIM_MS <= 600, `a submit dims for ${F.SUBMIT_DIM_MS} ms: a beat, not a wait`)
