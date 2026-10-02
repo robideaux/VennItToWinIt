@@ -1,5 +1,6 @@
 // Visual feedback for moves and submits (Phase 9). Timings live here so they can be tuned
 // in one place, and the decisions are pure functions so they can be tested without a browser.
+import { isMiss } from './gameRules.js'
 
 // Swapping two terms on a drop. Slow enough to see: the opening shuffle's 0.2s slide is not.
 export const SWAP_MS = 420
@@ -10,9 +11,30 @@ export const SWAP_MS = 420
 // tap.
 export const SUBMIT_DIM_MS = 350
 
-// After the last submit resolves, hold the board before moving to the results screen, so
-// the final colour or the lost pip is actually seen.
-export const RESULTS_HOLD_MS = 800
+// The lost pip goes a beat after the reveal rather than with it, and runs long, because
+// played at the same instant as everything else it was hard to notice. These mirror the
+// `.pipLost` animation in GameBoard.module.css; a check keeps the two in step.
+export const PIP_DELAY_MS = 250
+export const PIP_POP_MS = 1000
+
+// The LAST move gets no ceremony. The player knows it is their last move, so after its
+// result lands we go straight on to the results screen. A win waits just long enough for the
+// colour to finish rising (the 0.45s settle in VennDiagram.module.css); a loss does not wait
+// at all, because the loss screen opens with the same dimmed circles and carries straight
+// on into the board solving itself.
+export const WIN_HOLD_MS = 500
+export const LOSS_HOLD_MS = 0
+export const holdAfterResult = phase => (phase === 'lost' ? LOSS_HOLD_MS : WIN_HOLD_MS)
+
+// Whether a submit's result pops a pip. Not on the fatal miss: the game is over, the pip
+// going tells the player nothing, and waiting on it only delays the loss screen.
+export const popsPip = (submission, phaseAfter) => phaseAfter === 'playing' && isMiss(submission)
+
+// After a miss that does not end the game, a small grey note under the pips says how many
+// are left — the way Connections says "One away". The pip alone was easy to miss. Mirrors
+// the `.missToast` animation in GameBoard.module.css; a check keeps the two in step.
+export const MISS_TOAST_MS = 3000
+export const missesLeftText = n => `${n} ${n === 1 ? 'miss' : 'misses'} left`
 
 export const prefersReducedMotion = () => {
   try { return globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true } catch { return false }

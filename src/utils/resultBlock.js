@@ -56,6 +56,6 @@ export function buildResultBlock({ title, submissions, won, play = 1 }) {
   return [
     `Venn It To Win It — ${title}`,
     attemptRow(submissions),
-    play > 1 ? `${outcome} · play ${play}` : outcome,
+    play > 1 ? `${outcome} · play: ${play}` : outcome,
   ].join('\n')
 }

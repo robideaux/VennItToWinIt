@@ -12,8 +12,9 @@
 import { loadSettings } from './settings.js'
 
 export const PATTERNS = {
-  pick:  10,                              // a term is picked up
-  put:   15,                              // a term is put down (or put back)
+  pick:  12,                              // a term is picked up
+  put:   12,                              // a term is put down (or put back): the same tick,
+                                          // since 10 vs 15 ms could not be told apart by feel
   miss:  [60, 50, 60],                    // "uh oh": a failed submit or a missed One Shot
   solve: 150,                             // a circle is locked in
   win:   [60, 40, 60, 40, 60, 40, 220],   // rising and drawn out

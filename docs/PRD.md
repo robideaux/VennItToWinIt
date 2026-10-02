@@ -51,7 +51,7 @@ It draws inspiration from NYT Connections (hidden category groupings) and adds a
 10. Game ends in:
     - **Win**: all 3 circles revealed
     - **Loss**: misses exhausted first → the board animates from where the player left it into the full solution
-11. The results screen offers **Share**, **Try Again** (after a loss) and **‹ Back**, which returns to wherever the game was started from — the puzzle list, Home, or Home for a shared link. Replays are allowed: the **first** result is the one kept, and a replay's shared text says "· play N"
+11. The results screen offers **Share**, **Try Again** (after a loss) and **‹ Back**, which returns to wherever the game was started from — the puzzle list, Home, or Home for a shared link. Replays are allowed: the **first** result is the one kept, and a replay's shared text says "· play: N"
 
 ---
 
@@ -123,7 +123,7 @@ Puzzles are stored as external `.json` files (not hardcoded). The game loads a l
 - When the fifth miss is spent without a full solve → **Game Over** screen (animated solution reveal). The game ends exactly when it becomes unwinnable
 - When all 3 labels are revealed → **Win** screen
 - **Sharing** produces a spoiler-free result row: a coloured circle per solved group in the order they fell (🔴🟢🟣), `✗` for a miss, `↯` for a missed One Shot, a lone `⚡` for a One Shot sweep, then an outcome line ("Solved with 1 miss", "Solved in one shot", "Out of misses"). On desktop it is copied with the puzzle link; on phones it goes through the share sheet
-- **Feedback.** Dropping a term visibly swaps it with the one it displaces. A submit pauses for a beat on the circle concerned (all three for a One Shot): it dims, then the colour rises out of the dim if the group was right and the grey returns if not. A wrong submit's miss pip swells and flashes as it goes. The results screen follows after a short hold. All of this is skipped or calmed under reduced-motion settings
+- **Feedback.** Dropping a term visibly swaps it with the one it displaces. A submit pauses for a beat on the circle concerned (all three for a One Shot): it dims, then the colour rises out of the dim if the group was right and the grey returns if not. A wrong submit's miss pip swells and flashes as it goes, and a small grey note under the pips says how many misses are left. The results screen follows after a short hold. All of this is skipped or calmed under reduced-motion settings
 - **Vibration** is optional and **off by default**. The Settings toggle is disabled where the device cannot vibrate (iPhones, desktops). Cues: a short tick for pick-up and put-down, a double buzz for a miss, a longer buzz for a solve, a drawn-out pattern for a win and three slow pulses for a loss. A refused move (tapping a dimmed spot) deliberately gives none
 
 ---

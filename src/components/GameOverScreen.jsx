@@ -25,7 +25,8 @@ export default function GameOverScreen({ puzzle, placements, lockedCircles, subm
       <header className={styles.header}>
         {/* Back returns to wherever this game was started from — see handleResultsBack */}
         <button className={styles.backBtn} onClick={onBack}>{testMode ? '‹ Edit' : '‹ Back'}</button>
-        <h2 className={styles.heading}>Out of misses</h2>
+        {/* Short on purpose: "Out of misses" took too much of a portrait header */}
+        <h2 className={styles.heading}>Oops!</h2>
         <div className={styles.buttons}>
           {!testMode && (
             <button className={styles.btnSecondary} onClick={() => share(puzzle, buildResultBlock({ title: puzzle.title, submissions, won: false, play }))}>Share</button>

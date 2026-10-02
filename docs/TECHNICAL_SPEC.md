@@ -267,7 +267,7 @@ The board starts **fully populated** — all 7 terms shuffled into the 7 regions
 
 **A drop** commits the move at once, then `PlayOverlay` holds the two real pills out and slides two chips between the regions for 420 ms, using the shuffle's two looks. It is cosmetic and interruptible: the next tap ends it. Skipped under `prefers-reduced-motion`.
 
-**A submit is a beat.** `useGameState` updates the instant a submit happens, but what the board *shows* lags it by 350 ms, via `feedbackView`, which is derived in render so there is no frame where the answer shows early. For that beat the circle concerned (all three for a One Shot) is dim, instantly, and shown unsolved, and the miss pip is still full. Then the result lands: the colour rises out of the dim, or the grey returns; the pip swells and goes; and a missed One Shot's popup opens. The **haptic is the exception: it fires at the tap**, with the result's pattern, so the press is felt as it happens (waiting for the reveal left it feeling unanswered). Input is ignored during the beat. The results screen is reached only after the last submit lands plus an 800 ms hold, so the winning colour or the fatal pip is seen.
+**A submit is a beat.** `useGameState` updates the instant a submit happens, but what the board *shows* lags it by 350 ms, via `feedbackView`, which is derived in render so there is no frame where the answer shows early. For that beat the circle concerned (all three for a One Shot) is dim, instantly, and shown unsolved, and the miss pip is still full. Then the result lands: the colour rises out of the dim, or the grey returns; a beat later the pip swells and goes, and a small grey "4 misses left" note hangs under the pips for 3 s (a slow fade in and out); and a missed One Shot's popup opens, carrying the miss count itself. The **haptic is the exception: it fires at the tap**, with the result's pattern, so the press is felt as it happens (waiting for the reveal left it feeling unanswered). Input is ignored during the beat. The results screen is reached once the last submit lands, but **the last move gets no ceremony**: a win holds 500 ms for the colour to finish rising, and a loss holds none and skips the pip pop, since the player knows it is their last move and the loss screen continues straight into the board solving itself. That keys on the outcome (`holdAfterResult`, `popsPip`), not on "one pip left".
 
 **A loss** is staged by `revealView`: the circles the player had not solved stay dim and unnamed while `useRevealAnimation` shuffles the board into the solution, and take their colours and labels once its `done` flag lands. Circles already solved keep theirs throughout.
 
@@ -277,7 +277,7 @@ The board starts **fully populated** — all 7 terms shuffled into the 7 regions
 
 | Moment | Cue (ms) |
 |---|---|
-| Pick up / put down | `10` / `15` |
+| Pick up / put down | `12` (the same tick) |
 | Miss — a wrong circle, or a One Shot that did not sweep | `60 · 50 · 60` |
 | Circle solved | `150` |
 | Win | `60 · 40 · 60 · 40 · 60 · 40 · 220` |

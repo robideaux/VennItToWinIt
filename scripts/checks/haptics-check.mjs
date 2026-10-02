@@ -66,7 +66,7 @@ chk(pulses(P.miss).length === 2, `a miss is a double buzz`)
 chk(pulses(P.loss).length === 3 && Math.max(...pulses(P.loss)) <= 100, `a loss is three short pulses`)
 chk(P.solve > P.pick && P.solve > P.put, `a solve is longer than a pick or a put`)
 chk(total(P.win) > total(P.solve) && pulses(P.win).length >= 3, `a win is the longest, a drawn-out pattern`)
-chk(P.pick < P.put, `a put-down is a touch firmer than a pick-up`)
+chk(P.pick === P.put, `pick-up and put-down are the same tick (10 vs 15 ms could not be told apart by feel)`)
 
 console.log('\n=== wired to the board without a cue for a refused move ===')
 const gb = fs.readFileSync(ROOT + '/src/components/GameBoard.jsx', 'utf8')

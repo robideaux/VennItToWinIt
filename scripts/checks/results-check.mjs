@@ -69,8 +69,8 @@ chk(R.buildResultBlock({ title:'T', won:false, submissions:e.submissions }).incl
 
 console.log('\n=== a replay says so in the share text ===')
 chk(R.buildResultBlock({ title:'T', won:true, submissions:clean }).endsWith('Solved with no misses'), `first play: no mark`)
-chk(R.buildResultBlock({ title:'T', won:true, submissions:clean, play:3 }).endsWith('Solved with no misses · play 3'), `third play: "· play 3"`)
-chk(R.buildResultBlock({ title:'T', won:false, submissions:lost, play:2 }).endsWith('Out of misses · play 2'), `losses too`)
+chk(R.buildResultBlock({ title:'T', won:true, submissions:clean, play:3 }).endsWith('Solved with no misses · play: 3'), `third play: "· play: 3"`)
+chk(R.buildResultBlock({ title:'T', won:false, submissions:lost, play:2 }).endsWith('Out of misses · play: 2'), `losses too`)
 chk(/play=\{progress\[activePuzzle\.id\]\?\.plays \?\? 1\}/.test(app), `App hands the results screens the recorded play count`)
 
 console.log(fails===0?'\nPASS':`\nFAIL — ${fails}`); process.exit(fails?1:0)

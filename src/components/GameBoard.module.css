@@ -289,13 +289,17 @@
    error colour, then settles to the spent look. It is the one thing that costs you in this
    game, so it earns the emphasis. Size carries it as much as colour. */
 .pipLost {
-  animation: pipLose 0.75s ease-out;
+  /* Starts a beat AFTER the reveal (0.25s) and runs longer (1s): played at the same instant
+     as the circle rising and the rest of the reveal, it was hard to notice. `backwards`
+     holds the first keyframe through the delay, so the pip still looks full until it goes.
+     Keep the timings in step with PIP_DELAY_MS / PIP_POP_MS in feedback.js. */
+  animation: pipLose 1s ease-out 0.25s backwards;
 }
 
 @keyframes pipLose {
   0%   { transform: scale(1);   background: var(--color-accent); }
-  22%  { transform: scale(2.6); background: var(--color-error); }
-  55%  { transform: scale(1.7); background: var(--color-error); }
+  20%  { transform: scale(3);   background: var(--color-error); }
+  60%  { transform: scale(2.1); background: var(--color-error); }
   100% { transform: scale(1);   background: var(--color-border); }
 }
 
@@ -306,5 +310,50 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .pipLost { animation: pipLoseCalm 0.75s ease-out; }
+  .pipLost { animation: pipLoseCalm 1s ease-out 0.25s backwards; }
+}
+
+/* "4 misses left": a small grey note hanging under the pips, right-aligned to them, so it
+   points at the thing that changed. Fades in, holds, fades out by itself. Keep the duration
+   in step with MISS_TOAST_MS in feedback.js. */
+.pipsWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.missToast {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 60;
+  width: max-content;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--color-text-2);
+  color: var(--color-bg);
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: missToastLife 3s ease-out forwards;
+}
+
+/* About 0.4s in, held to 2.2s, 0.8s out: long enough to read it and think about the next
+   move, and nothing sits under it that it could be in the way of. */
+@keyframes missToastLife {
+  0%   { opacity: 0; transform: translateY(-4px); }
+  13%  { opacity: 1; transform: none; }
+  73%  { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .missToast { animation-name: missToastLifeCalm; }
+}
+
+@keyframes missToastLifeCalm {
+  0%   { opacity: 0; }
+  13%  { opacity: 1; }
+  73%  { opacity: 1; }
+  100% { opacity: 0; }
 }

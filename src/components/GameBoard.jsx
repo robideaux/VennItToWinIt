@@ -3,7 +3,8 @@ import { useGameState } from '../hooks/useGameState.js'
 import { MISSES, isMiss } from '../utils/gameRules.js'
 import { haptic, cueForSubmit } from '../utils/haptics.js'
 import {
-  SWAP_MS, SUBMIT_DIM_MS, RESULTS_HOLD_MS, prefersReducedMotion, swapFor, feedbackView,
+  SWAP_MS, SUBMIT_DIM_MS, MISS_TOAST_MS, holdAfterResult, popsPip, missesLeftText,
+  prefersReducedMotion, swapFor, feedbackView,
 } from '../utils/feedback.js'
 import {
   ONE_SHOT_HINT, ONE_SHOT_CONFIRM, ONE_SHOT_RESULT,
@@ -56,6 +57,18 @@ export default function GameBoard({
   })
   const pending = view.pending
 
+  // "4 misses left", under the pips, for a moment after a miss. Not on the fatal miss (the
+  // game is over) and not on a One Shot miss, whose popup carries the number itself.
+  const [missToast, setMissToast] = useState(null)
+  const missToastTimer = useRef(null)
+  const missToastSeq = useRef(0)
+  useEffect(() => () => clearTimeout(missToastTimer.current), [])
+  function showMissToast(missesLeft) {
+    clearTimeout(missToastTimer.current)
+    setMissToast({ id: ++missToastSeq.current, text: missesLeftText(missesLeft) })
+    missToastTimer.current = setTimeout(() => setMissToast(null), MISS_TOAST_MS)
+  }
+
   useEffect(() => {
     if (!pending) return
     const last = game.submissions[submitted - 1]
@@ -65,15 +78,18 @@ export default function GameBoard({
     haptic(cueForSubmit(last, game.phase))
     const t = setTimeout(() => {
       setResolved(submitted)
-      if (isMiss(last)) setPopPip(game.missesLeft)
+      if (popsPip(last, game.phase)) {
+        setPopPip(game.missesLeft)
+        if (last.type === 'circle') showMissToast(game.missesLeft)
+      }
       // Held until now: it states the result, and would give it away mid-pulse
       if (last.type === 'oneShot' && last.correctCount < 3) setOneShotNotice(last.correctCount)
     }, SUBMIT_DIM_MS)
     return () => clearTimeout(t)
   }, [submitted]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Move on to the results only once the last submit has landed, then hold a moment so
-  // the final colour, or the pip that just went, is actually seen.
+  // Move on to the results once the last submit has landed. The last move gets no ceremony
+  // (no pip pop, a short hold for a win, none for a loss): the player knows it is their last.
   useEffect(() => {
     if (pending || (game.phase !== 'won' && game.phase !== 'lost')) return
     const t = setTimeout(() => {
@@ -82,7 +98,7 @@ export default function GameBoard({
       } else {
         onGameOver({ placements: game.placements, revealedCircles: game.revealedCircles, missesUsed: MISSES, submissions: game.submissions })
       }
-    }, RESULTS_HOLD_MS)
+    }, holdAfterResult(game.phase))
     return () => clearTimeout(t)
   }, [game.phase, pending]) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -214,20 +230,27 @@ export default function GameBoard({
             ↯{game.lastOneShot.correctCount}
           </span>
         ) : null}
-        <div
-          className={styles.pips}
-          aria-label={`${game.missesLeft} of ${MISSES} misses left`}
-        >
-          {Array.from({ length: MISSES }, (_, i) => (
-            <span
-              key={i}
-              className={[
-                styles.pip,
-                i < view.shownMisses ? styles.pipActive : '',
-                i === popPip ? styles.pipLost : '',
-              ].join(' ').trim()}
-            />
-          ))}
+        <div className={styles.pipsWrap}>
+          <div
+            className={styles.pips}
+            aria-label={`${game.missesLeft} of ${MISSES} misses left`}
+          >
+            {Array.from({ length: MISSES }, (_, i) => (
+              <span
+                key={i}
+                className={[
+                  styles.pip,
+                  i < view.shownMisses ? styles.pipActive : '',
+                  i === popPip ? styles.pipLost : '',
+                ].join(' ').trim()}
+              />
+            ))}
+          </div>
+          {missToast && (
+            <span key={missToast.id} className={styles.missToast} role="status">
+              {missToast.text}
+            </span>
+          )}
         </div>
       </header>
 
@@ -285,6 +308,8 @@ export default function GameBoard({
               {ONE_SHOT_RESULT[oneShotNotice]}
               <br /><br />
               {ONE_SHOT_RESULT_FOOTER}
+              <br /><br />
+              {missesLeftText(game.missesLeft)}.
             </p>
             <button
               className={`${styles.pauseBtn} ${styles.pauseBtnPrimary}`}
