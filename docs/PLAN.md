@@ -15,7 +15,7 @@ Since then: the diagram was split into a geometry-only SVG shell plus swappable 
 | Item | Status |
 |---|---|
 | **Phase 20 — Misses & Category Colours** | **Shipped (2026-09-30, `e4f47f8`..`ad23050`).** From beta feedback: the budget counts misses; colour belongs to the category (red / green / violet, chosen by colour-blindness simulation); the results screens have a single ‹ Back; replays are marked in the share text; the first result is kept in full. **Still open:** the deferred past-results view (20.16). |
-| **Phase 21 — Short Share Links & Preview Cards** | **Built (2026-10-01), not yet pushed.** Custom-puzzle links are about a fifth of their old length (versioned, compressed, old links still open), and every link gets an Open Graph preview card. Needs checking in Messenger after deploy. |
+| **Phase 21 — Short Share Links & Preview Cards** | **Shipped (2026-10-01, `cdef906`, `ac4e498`).** Custom-puzzle links are about a fifth of their old length (versioned, compressed, old links still open), and every link gets an Open Graph preview card. Card verified in Facebook's Sharing Debugger. |
 | **Phase 9 — Feedback & Animation** | **Not started — follows Phase 20.** No `navigator.vibrate` and no `@keyframes` anywhere in `src/`. The existing shuffle/reveal hooks drive discrete swap steps; they are not the tap, submit and transition feedback this phase describes. Most likely to make the phone build feel finished rather than merely functional. |
 | **Legacy puzzle cleanup** | 34 older-format puzzles are live in `index.json` with placeholder `year: 2025, sequence: 0`. Intentionally active as test content; a review sweep with the other devs decides which to keep, then assigns final `2026_NNN` filenames and sequence numbers. Known: a duplicate "Just Relax", and a typo "Natrually Irrational". |
 | **`docs/DEPLOYMENT.md`** | Knowingly stale — documents `puzzle-XXX.json` naming and omits the required `year`/`sequence` fields. Deliberately waiting on the puzzle sweep so it is rewritten once. |
@@ -824,7 +824,7 @@ Choosing text-class `✗` and `↯` for the "nothing gained" marks is deliberate
 
 ---
 
-## Phase 21 — Short Share Links & Preview Cards — BUILT (2026-10-01)
+## Phase 21 — Short Share Links & Preview Cards — SHIPPED (2026-10-01)
 
 Beta testers pasting a custom-puzzle link into Messenger got a wall of random text. Design and measurements are in the parking-lot entry "Shorter custom-puzzle links", now promoted to this phase.
 
@@ -837,7 +837,7 @@ Beta testers pasting a custom-puzzle link into Messenger got a wall of random te
 - [x] 21.6 Checks (`linkformat`): every library puzzle round-trips through v1 unchanged; v0 links still decode; v0 and v1 of one puzzle share a `contentKey`; a **frozen v1 link** must still decode, so the format cannot drift under links already sent; separator, control characters, unknown versions, truncation, garbage and Unicode are all handled. **Measured: median payload 614 → 132 characters, longest full link 234.** `fflate` added about 10 KB to the bundle (5 KB gzipped)
 
 ### Stage 2 — Preview cards
-- [x] 21.7 Open Graph and Twitter meta in `index.html` (title, description, image), so chat apps render a card under any link. Static and site-wide. A card is not per-puzzle: there is no server to vary it, and a per-puzzle card would spoil the answers anyway. The image `public/og-image.png` (1200×630, 13 KB) is drawn by `scripts/make-og-image.mjs` from `CATEGORY_COLORS`, with no text and a PNG because Messenger and Facebook do not render SVG. Re-run it after a palette change. Covered by `card`. **To verify after deploy:** Facebook's Sharing Debugger shows exactly what Messenger will render and refreshes its cache
+- [x] 21.7 Open Graph and Twitter meta in `index.html` (title, description, image), so chat apps render a card under any link. Static and site-wide. A card is not per-puzzle: there is no server to vary it, and a per-puzzle card would spoil the answers anyway. The image `public/og-image.png` (1200×630, 13 KB) is drawn by `scripts/make-og-image.mjs` from `CATEGORY_COLORS`, with no text and a PNG because Messenger and Facebook do not render SVG. Re-run it after a palette change. Covered by `card`. **Verified in Facebook's Sharing Debugger (2026-10-01):** the card renders with image, title and description. Its two warnings are deliberately not fixed. Adding `og:url` would make every puzzle link canonicalise to Home, and `fb:app_id` is analytics only. A comment in `index.html` explains this
 
 ---
 
